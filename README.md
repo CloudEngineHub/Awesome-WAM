@@ -1,4 +1,6 @@
-<h1 align="center"># WAM-survey
+# WAM-survey
+
+[![arXiv](https://img.shields.io/badge/arXiv-2602.15922-b31b1b.svg)](https://arxiv.org/abs/2602.15922)
 
 [[Project Page](https://dreamzero0.github.io/)] [[Paper](https://arxiv.org/abs/2602.15922)]
 
