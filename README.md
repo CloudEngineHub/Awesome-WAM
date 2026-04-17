@@ -1,5 +1,6 @@
 <h1 align="center"># WAM-survey
-[![NVIDIA](https://img.shields.io/badge/NVIDIA-76B900?style=flat&logo=nvidia&logoColor=white)](https://www.nvidia.com)
+
+[[Project Page](https://dreamzero0.github.io/)] [[Paper](https://arxiv.org/abs/2602.15922)]
 
 <p align="center">[ONE-LINE DESCRIPTION]</p>
 
