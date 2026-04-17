@@ -4,8 +4,6 @@
 
 [[Project Page](https://dreamzero0.github.io/)] [[Paper](https://arxiv.org/abs/2602.15922)]
 
-<p align="center">[ONE-LINE DESCRIPTION]</p>
-
 这是一个围绕 `[TOPIC / PROBLEM SETTING]` 持续整理的 survey repository。它将路线图、论文条目、阅读方法和 HTML 精读报告放在同一个入口中，目标不是简单堆论文，而是提供一个有组织、可导航、可扩展的学术项目首页。
 
 示例定位：`[e.g., world models / action models / policy learning / planning / evaluation]`。
@@ -21,7 +19,7 @@
 ## Roadmap
 
 <p align="center">
-  <img src="[这里可以放figrue1]" alt="[ROADMAP ALT TEXT]" width="100%">
+  <img src="[ROADMAP FIGURE PATH]" alt="[这里可以放figure1]" width="100%">
 </p>
 
 Roadmap 是这个仓库的主导航。后面的分支章节应与图中的命名保持一致，这样 README、网页和报告目录可以长期对齐。
@@ -67,9 +65,9 @@ Roadmap 是这个仓库的主导航。后面的分支章节应与图中的命名
 
 示例：这一分支可用于整理围绕 `[EXAMPLE RESEARCH QUESTION]` 展开的工作。
 
-| Short | Full Paper Name | Released | Links | Report |
-| --- | --- | --- | --- | --- |
-| `[SHORT NAME]` | `[FULL PAPER NAME]` | `[YYYY-MM / VENUE / STATUS]` | `[PAPER LINK]` · `[PROJECT PAGE LINK]` · `[GITHUB LINK]` · `[HF LINK]` | `[HTML REPORT LINK]` |
+| Paper | Released | Links | Report |
+| ------ | --- | --- | --- |
+| **DreamZero**, World Action Models are Zero-shot Policies | `[2026-02 / arXiv]` | `[📄 Paper](https://arxiv.org/abs/1706.03762)` · `[🌍 Webpage](https://openai.com/index/instruction-following/)` · `[💻 Code](https://github.com/google-research/bert)` · `[🤗 Model](https://huggingface.co/google-bert)` | `[HTML REPORT LINK]` |
 
 ### [BRANCH C TITLE]
 
