@@ -67,7 +67,7 @@ Roadmap 是这个仓库的主导航。后面的分支章节应与图中的命名
 
 | Paper | Released | Links | Report |
 | ------ | --- | --- | --- |
-| **DreamZero**, World Action Models are Zero-shot Policies | `[2026-02 / arXiv]` | [📄 Paper](https://arxiv.org/abs/1706.03762) · `[🌍 Webpage](https://openai.com/index/instruction-following/)` · `[💻 Code](https://github.com/google-research/bert)` · `[🤗 Model](https://huggingface.co/google-bert)` | `[HTML REPORT LINK]` |
+| **DreamZero**, World Action Models are Zero-shot Policies | `[2026-02 / arXiv]` | [[📄 Paper](https://arxiv.org/abs/1706.03762)] · [[🌍 Webpage](https://openai.com/index/instruction-following/)] · [[💻 Code](https://github.com/google-research/bert)] · [[🤗 Model](https://huggingface.co/google-bert)] | `[HTML REPORT LINK]` |
 
 ### [BRANCH C TITLE]
 
