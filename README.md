@@ -52,12 +52,13 @@ Roadmap 是这个仓库的主导航。后面的分支章节应与图中的命名
 
 **Tags:** Action-conditioned - Explicit Pixel-level Prediction and Video-based WMs - Pixel-level Prediction
 
+[[💻 Code](https://github.com/rubenvillegas/iclr2017mcnet)]
+
 ***
 #### ContextVP - *ContextVP: Fully Context-Aware Video Prediction* - [![arXiv](https://img.shields.io/badge/arXiv-1710.08518-b31b1b?style=flat-square&logo=arxiv)](https://arxiv.org/pdf/1710.08518)
 
 **Tags:** Action-conditioned - Explicit Pixel-level Prediction and Video-based WMs - Pixel-level Prediction
 
-[[🌍 Webpage](https://wonmin-byeon.github.io/publication/2018-contextvp)]
 ***
 #### VideoGPT - *VideoGPT: Video Generation using VQ-VAE and Transformers* - [![arXiv](https://img.shields.io/badge/arXiv-2104.10157-b31b1b?style=flat-square&logo=arxiv)](https://arxiv.org/pdf/2104.10157)
 
@@ -82,7 +83,7 @@ Roadmap 是这个仓库的主导航。后面的分支章节应与图中的命名
 **Tags:** Action-conditioned - Explicit Pixel-level Prediction and Video-based WMs - Diffusion-based Video WMs
 
 ***
-#### Unified World Models - *Unified World Models: Coupling Video and Action Diffusion for Pretraining on Large Robotic Datasets* - [![arXiv](https://img.shields.io/badge/arXiv-2504.02792-b31b1b?style=flat-square&logo=arxiv)](https://arxiv.org/pdf/2504.02792)
+#### Unified World Models 和后面重复了 - *Unified World Models: Coupling Video and Action Diffusion for Pretraining on Large Robotic Datasets* - [![arXiv](https://img.shields.io/badge/arXiv-2504.02792-b31b1b?style=flat-square&logo=arxiv)](https://arxiv.org/pdf/2504.02792)
 
 **Tags:** Action-conditioned - Explicit Pixel-level Prediction and Video-based WMs - Diffusion-based Video WMs
 
@@ -118,9 +119,10 @@ Roadmap 是这个仓库的主导航。后面的分支章节应与图中的命名
 
 [[🌍 Webpage](https://worldmodels.github.io/)] · [[💻 Code](https://github.com/hardmaru/WorldModelsExperiments)]
 ***
-#### Recurrent World Models - *Recurrent World Models Facilitate Policy Evolution* - [![arXiv](https://img.shields.io/badge/arXiv-1809.01999-b31b1b?style=flat-square&logo=arxiv)](https://arxiv.org/pdf/1809.01999)
+#### Recurrent World Models 这和上面的网页好像是一个啊 - *Recurrent World Models Facilitate Policy Evolution* - [![arXiv](https://img.shields.io/badge/arXiv-1809.01999-b31b1b?style=flat-square&logo=arxiv)](https://arxiv.org/pdf/1809.01999) 
 
 **Tags:** Action-conditioned - Implicit Latent-space Dynamics Models - RSSM
+[[🌍 Webpage](https://worldmodels.github.io/)]
 
 ***
 #### PlaNet - *Learning Latent Dynamics for Planning from Pixels* - [![arXiv](https://img.shields.io/badge/arXiv-1811.04551-b31b1b?style=flat-square&logo=arxiv)](https://arxiv.org/pdf/1811.04551)
@@ -198,7 +200,7 @@ Roadmap 是这个仓库的主导航。后面的分支章节应与图中的命名
 
 **Tags:** Action-conditioned - Implicit Latent-space Dynamics Models - Predictive Representation Learning
 
-[[💻 Code](https://github.com/facebookresearch/jepa)]
+[[🌍 Webpage](https://ai.meta.com/blog/v-jepa-yann-lecun-ai-model-video-joint-embedding-predictive-architecture/)] · [[💻 Code](https://github.com/facebookresearch/jepa)]
 ***
 #### Rethinking JEPA - *Rethinking JEPA: Compute-Efficient Video SSL with Frozen Teachers* - [![arXiv](https://img.shields.io/badge/arXiv-2509.24317-b31b1b?style=flat-square&logo=arxiv)](https://arxiv.org/pdf/2509.24317)
 
@@ -209,7 +211,7 @@ Roadmap 是这个仓库的主导航。后面的分支章节应与图中的命名
 
 **Tags:** Action-conditioned - Implicit Latent-space Dynamics Models - Predictive Representation Learning
 
-[[💻 Code](https://github.com/facebookresearch/vjepa2)]
+[[🌍 Webpage](https://ai.meta.com/blog/v-jepa-2-world-model-benchmarks/)] · [[💻 Code](https://github.com/facebookresearch/vjepa2)]
 ***
 #### Drive-JEPA - *Drive-JEPA: Video JEPA Meets Multimodal Trajectory Distillation for End-to-End Driving* - [![arXiv](https://img.shields.io/badge/arXiv-2601.22032-b31b1b?style=flat-square&logo=arxiv)](https://arxiv.org/pdf/2601.22032)
 
@@ -222,7 +224,7 @@ Roadmap 是这个仓库的主导航。后面的分支章节应与图中的命名
 **Tags:** Action-conditioned - Implicit Latent-space Dynamics Models - Predictive Representation Learning
 
 ***
-#### VLA-JEPA - *VLA-JEPA: Enhancing Vision-Language-Action Model with Latent World Model* - [![arXiv](https://img.shields.io/badge/arXiv-2602.10098-b31b1b?style=flat-square&logo=arxiv)](https://arxiv.org/pdf/2602.10098)
+#### VLA-JEPA 后面重复了 - *VLA-JEPA: Enhancing Vision-Language-Action Model with Latent World Model* - [![arXiv](https://img.shields.io/badge/arXiv-2602.10098-b31b1b?style=flat-square&logo=arxiv)](https://arxiv.org/pdf/2602.10098)
 
 **Tags:** Action-conditioned - Implicit Latent-space Dynamics Models - Predictive Representation Learning
 
