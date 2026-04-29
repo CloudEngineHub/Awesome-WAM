@@ -302,7 +302,6 @@ Roadmap 是这个仓库的主导航。后面的分支章节应与图中的命名
 
 **Tags:** Language-conditioned and Multimodal - Backbone Design - ViT-based
 
-[[🌍 Webpage](https://openai.com/research/video-generation-models-as-world-simulators)]
 ***
 #### Latte 出现两次 - *Latte: Latent Diffusion Transformer for Video Generation* - [![arXiv](https://img.shields.io/badge/arXiv-2401.03048-b31b1b?style=flat-square&logo=arxiv)](https://arxiv.org/pdf/2401.03048)
 
@@ -411,6 +410,96 @@ Roadmap 是这个仓库的主导航。后面的分支章节应与图中的命名
 
 
 ### Embodied World Model
+
+***
+#### Genie - *Genie: Generative Interactive Environments* - [![arXiv](https://img.shields.io/badge/arXiv-2402.15391-b31b1b?style=flat-square&logo=arxiv)](https://arxiv.org/pdf/2402.15391)
+
+**Tags:** Embodied World Model - Learning Physics from Video-only Data
+
+[[🌍 Webpage](https://sites.google.com/view/genie-2024/)]
+***
+#### SWIM - *Structured World Models from Human Videos* - [![arXiv](https://img.shields.io/badge/arXiv-2308.10901-b31b1b?style=flat-square&logo=arxiv)](https://arxiv.org/pdf/2308.10901)
+
+**Tags:** Embodied World Model - Learning Physics from Video-only Data
+
+[[🌍 Webpage](https://human-world-model.github.io/)]
+***
+#### DreamDojo - *DreamDojo: A Generalist Robot World Model from Large-Scale Human Videos* - [![arXiv](https://img.shields.io/badge/arXiv-2602.06949-b31b1b?style=flat-square&logo=arxiv)](https://arxiv.org/pdf/2602.06949)
+
+**Tags:** Embodied World Model - Learning Physics from Video-only Data
+
+[[🌍 Webpage](https://dreamdojo-world.github.io/)] · [[💻 Code](https://github.com/NVIDIA/DreamDojo)] · [[🤗 Model](https://huggingface.co/nvidia/DreamDojo)]
+***
+#### RoboDreamer - *RoboDreamer: Learning Compositional World Models for Robot Imagination* - [![arXiv](https://img.shields.io/badge/arXiv-2404.12377-b31b1b?style=flat-square&logo=arxiv)](https://arxiv.org/pdf/2404.12377)
+
+**Tags:** Embodied World Model - Realism and Consistency Enhancement
+
+[[🌍 Webpage](https://umass-embodied-agi.github.io/robodreamer/)] · [[💻 Code](https://github.com/rainbow979/robodreamer)]
+***
+#### IRASim - *IRASim: A Fine-Grained World Model for Robot Manipulation* - [![arXiv](https://img.shields.io/badge/arXiv-2406.14540-b31b1b?style=flat-square&logo=arxiv)](https://arxiv.org/pdf/2406.14540)
+
+**Tags:** Embodied World Model - Realism and Consistency Enhancement
+
+[[🌍 Webpage](https://gen-irasim.github.io/)] · [[💻 Code](https://github.com/bytedance/IRASim)]
+***
+#### MiLA - *MiLA: Multi-view Intensive-fidelity Long-term Video Generation World Model for Autonomous Driving* - [![arXiv](https://img.shields.io/badge/arXiv-2503.15875-b31b1b?style=flat-square&logo=arxiv)](https://arxiv.org/pdf/2503.15875)
+
+**Tags:** Embodied World Model - Realism and Consistency Enhancement
+
+[[🌍 Webpage](https://xiaomi-mlab.github.io/mila.github.io/)] · [[💻 Code](https://github.com/xiaomi-mlab/mila.github.io)]
+***
+#### Ctrl-World - *Ctrl-World: A Controllable Generative World Model for Robot Manipulation* - [![arXiv](https://img.shields.io/badge/arXiv-2510.10125-b31b1b?style=flat-square&logo=arxiv)](https://arxiv.org/pdf/2510.10125)
+
+**Tags:** Embodied World Model - Realism and Consistency Enhancement
+
+[[🌍 Webpage](https://ctrl-world.github.io/)] · [[💻 Code](https://github.com/Robert-gyj/Ctrl-World)]
+***
+#### EnerVerse - *EnerVerse: Envisioning Embodied Future Space for Robotics Manipulation* - [![arXiv](https://img.shields.io/badge/arXiv-2501.01895-b31b1b?style=flat-square&logo=arxiv)](https://arxiv.org/pdf/2501.01895)
+
+**Tags:** Embodied World Model - Realism and Consistency Enhancement
+
+[[🌍 Webpage](https://sites.google.com/view/enerverse)]
+***
+#### Gemini Robotics in Veo - *Evaluating Gemini Robotics Policies in a Veo World Simulator* - [![arXiv](https://img.shields.io/badge/arXiv-2512.10675-b31b1b?style=flat-square&logo=arxiv)](https://arxiv.org/pdf/2512.10675)
+
+**Tags:** Embodied World Model - Realism and Consistency Enhancement
+
+[[🌍 Webpage](https://veo-robotics.github.io/)]
+***
+#### Scalable Policy Evaluation - *Scalable Policy Evaluation with Video World Models* - [![arXiv](https://img.shields.io/badge/arXiv-2511.11520-b31b1b?style=flat-square&logo=arxiv)](https://arxiv.org/pdf/2511.11520)
+
+**Tags:** Embodied World Model - Realism and Consistency Enhancement
+
+***
+#### 4DGen - *Geometry-aware 4D Video Generation for Robot Manipulation* - [![arXiv](https://img.shields.io/badge/arXiv-2507.01099-b31b1b?style=flat-square&logo=arxiv)](https://arxiv.org/pdf/2507.01099)
+
+**Tags:** Embodied World Model - Realism and Consistency Enhancement
+
+[[🌍 Webpage](https://robot4dgen.github.io/)] · [[💻 Code](https://github.com/lzylucy/4dgen)]
+***
+#### Vidar - *Vidar: Embodied Video Diffusion Model for Generalist Manipulation* - [![arXiv](https://img.shields.io/badge/arXiv-2507.12898-b31b1b?style=flat-square&logo=arxiv)](https://arxiv.org/pdf/2507.12898)
+
+**Tags:** Embodied World Model - Realism and Consistency Enhancement
+
+[[🌍 Webpage](https://embodiedfoundation.github.io/vidar_anypos)] · [[🤗 Model](https://huggingface.co/embodiedfoundation/VIDAR)]
+***
+#### RoboScape - *RoboScape: Physics-informed Embodied World Model* - [![arXiv](https://img.shields.io/badge/arXiv-2506.23135-b31b1b?style=flat-square&logo=arxiv)](https://arxiv.org/pdf/2506.23135)
+
+**Tags:** Embodied World Model - Realism and Consistency Enhancement
+
+[[💻 Code](https://github.com/tsinghua-fib-lab/RoboScape)]
+***
+#### Visuo-Tactile - *Visuo-Tactile World Models* - [![arXiv](https://img.shields.io/badge/arXiv-2602.06001-b31b1b?style=flat-square&logo=arxiv)](https://arxiv.org/pdf/2602.06001)
+
+**Tags:** Embodied World Model - Extended Modalities and 3D World Modeling
+
+[[🌍 Webpage](https://carolinahiguera.github.io/vtml/)]
+***
+#### PointWorld - *PointWorld: Scaling 3D World Models for In-The-Wild Robotic Manipulation* - [![arXiv](https://img.shields.io/badge/arXiv-2601.03782-b31b1b?style=flat-square&logo=arxiv)](https://arxiv.org/pdf/2601.03782)
+
+**Tags:** Embodied World Model - Extended Modalities and 3D World Modeling
+
+[[🌍 Webpage](https://point-world.github.io/)] · [[💻 Code](https://github.com/NVlabs/PointWorld)]
 
 
 
