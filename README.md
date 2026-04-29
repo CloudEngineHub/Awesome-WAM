@@ -229,8 +229,191 @@ Roadmap 是这个仓库的主导航。后面的分支章节应与图中的命名
 **Tags:** Action-conditioned - Implicit Latent-space Dynamics Models - Predictive Representation Learning
 
 [[🌍 Webpage](https://ginwind.github.io/VLA-JEPA/)] · [[💻 Code](https://github.com/ginwind/VLA-JEPA)] · [[🤗 Model](https://huggingface.co/ginwind/VLA-JEPA)]
+***
+
+
+
+
+
 
 ### Language-conditioned and Multimodal
+
+***
+#### MoCoGAN - *MoCoGAN: Decomposing Motion and Content for Video Generation* - [![arXiv](https://img.shields.io/badge/arXiv-1707.04993-b31b1b?style=flat-square&logo=arxiv)](https://arxiv.org/pdf/1707.04993)
+
+**Tags:** Language-conditioned and Multimodal - Video Foundation Models - GAN-based
+
+[[💻 Code](https://github.com/sergeytulyakov/mocogan)]
+***
+#### TGAN - *Temporal Generative Adversarial Nets with Singular Value Clipping* - [![arXiv](https://img.shields.io/badge/arXiv-1611.06624-b31b1b?style=flat-square&logo=arxiv)](https://arxiv.org/pdf/1611.06624)
+
+**Tags:** Language-conditioned and Multimodal - Video Foundation Models - GAN-based
+
+[[🌍 Webpage](https://pfnet-research.github.io/tgan/)] · [[💻 Code](https://github.com/pfnet-research/tgan)]
+***
+#### DVD-GAN - *Adversarial Video Generation on Complex Datasets* - [![arXiv](https://img.shields.io/badge/arXiv-1907.06571-b31b1b?style=flat-square&logo=arxiv)](https://arxiv.org/pdf/1907.06571)
+
+**Tags:** Language-conditioned and Multimodal - Video Foundation Models - GAN-based
+
+***
+#### Video Diffusion Models - *Video Diffusion Models* - [![arXiv](https://img.shields.io/badge/arXiv-2204.03458-b31b1b?style=flat-square&logo=arxiv)](https://arxiv.org/pdf/2204.03458)
+
+**Tags:** Language-conditioned and Multimodal - Video Foundation Models - Diffusion-based
+
+[[🌍 Webpage](https://video-diffusion.github.io/)]
+***
+#### Stable Video Diffusion - *Stable Video Diffusion: Scaling Latent Video Diffusion Models to Large Datasets* - [![arXiv](https://img.shields.io/badge/arXiv-2311.15127-b31b1b?style=flat-square&logo=arxiv)](https://arxiv.org/pdf/2311.15127)
+
+**Tags:** Language-conditioned and Multimodal - Video Foundation Models - Diffusion-based
+
+[[🌍 Webpage](https://stability.ai/news/stable-video-diffusion-open-ai-video-model)] · [[💻 Code](https://github.com/Stability-AI/generative-models)] · [[🤗 Model](https://huggingface.co/stabilityai/stable-video-diffusion-img2vid-xt)]
+***
+#### U-Net - *U-Net: Convolutional Networks for Biomedical Image Segmentation* - [![arXiv](https://img.shields.io/badge/arXiv-1505.04597-b31b1b?style=flat-square&logo=arxiv)](https://arxiv.org/pdf/1505.04597)
+
+**Tags:** Language-conditioned and Multimodal - Backbone Design - U-Net-based
+
+[[🌍 Webpage](https://lmb.informatik.uni-freiburg.de/people/ronneber/u-net/)]
+***
+#### Video Diffusion Models - *Video Diffusion Models* - [![arXiv](https://img.shields.io/badge/arXiv-2204.03458-b31b1b?style=flat-square&logo=arxiv)](https://arxiv.org/pdf/2204.03458)
+
+**Tags:** Language-conditioned and Multimodal - Backbone Design - U-Net-based
+
+[[🌍 Webpage](https://video-diffusion.github.io/)]
+***
+#### Text2Video-Zero - *Text2Video-Zero: Text-to-Image Diffusion Models are Zero-Shot Video Generators* - [![arXiv](https://img.shields.io/badge/arXiv-2303.13439-b31b1b?style=flat-square&logo=arxiv)](https://arxiv.org/pdf/2303.13439)
+
+**Tags:** Language-conditioned and Multimodal - Backbone Design - U-Net-based
+
+[[🌍 Webpage](https://text2video-zero.github.io/)] · [[💻 Code](https://github.com/Picsart-AI-Research/Text2Video-Zero)]
+***
+#### AnimateDiff - *AnimateDiff: Animate Your Personalized Text-to-Image Diffusion Models without Specific Tuning* - [![arXiv](https://img.shields.io/badge/arXiv-2307.04725-b31b1b?style=flat-square&logo=arxiv)](https://arxiv.org/pdf/2307.04725)
+
+**Tags:** Language-conditioned and Multimodal - Backbone Design - U-Net-based
+
+[[🌍 Webpage](https://animatediff.github.io/)] · [[💻 Code](https://github.com/guoyww/AnimateDiff)] · [[🤗 Model](https://huggingface.co/guoyww/animatediff-motion-adapter-v1-5-2)]
+***
+#### ViT - *An Image is Worth 16x16 Words: Transformers for Image Recognition at Scale* - [![arXiv](https://img.shields.io/badge/arXiv-2010.11929-b31b1b?style=flat-square&logo=arxiv)](https://arxiv.org/pdf/2010.11929)
+
+**Tags:** Language-conditioned and Multimodal - Backbone Design - ViT-based
+
+[[💻 Code](https://github.com/google-research/vision_transformer)]
+***
+#### Sora - *Video generation models as world simulators* - [![Website](https://img.shields.io/badge/Website-Link-blue?style=flat-square)](https://openai.com/research/video-generation-models-as-world-simulators)
+
+**Tags:** Language-conditioned and Multimodal - Backbone Design - ViT-based
+
+[[🌍 Webpage](https://openai.com/research/video-generation-models-as-world-simulators)]
+***
+#### Latte - *Latte: Latent Diffusion Transformer for Video Generation* - [![arXiv](https://img.shields.io/badge/arXiv-2401.03048-b31b1b?style=flat-square&logo=arxiv)](https://arxiv.org/pdf/2401.03048)
+
+**Tags:** Language-conditioned and Multimodal - Backbone Design - ViT-based
+
+[[🌍 Webpage](https://maxin-cn.github.io/latte_project/)] · [[💻 Code](https://github.com/Vchitect/Latte)] · [[🤗 Model](https://huggingface.co/maxin-cn/Latte)]
+***
+#### LDM - *High-Resolution Image Synthesis with Latent Diffusion Models* - [![arXiv](https://img.shields.io/badge/arXiv-2112.10752-b31b1b?style=flat-square&logo=arxiv)](https://arxiv.org/pdf/2112.10752)
+
+**Tags:** Language-conditioned and Multimodal - Backbone Design - Latent-space Modeling
+
+[[🌍 Webpage](https://ommer-lab.com/research/latent-diffusion-models/)] · [[💻 Code](https://github.com/CompVis/latent-diffusion)]
+***
+#### VideoGPT - *VideoGPT: Video Generation using VQ-VAE and Transformers* - [![arXiv](https://img.shields.io/badge/arXiv-2104.10157-b31b1b?style=flat-square&logo=arxiv)](https://arxiv.org/pdf/2104.10157)
+
+**Tags:** Language-conditioned and Multimodal - Backbone Design - Latent-space Modeling
+
+[[🌍 Webpage](https://wilson1yan.github.io/videogpt/index.html)] · [[💻 Code](https://github.com/wilson1yan/VideoGPT)]
+***
+#### Align your Latents - *Align your Latents: High-Resolution Video Synthesis with Latent Diffusion Models* - [![arXiv](https://img.shields.io/badge/arXiv-2304.08818-b31b1b?style=flat-square&logo=arxiv)](https://arxiv.org/pdf/2304.08818)
+
+**Tags:** Language-conditioned and Multimodal - Backbone Design - Latent-space Modeling
+
+[[🌍 Webpage](https://research.nvidia.com/labs/toronto-ai/publication/2023_cvpr_align_latents/)]
+***
+#### MAGVIT - *MAGVIT: Masked Generative Video Transformer* - [![arXiv](https://img.shields.io/badge/arXiv-2212.05199-b31b1b?style=flat-square&logo=arxiv)](https://arxiv.org/pdf/2212.05199)
+
+**Tags:** Language-conditioned and Multimodal - Backbone Design - Latent-space Modeling
+
+[[🌍 Webpage](https://magvit.cs.cmu.edu/)] · [[💻 Code](https://github.com/google-research/magvit)]
+***
+#### Movie Gen - *Movie Gen: A Cast of Media Foundation Models* - [![arXiv](https://img.shields.io/badge/arXiv-2410.13720-b31b1b?style=flat-square&logo=arxiv)](https://arxiv.org/pdf/2410.13720)
+
+**Tags:** Language-conditioned and Multimodal - Backbone Design - Latent-space Modeling
+
+[[🌍 Webpage](https://ai.meta.com/research/movie-gen/)]
+***
+#### Latte - *Latte: Latent Diffusion Transformer for Video Generation* - [![arXiv](https://img.shields.io/badge/arXiv-2401.03048-b31b1b?style=flat-square&logo=arxiv)](https://arxiv.org/pdf/2401.03048)
+
+**Tags:** Language-conditioned and Multimodal - Backbone Design - Latent-space Modeling
+
+[[🌍 Webpage](https://maxin-cn.github.io/latte_project/)] · [[💻 Code](https://github.com/Vchitect/Latte)] · [[🤗 Model](https://huggingface.co/maxin-cn/Latte)]
+***
+#### CogVideoX - *CogVideoX: Text-to-Video Diffusion Models with An Expert Transformer* - [![arXiv](https://img.shields.io/badge/arXiv-2408.06072-b31b1b?style=flat-square&logo=arxiv)](https://arxiv.org/pdf/2408.06072)
+
+**Tags:** Language-conditioned and Multimodal - Backbone Design - Latent-space Modeling
+
+[[💻 Code](https://github.com/zai-org/CogVideo)] · [[🤗 Model](https://huggingface.co/THUDM/CogVideoX-5b)]
+***
+#### LTX-Video - *LTX-Video: Realtime Video Latent Diffusion* - [![arXiv](https://img.shields.io/badge/arXiv-2501.00103-b31b1b?style=flat-square&logo=arxiv)](https://arxiv.org/pdf/2501.00103)
+
+**Tags:** Language-conditioned and Multimodal - Backbone Design - Latent-space Modeling
+
+[[💻 Code](https://github.com/Lightricks/LTX-Video)] · [[🤗 Model](https://huggingface.co/Lightricks/LTX-Video)]
+***
+#### Wan - *Wan: Open and Advanced Large-Scale Video Generative Models* - [![arXiv](https://img.shields.io/badge/arXiv-2503.20314-b31b1b?style=flat-square&logo=arxiv)](https://arxiv.org/pdf/2503.20314)
+
+**Tags:** Language-conditioned and Multimodal - Representative Models - Open-source
+
+[[🌍 Webpage](https://wan.video/)] · [[💻 Code](https://github.com/Wan-Video/Wan2.1)] · [[🤗 Model](https://huggingface.co/Wan-AI/Wan2.1-T2V-14B)]
+***
+#### Wan-Animate - *Wan-Animate: Unified Character Animation and Replacement with Holistic Replication* - [![arXiv](https://img.shields.io/badge/arXiv-2509.14055-b31b1b?style=flat-square&logo=arxiv)](https://arxiv.org/pdf/2509.14055)
+
+**Tags:** Language-conditioned and Multimodal - Representative Models - Open-source
+
+[[🌍 Webpage](https://humanaigc.github.io/wan-animate)] · [[💻 Code](https://github.com/Wan-Video/Wan2.2)] · [[🤗 Model](https://huggingface.co/Wan-AI/Wan2.2-Animate-14B)]
+***
+#### Wan-Move - *Wan-Move: Motion-controllable Video Generation via Latent Trajectory Guidance* - [![arXiv](https://img.shields.io/badge/arXiv-2512.08765-b31b1b?style=flat-square&logo=arxiv)](https://arxiv.org/pdf/2512.08765)
+
+**Tags:** Language-conditioned and Multimodal - Representative Models - Open-source
+
+[[🌍 Webpage](https://wan-move.github.io/)] · [[💻 Code](https://github.com/ali-vilab/Wan-Move)] · [[🤗 Model](https://huggingface.co/Ruihang/Wan-Move-14B-480P)]
+***
+#### Sora 2 - *Sora 2* - [![Website](https://img.shields.io/badge/Website-Link-blue?style=flat-square)](https://openai.com/index/sora-2/)
+
+**Tags:** Language-conditioned and Multimodal - Representative Models - Closed-source
+
+[[🌍 Webpage](https://openai.com/index/sora-2/)]
+***
+#### Kling 3.0 - *Kling 3.0* - [![Website](https://img.shields.io/badge/Website-Link-blue?style=flat-square)](https://app.klingai.com/cn/quickstart/klingai-video-3-model-user-guide)
+
+**Tags:** Language-conditioned and Multimodal - Representative Models - Closed-source
+
+[[🌍 Webpage](https://app.klingai.com/cn/quickstart/klingai-video-3-model-user-guide)]
+***
+#### Veo 3 - *Veo 3* - [![Website](https://img.shields.io/badge/Website-Link-blue?style=flat-square)](https://deepmind.google/models/veo/)
+
+**Tags:** Language-conditioned and Multimodal - Representative Models - Closed-source
+
+[[🌍 Webpage](https://deepmind.google/models/veo/)]
+***
+#### Gen-4 - *Gen-4* - [![Website](https://img.shields.io/badge/Website-Link-blue?style=flat-square)](https://runwayml.com/research/introducing-runway-gen-4?gen4-film=3)
+
+**Tags:** Language-conditioned and Multimodal - Representative Models - Closed-source
+
+[[🌍 Webpage](https://runwayml.com/research/introducing-runway-gen-4?gen4-film=3)]
+***
+#### Pika 2.2 - *Pika 2.2* - [![Website](https://img.shields.io/badge/Website-Link-blue?style=flat-square)](https://pika.art/release-notes/v2-2)
+
+**Tags:** Language-conditioned and Multimodal - Representative Models - Closed-source
+
+[[🌍 Webpage](https://pika.art/release-notes/v2-2)]
+***
+
+
+
+
+
+
+
+
 
 ### Embodied World Model
 
