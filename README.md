@@ -256,7 +256,7 @@ Roadmap 是这个仓库的主导航。后面的分支章节应与图中的命名
 **Tags:** Language-conditioned and Multimodal - Video Foundation Models - GAN-based
 
 ***
-#### Video Diffusion Models - *Video Diffusion Models* - [![arXiv](https://img.shields.io/badge/arXiv-2204.03458-b31b1b?style=flat-square&logo=arxiv)](https://arxiv.org/pdf/2204.03458)
+#### Video Diffusion Models 和下面重复了 - *Video Diffusion Models* - [![arXiv](https://img.shields.io/badge/arXiv-2204.03458-b31b1b?style=flat-square&logo=arxiv)](https://arxiv.org/pdf/2204.03458)
 
 **Tags:** Language-conditioned and Multimodal - Video Foundation Models - Diffusion-based
 
@@ -274,7 +274,7 @@ Roadmap 是这个仓库的主导航。后面的分支章节应与图中的命名
 
 [[🌍 Webpage](https://lmb.informatik.uni-freiburg.de/people/ronneber/u-net/)]
 ***
-#### Video Diffusion Models - *Video Diffusion Models* - [![arXiv](https://img.shields.io/badge/arXiv-2204.03458-b31b1b?style=flat-square&logo=arxiv)](https://arxiv.org/pdf/2204.03458)
+#### Video Diffusion Models 和上面重复了 - *Video Diffusion Models* - [![arXiv](https://img.shields.io/badge/arXiv-2204.03458-b31b1b?style=flat-square&logo=arxiv)](https://arxiv.org/pdf/2204.03458)
 
 **Tags:** Language-conditioned and Multimodal - Backbone Design - U-Net-based
 
@@ -284,7 +284,7 @@ Roadmap 是这个仓库的主导航。后面的分支章节应与图中的命名
 
 **Tags:** Language-conditioned and Multimodal - Backbone Design - U-Net-based
 
-[[🌍 Webpage](https://text2video-zero.github.io/)] · [[💻 Code](https://github.com/Picsart-AI-Research/Text2Video-Zero)]
+[[🌍 Webpage](https://text2video-zero.github.io/)] · [[💻 Code](https://github.com/Picsart-AI-Research/Text2Video-Zero)] · [[🤗 Model](https://huggingface.co/PAIR/text2video-zero-controlnet-canny-arcane)]
 ***
 #### AnimateDiff - *AnimateDiff: Animate Your Personalized Text-to-Image Diffusion Models without Specific Tuning* - [![arXiv](https://img.shields.io/badge/arXiv-2307.04725-b31b1b?style=flat-square&logo=arxiv)](https://arxiv.org/pdf/2307.04725)
 
@@ -304,7 +304,7 @@ Roadmap 是这个仓库的主导航。后面的分支章节应与图中的命名
 
 [[🌍 Webpage](https://openai.com/research/video-generation-models-as-world-simulators)]
 ***
-#### Latte - *Latte: Latent Diffusion Transformer for Video Generation* - [![arXiv](https://img.shields.io/badge/arXiv-2401.03048-b31b1b?style=flat-square&logo=arxiv)](https://arxiv.org/pdf/2401.03048)
+#### Latte 出现两次 - *Latte: Latent Diffusion Transformer for Video Generation* - [![arXiv](https://img.shields.io/badge/arXiv-2401.03048-b31b1b?style=flat-square&logo=arxiv)](https://arxiv.org/pdf/2401.03048)
 
 **Tags:** Language-conditioned and Multimodal - Backbone Design - ViT-based
 
@@ -322,11 +322,11 @@ Roadmap 是这个仓库的主导航。后面的分支章节应与图中的命名
 
 [[🌍 Webpage](https://wilson1yan.github.io/videogpt/index.html)] · [[💻 Code](https://github.com/wilson1yan/VideoGPT)]
 ***
-#### Align your Latents - *Align your Latents: High-Resolution Video Synthesis with Latent Diffusion Models* - [![arXiv](https://img.shields.io/badge/arXiv-2304.08818-b31b1b?style=flat-square&logo=arxiv)](https://arxiv.org/pdf/2304.08818)
+#### Video LDMs - *Align your Latents: High-Resolution Video Synthesis with Latent Diffusion Models* - [![arXiv](https://img.shields.io/badge/arXiv-2304.08818-b31b1b?style=flat-square&logo=arxiv)](https://arxiv.org/pdf/2304.08818)
 
 **Tags:** Language-conditioned and Multimodal - Backbone Design - Latent-space Modeling
 
-[[🌍 Webpage](https://research.nvidia.com/labs/toronto-ai/publication/2023_cvpr_align_latents/)]
+[[🌍 Webpage](https://research.nvidia.com/labs/toronto-ai/VideoLDM/)]
 ***
 #### MAGVIT - *MAGVIT: Masked Generative Video Transformer* - [![arXiv](https://img.shields.io/badge/arXiv-2212.05199-b31b1b?style=flat-square&logo=arxiv)](https://arxiv.org/pdf/2212.05199)
 
@@ -340,7 +340,7 @@ Roadmap 是这个仓库的主导航。后面的分支章节应与图中的命名
 
 [[🌍 Webpage](https://ai.meta.com/research/movie-gen/)]
 ***
-#### Latte - *Latte: Latent Diffusion Transformer for Video Generation* - [![arXiv](https://img.shields.io/badge/arXiv-2401.03048-b31b1b?style=flat-square&logo=arxiv)](https://arxiv.org/pdf/2401.03048)
+#### Latte 重复了 - *Latte: Latent Diffusion Transformer for Video Generation* - [![arXiv](https://img.shields.io/badge/arXiv-2401.03048-b31b1b?style=flat-square&logo=arxiv)](https://arxiv.org/pdf/2401.03048)
 
 **Tags:** Language-conditioned and Multimodal - Backbone Design - Latent-space Modeling
 
@@ -376,35 +376,30 @@ Roadmap 是这个仓库的主导航。后面的分支章节应与图中的命名
 
 [[🌍 Webpage](https://wan-move.github.io/)] · [[💻 Code](https://github.com/ali-vilab/Wan-Move)] · [[🤗 Model](https://huggingface.co/Ruihang/Wan-Move-14B-480P)]
 ***
-#### Sora 2 - *Sora 2* - [![Website](https://img.shields.io/badge/Website-Link-blue?style=flat-square)](https://openai.com/index/sora-2/)
+#### Sora 2 - [![Website](https://img.shields.io/badge/Website-Link-blue?style=flat-square)](https://openai.com/index/sora-2/)
 
 **Tags:** Language-conditioned and Multimodal - Representative Models - Closed-source
 
-[[🌍 Webpage](https://openai.com/index/sora-2/)]
 ***
-#### Kling 3.0 - *Kling 3.0* - [![Website](https://img.shields.io/badge/Website-Link-blue?style=flat-square)](https://app.klingai.com/cn/quickstart/klingai-video-3-model-user-guide)
+#### Kling 3.0 - [![Website](https://img.shields.io/badge/Website-Link-blue?style=flat-square)](https://app.klingai.com/cn/quickstart/klingai-video-3-model-user-guide)
 
 **Tags:** Language-conditioned and Multimodal - Representative Models - Closed-source
 
-[[🌍 Webpage](https://app.klingai.com/cn/quickstart/klingai-video-3-model-user-guide)]
 ***
-#### Veo 3 - *Veo 3* - [![Website](https://img.shields.io/badge/Website-Link-blue?style=flat-square)](https://deepmind.google/models/veo/)
+#### Veo 3 - [![Website](https://img.shields.io/badge/Website-Link-blue?style=flat-square)](https://deepmind.google/models/veo/)
 
 **Tags:** Language-conditioned and Multimodal - Representative Models - Closed-source
 
-[[🌍 Webpage](https://deepmind.google/models/veo/)]
 ***
-#### Gen-4 - *Gen-4* - [![Website](https://img.shields.io/badge/Website-Link-blue?style=flat-square)](https://runwayml.com/research/introducing-runway-gen-4?gen4-film=3)
+#### Gen-4 - [![Website](https://img.shields.io/badge/Website-Link-blue?style=flat-square)](https://runwayml.com/research/introducing-runway-gen-4?gen4-film=3)
 
 **Tags:** Language-conditioned and Multimodal - Representative Models - Closed-source
 
-[[🌍 Webpage](https://runwayml.com/research/introducing-runway-gen-4?gen4-film=3)]
 ***
-#### Pika 2.2 - *Pika 2.2* - [![Website](https://img.shields.io/badge/Website-Link-blue?style=flat-square)](https://pika.art/release-notes/v2-2)
+#### Pika 2.2 - [![Website](https://img.shields.io/badge/Website-Link-blue?style=flat-square)](https://pika.art/release-notes/v2-2)
 
 **Tags:** Language-conditioned and Multimodal - Representative Models - Closed-source
 
-[[🌍 Webpage](https://pika.art/release-notes/v2-2)]
 ***
 
 
