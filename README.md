@@ -412,7 +412,7 @@ Roadmap 是这个仓库的主导航。后面的分支章节应与图中的命名
 ### Embodied World Model
 
 ***
-#### Genie - *Genie: Generative Interactive Environments* - [![arXiv](https://img.shields.io/badge/arXiv-2402.15391-b31b1b?style=flat-square&logo=arxiv)](https://arxiv.org/pdf/2402.15391)
+#### Genie 在action-condition有了 - *Genie: Generative Interactive Environments* - [![arXiv](https://img.shields.io/badge/arXiv-2402.15391-b31b1b?style=flat-square&logo=arxiv)](https://arxiv.org/pdf/2402.15391)
 
 **Tags:** Embodied World Model - Learning Physics from Video-only Data
 
@@ -454,7 +454,7 @@ Roadmap 是这个仓库的主导航。后面的分支章节应与图中的命名
 
 [[🌍 Webpage](https://ctrl-world.github.io/)] · [[💻 Code](https://github.com/Robert-gyj/Ctrl-World)]
 ***
-#### EnerVerse - *EnerVerse: Envisioning Embodied Future Space for Robotics Manipulation* - [![arXiv](https://img.shields.io/badge/arXiv-2501.01895-b31b1b?style=flat-square&logo=arxiv)](https://arxiv.org/pdf/2501.01895)
+#### EnerVerse 之前action-conditioned有了 - *EnerVerse: Envisioning Embodied Future Space for Robotics Manipulation* - [![arXiv](https://img.shields.io/badge/arXiv-2501.01895-b31b1b?style=flat-square&logo=arxiv)](https://arxiv.org/pdf/2501.01895)
 
 **Tags:** Embodied World Model - Realism and Consistency Enhancement
 
@@ -470,14 +470,16 @@ Roadmap 是这个仓库的主导航。后面的分支章节应与图中的命名
 
 **Tags:** Embodied World Model - Realism and Consistency Enhancement
 
+[[🌍 Webpage](https://miscsubmission.github.io/world_model_policy_eval/)]
+
 ***
-#### 4DGen - *Geometry-aware 4D Video Generation for Robot Manipulation* - [![arXiv](https://img.shields.io/badge/arXiv-2507.01099-b31b1b?style=flat-square&logo=arxiv)](https://arxiv.org/pdf/2507.01099)
+#### 4DGen 和cascaded重复了 - *Geometry-aware 4D Video Generation for Robot Manipulation* - [![arXiv](https://img.shields.io/badge/arXiv-2507.01099-b31b1b?style=flat-square&logo=arxiv)](https://arxiv.org/pdf/2507.01099)
 
 **Tags:** Embodied World Model - Realism and Consistency Enhancement
 
-[[🌍 Webpage](https://robot4dgen.github.io/)] · [[💻 Code](https://github.com/lzylucy/4dgen)]
+[[🌍 Webpage](https://robot4dgen.github.io/)] · [[💻 Code](https://github.com/lzylucy/4dgen)] · [[🤗 Model](https://huggingface.co/Zeyi)]
 ***
-#### Vidar - *Vidar: Embodied Video Diffusion Model for Generalist Manipulation* - [![arXiv](https://img.shields.io/badge/arXiv-2507.12898-b31b1b?style=flat-square&logo=arxiv)](https://arxiv.org/pdf/2507.12898)
+#### Vidar 和后面cascaded重复 - *Vidar: Embodied Video Diffusion Model for Generalist Manipulation* - [![arXiv](https://img.shields.io/badge/arXiv-2507.12898-b31b1b?style=flat-square&logo=arxiv)](https://arxiv.org/pdf/2507.12898)
 
 **Tags:** Embodied World Model - Realism and Consistency Enhancement
 
@@ -607,7 +609,7 @@ Roadmap 是这个仓库的主导航。后面的分支章节应与图中的命名
 
 **Tags:** Cascaded - Explicit Visual Planning via Pixel-Space Representations - Geometric Action Extraction
 
-[[🌍 Webpage](https://robot4dgen.github.io/)] · [[💻 Code](https://github.com/lzylucy/4dgen)] · [[🌟 Summary](https://htmlpreview.github.io/?https://github.com/OpenMOSS/WAM-survey/blob/main/Report/4DGen/index.html) ]
+[[🌍 Webpage](https://robot4dgen.github.io/)] · [[💻 Code](https://github.com/lzylucy/4dgen)] · [[🤗 Model](https://huggingface.co/Zeyi)] · [[🌟 Summary](https://htmlpreview.github.io/?https://github.com/OpenMOSS/WAM-survey/blob/main/Report/4DGen/index.html) ]
 ***
 #### RIGVid - *Robotic Manipulation by Imitating Generated Videos Without Physical Demonstrations* - [![arXiv](https://img.shields.io/badge/arXiv-2507.00990-b31b1b?style=flat-square&logo=arxiv)](https://arxiv.org/pdf/2507.00990)
 
