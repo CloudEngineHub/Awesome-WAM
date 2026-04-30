@@ -911,13 +911,13 @@ Roadmap 是这个仓库的主导航。后面的分支章节应与图中的命名
 
 **Tags:** Robot-centric
 
-[[📦 Dataset](https://docs.google.com/spreadsheets/d/1rPBD77tk60AEIGZrGSODwyyzs5FgCU9Uz3h-3_t2A9g/edit?gid=0#gid=0)] · [[🌍 Webpage](https://robotics-transformer-x.github.io/)] · [[💻 Code]([https://github.com/droid-dataset/droid](https://github.com/google-deepmind/open_x_embodiment))]
+[[📦 Dataset](https://docs.google.com/spreadsheets/d/1rPBD77tk60AEIGZrGSODwyyzs5FgCU9Uz3h-3_t2A9g/edit?gid=0#gid=0)] · [[🌍 Webpage](https://robotics-transformer-x.github.io/)] · [[💻 Code](https://github.com/google-deepmind/open_x_embodiment)]
 ***
 #### DROID - *DROID: A Large-Scale In-The-Wild Robot Manipulation Dataset* - [![arXiv](https://img.shields.io/badge/arXiv-2403.12945-b31b1b?style=flat-square&logo=arxiv)](https://arxiv.org/pdf/2403.12945)
 
 **Tags:** Robot-centric
 
-[[📦 Dataset](https://colab.research.google.com/drive/1b4PPH4XGht4Jve2xPKMCh-AXXAQziNQa?usp=sharing)] · [[🌍 Webpage](https://droid-dataset.github.io/)] · [[💻 Code](https://github.com/droid-dataset/droid_policy_learning)]
+[[📦 Dataset](https://droid-dataset.github.io/droid/the-droid-dataset)] · [[🌍 Webpage](https://droid-dataset.github.io/)] · [[💻 Code](https://github.com/droid-dataset/droid_policy_learning)]
 ***
 #### RH20T-P - *RH20T-P: A Primitive-Level Robotic Dataset Towards Composable Generalization Agents* - [![arXiv](https://img.shields.io/badge/arXiv-2403.19622-b31b1b?style=flat-square&logo=arxiv)](https://arxiv.org/pdf/2403.19622)
 
@@ -982,7 +982,85 @@ Roadmap 是这个仓库的主导航。后面的分支章节应与图中的命名
 ***
 
 
+***
+#### UMI - *Universal Manipulation Interface: In-The-Wild Robot Teaching Without In-The-Wild Robots* - [![arXiv](https://img.shields.io/badge/arXiv-2402.10329-b31b1b?style=flat-square&logo=arxiv)](https://arxiv.org/pdf/2402.10329)
 
+**Tags:** UMI-style Human Demonstration
+
+[[🌍 Webpage](https://umi-gripper.github.io/)] · [[💻 Code](https://github.com/real-stanford/universal_manipulation_interface)]
+***
+#### FastUMI - *FastUMI: A Scalable and Hardware-Independent Universal Manipulation Interface with Dataset* - [![arXiv](https://img.shields.io/badge/arXiv-2409.19499-b31b1b?style=flat-square&logo=arxiv)](https://arxiv.org/pdf/2409.19499)
+
+**Tags:** UMI-style Human Demonstration
+
+[[📦 Dataset](https://huggingface.co/datasets/IPEC-COMMUNITY/FastUMI-Data)] · [[🌍 Webpage](https://fastumi.com/FastUMI/)] · [[💻 Code](https://github.com/zxzm-zak/FastUMI_Data)]
+***
+#### FastUMI-100K - *FastUMI-100K: Advancing Data-driven Robotic Manipulation with a Large-scale UMI-style Dataset* - [![arXiv](https://img.shields.io/badge/arXiv-2510.08022-b31b1b?style=flat-square&logo=arxiv)](https://arxiv.org/pdf/2510.08022)
+
+**Tags:** UMI-style Human Demonstration
+
+[[💻 Code](https://github.com/MrKeee/FastUMI-100K)]
+***
+#### RealOmin - *10Kh-RealOmin-OpenData: A Large-Scale Real-World Manipulation Dataset* - [![Link](https://img.shields.io/badge/Link-Dataset-blue?style=flat-square)](https://huggingface.co/datasets/genrobot2025/10Kh-RealOmin-OpenData)
+
+**Tags:** UMI-style Human Demonstration
+
+[[📦 Dataset](https://huggingface.co/datasets/genrobot2025/10Kh-RealOmin-OpenData)] · [[🌍 Webpage](https://www.genrobot.ai/data/open-dataset)] · [[💻 Code](https://github.com/genrobot-ai/das-datakit)]
+***
+#### Hoi! - *Hoi! -- A Multimodal Dataset for Force-Grounded, Cross-View Articulated Manipulation* - [![arXiv](https://img.shields.io/badge/arXiv-2512.04884-b31b1b?style=flat-square&logo=arxiv)](https://arxiv.org/pdf/2512.04884)
+
+**Tags:** UMI-style Human Demonstration
+
+[[📦 Example Data](https://drive.google.com/drive/folders/1Hzpt5WXFbUg0CNVU7gudH-4z-HkC6kGR)] · [[🌍 Webpage](https://timengelbracht.github.io/Hoi-Dataset-Website/)]
+***
+#### RDT2 - *RDT2: Exploring the Scaling Limit of UMI Data Towards Zero-Shot Cross-Embodiment Generalization* - [![arXiv](https://img.shields.io/badge/arXiv-2602.03310-b31b1b?style=flat-square&logo=arxiv)](https://arxiv.org/pdf/2602.03310)
+
+**Tags:** UMI-style Human Demonstration
+
+[[🌍 Webpage](https://rdt-robotics.github.io/rdt2/)] · [[💻 Code](https://github.com/thu-ml/RDT2)] · [[🤗 Model](https://huggingface.co/robotics-diffusion-transformer/RDT2-VQ)] · [[🤗 Model](https://huggingface.co/robotics-diffusion-transformer/RDT2-FM)]
+***
+#### MV-UMI - *MV-UMI: A Scalable Multi-View Interface for Cross-Embodiment Learning* - [![arXiv](https://img.shields.io/badge/arXiv-2509.18757-b31b1b?style=flat-square&logo=arxiv)](https://arxiv.org/pdf/2509.18757)
+
+**Tags:** UMI-style Human Demonstration
+
+[[🌍 Webpage](https://mv-umi.github.io/)]
+***
+#### ActiveUMI - *ActiveUMI: Robotic Manipulation with Active Perception from Robot-Free Human Demonstrations* - [![arXiv](https://img.shields.io/badge/arXiv-2510.01607-b31b1b?style=flat-square&logo=arxiv)](https://arxiv.org/pdf/2510.01607)
+
+**Tags:** UMI-style Human Demonstration
+
+[[🌍 Webpage](https://activeumi.github.io/)]
+***
+#### exUMI - *exUMI: Extensible Robot Teaching System with Action-aware Task-agnostic Tactile Representation* - [![arXiv](https://img.shields.io/badge/arXiv-2509.14688-b31b1b?style=flat-square&logo=arxiv)](https://arxiv.org/pdf/2509.14688)
+
+**Tags:** UMI-style Human Demonstration
+
+[[🌍 Webpage](https://silicx.github.io/exUMI/)] · [[💻 Code](https://github.com/silicx/exUMI)]
+***
+#### Tactile-Conditioned Diffusion Policy - *Tactile-Conditioned Diffusion Policy for Force-Aware Robotic Manipulation* - [![arXiv](https://img.shields.io/badge/arXiv-2510.13324-b31b1b?style=flat-square&logo=arxiv)](https://arxiv.org/pdf/2510.13324)
+
+**Tags:** UMI-style Human Demonstration
+
+[[🌍 Webpage](https://tactile-farm.github.io/)]
+***
+#### DexUMI - *DexUMI: Using Human Hand as the Universal Manipulation Interface for Dexterous Manipulation* - [![arXiv](https://img.shields.io/badge/arXiv-2505.21864-b31b1b?style=flat-square&logo=arxiv)](https://arxiv.org/pdf/2505.21864)
+
+**Tags:** UMI-style Human Demonstration
+
+[[📦 Dataset](https://umi-data.github.io/)] · [[🌍 Webpage](https://dex-umi.github.io/)] · [[💻 Code](https://github.com/real-stanford/DexUMI)]
+***
+#### UMI on Legs - *UMI on Legs: Making Manipulation Policies Mobile with Manipulation-Centric Whole-body Controllers* - [![arXiv](https://img.shields.io/badge/arXiv-2407.10353-b31b1b?style=flat-square&logo=arxiv)](https://arxiv.org/pdf/2407.10353)
+
+**Tags:** UMI-style Human Demonstration
+
+[[🌍 Webpage](https://umi-on-legs.github.io/)] · [[💻 Code](https://github.com/real-stanford/umi-on-legs)]
+***
+#### HoMMI - *HoMMI: Learning Whole-Body Mobile Manipulation from Human Demonstrations* - [![arXiv](https://img.shields.io/badge/arXiv-2603.03243-b31b1b?style=flat-square&logo=arxiv)](https://arxiv.org/pdf/2603.03243)
+
+**Tags:** UMI-style Human Demonstration
+
+[[🌍 Webpage](https://hommi-robot.github.io/)] · [[💻 Code](https://github.com/xxm19/hommi)]
+***
 
 
 
