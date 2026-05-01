@@ -15,6 +15,7 @@
 ## Contents
 
 - [Roadmap](#roadmap)
+- [Tag Legend](#tag-legend)
 - [World Action Models for Generalist Robotics](#world-action-models-for-generalist-robotics)
   - [World Model](#world-model)
     - [Action-Conditioned](#action-conditioned)
@@ -36,16 +37,71 @@ Roadmap 是这个仓库的主导航。后面的分支章节应与图中的命名
 
 示例：如果路线图中有 `[Branch A] -> [Branch B] -> [Branch C]`，那么下方就按相同层级组织对应论文与报告。
 
+## Tag Legend
+### World Model tags
+**![](https://img.shields.io/badge/Action--Conditioned-0ea5e9) Action-conditioned**
+- ![](https://img.shields.io/badge/Explicit-2ea44f) Explicit Pixel-level Prediction and Video-based WMs
+- ![](https://img.shields.io/badge/Implicit-2ea44f) Implicit Latent-space Dynamics Models
+
+**![](https://img.shields.io/badge/Language--Conditioned-f85149) Language-conditioned**
+
+**![](https://img.shields.io/badge/Embodied--WM-0ea5e9) Embodied World Model**
+
+### World Action Model tags
+**![](https://img.shields.io/badge/Cascaded-f59e0b) Cascaded WAM**
+- ![](https://img.shields.io/badge/Explicit-d29922) Explicit Planning
+  - ![](https://img.shields.io/badge/Learned-7c3aed) Learned Action Extraction
+  - ![](https://img.shields.io/badge/Geometric-2563eb) Geometric Action Extraction
+- ![](https://img.shields.io/badge/Implicit-0ea5e9) Implicit Planning
+
+**![](https://img.shields.io/badge/Joint-ec4899) Joint WAM**
+- ![](https://img.shields.io/badge/Discrete-d29922) Discrete Tokenization
+  - ![](https://img.shields.io/badge/Causal--TF-7c3aed) Causal Transformer
+  - ![](https://img.shields.io/badge/MLLM-2563eb) Unified MLLM
+  - ![](https://img.shields.io/badge/LatentPred-7c3aed) Latent Predictive
+  - ![](https://img.shields.io/badge/Parallel-2563eb) Parallel Decoding
+- ![](https://img.shields.io/badge/Continuous-0ea5e9) Continuous Diffusion
+  - ![](https://img.shields.io/badge/Single--DiT-7c3aed) Single Dit
+    - ![](https://img.shields.io/badge/Explicit-2563eb) Explicit Future Generation
+    - ![](https://img.shields.io/badge/Implicit-7c3aed) Implicit Future-Representation Alignment
+  - ![](https://img.shields.io/badge/Multi--Dit-7c3aed) Multi Dit
+    - ![](https://img.shields.io/badge/CrossAttention-2563eb) Cross-Attention Coupling
+    - ![](https://img.shields.io/badge/HiddenState-2563eb) Hidden-State Coupling
+    - ![](https://img.shields.io/badge/SharedRep-db2777) Unified Encoder
+
+### Training Data
+**![](https://img.shields.io/badge/data--RobotCentric-7c3aed) Robot-centric Teleoperation**
+
+**![](https://img.shields.io/badge/data--UMI-2563eb) UMI-style Human Demonstration**
+
+**![](https://img.shields.io/badge/data--Simulation-db2777) Simulation Data**
+
+**![](https://img.shields.io/badge/data--Human/Egocentric-16a34a) Human / Egocentric Data**
+
+### Evaluation - 待补全
+![](https://img.shields.io/badge/eng--video2data-7c3aed) Robot-centric Teleoperation
+
+![](https://img.shields.io/badge/eng--hardware-2563eb) UMI-style Human Demonstration
+
+![](https://img.shields.io/badge/eng--generative-db2777) Simulation Data
+
+![](https://img.shields.io/badge/src--human-16a34a) Human / Egocentric Data
+
+
+
 ## World Action Models for Generalist Robotics
 下面的每个分支都应对应 roadmap 中的一个节点。建议每个分支只保留一段简短说明和一个紧凑表格，方便后续持续补充。
-
+- ![](https://img.shields.io/badge/Explicit-2ea44f) Explicit Pixel-level Prediction and Video-based WMs
+  - ![](https://img.shields.io/badge/Explicit--Pixel-8957e5) Pixel-level Prediction
+  - ![](https://img.shields.io/badge/Explicit--AutoReg-8b949e) Autoregressive Video WMs
+  - ![](https://img.shields.io/badge/Explicit--Diffusion-f59e0b) Diffusion-based Video WMs
 ## World Model
 ### Action-conditioned
 
 ***
 #### Physical Interaction - *Unsupervised Learning for Physical Interaction through Video Prediction* - [![arXiv](https://img.shields.io/badge/arXiv-1605.07157-b31b1b?style=flat-square&logo=arxiv)](https://arxiv.org/pdf/1605.07157)
 
-**Tags:** Action-conditioned - Explicit Pixel-level Prediction and Video-based WMs - Pixel-level Prediction
+**Tags:** ![](https://img.shields.io/badge/Action--Conditioned-0ea5e9) - ![](https://img.shields.io/badge/Explicit-2ea44f)
 
 ***
 #### MCNet - *Decomposing Motion and Content for Natural Video Sequence Prediction* - [![arXiv](https://img.shields.io/badge/arXiv-1706.08033-b31b1b?style=flat-square&logo=arxiv)](https://arxiv.org/pdf/1706.08033)
