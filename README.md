@@ -1149,6 +1149,89 @@ Roadmap 是这个仓库的主导航。后面的分支章节应与图中的命名
 
 
 
+#### MimicGen - *MimicGen: A Data Generation System for Scalable Robot Learning using Human Demonstrations* - [![arXiv](https://img.shields.io/badge/arXiv-2310.17596-b31b1b?style=flat-square&logo=arxiv)](https://arxiv.org/pdf/2310.17596)
+
+**Tags:** ![](https://img.shields.io/badge/data--Simulation-15803d)
+
+[[📦 Dataset](https://huggingface.co/datasets/amandlek/mimicgen_datasets)] · [[🌍 Webpage](https://mimicgen.github.io/)] · [[💻 Code](https://github.com/NVlabs/mimicgen)]
+***
+#### ManiSkill2 - *ManiSkill2: A Unified Benchmark for Generalizable Manipulation Skills* - [![arXiv](https://img.shields.io/badge/arXiv-2302.04659-b31b1b?style=flat-square&logo=arxiv)](https://arxiv.org/pdf/2302.04659)
+
+**Tags:** ![](https://img.shields.io/badge/data--Simulation-15803d)
+
+[[📦 Dataset](https://huggingface.co/datasets/haosulab/ManiSkill2)] · [[🌍 Webpage](https://haosulab.github.io/ManiSkill2/)] · [[💻 Code](https://github.com/KolinGuo/ManiSkill2)]
+***
+#### RoboCasa - *RoboCasa: Large-Scale Simulation of Everyday Tasks for Generalist Robots* - [![arXiv](https://img.shields.io/badge/arXiv-2406.02523-b31b1b?style=flat-square&logo=arxiv)](https://arxiv.org/pdf/2406.02523)
+
+**Tags:** ![](https://img.shields.io/badge/data--Simulation-15803d)
+
+[[📦 Dataset](https://robocasa.ai/docs/build/html/datasets/using_datasets.html)] · [[🌍 Webpage](https://robocasa.ai/)] · [[💻 Code](https://github.com/robocasa/robocasa)]
+***
+#### RoboTwin - *RoboTwin: Dual-Arm Robot Benchmark with Generative Digital Twins* - [![arXiv](https://img.shields.io/badge/arXiv-2504.13059-b31b1b?style=flat-square&logo=arxiv)](https://arxiv.org/pdf/2504.13059)
+
+**Tags:** ![](https://img.shields.io/badge/data--Simulation-15803d)
+
+[[📦 Dataset](https://huggingface.co/datasets/TianxingChen/RoboTwin)] · [[🌍 Webpage](https://robotwin-platform.github.io/)] · [[💻 Code](https://github.com/RoboTwin-Platform/RoboTwin)]
+***
+#### DexMimicGen - *DexMimicGen: Automated Data Generation for Bimanual Dexterous Manipulation via Imitation Learning* - [![arXiv](https://img.shields.io/badge/arXiv-2410.24185-b31b1b?style=flat-square&logo=arxiv)](https://arxiv.org/pdf/2410.24185)
+
+**Tags:** ![](https://img.shields.io/badge/data--Simulation-15803d)
+
+[[📦 Dataset](https://huggingface.co/datasets/MimicGen/dexmimicgen_datasets)] · [[🌍 Webpage](https://dexmimicgen.github.io/)] · [[💻 Code](https://github.com/NVlabs/dexmimicgen)]
+***
+#### QUARD-Auto - *GeRM: A Generalist Robotic Model with Mixture-of-experts for Quadruped Robot* - [![arXiv](https://img.shields.io/badge/arXiv-2403.13358-b31b1b?style=flat-square&logo=arxiv)](https://arxiv.org/pdf/2403.13358)
+
+**Tags:** ![](https://img.shields.io/badge/data--Simulation-15803d)
+
+Dataset: Not publicly available
+***
+#### TesserAct - *TesserAct: Learning 4D Embodied World Models* - [![arXiv](https://img.shields.io/badge/arXiv-2504.20995-b31b1b?style=flat-square&logo=arxiv)](https://arxiv.org/pdf/2504.20995)
+
+**Tags:** ![](https://img.shields.io/badge/data--Simulation-15803d)
+
+Dataset: No standalone official public dataset page found
+
+[[🌍 Webpage](https://tesseractworld.github.io/)] · [[💻 Code](https://github.com/UMass-Embodied-AGI/TesserAct)] · [[🤗 Model](https://huggingface.co/anyeZHY/tesseract)]
+***
+#### RoboCerebra - *RoboCerebra: A Large-scale Benchmark for Long-horizon Robotic Manipulation Evaluation* - [![arXiv](https://img.shields.io/badge/arXiv-2506.06677-b31b1b?style=flat-square&logo=arxiv)](https://arxiv.org/pdf/2506.06677)
+
+**Tags:** ![](https://img.shields.io/badge/data--Simulation-15803d)
+
+[[📦 Dataset](https://huggingface.co/datasets/lerobot/robocerebra_unified)] · [[🌍 Webpage](https://robocerebra.github.io/)]
+***
+#### SynGrasp-1B - *GraspVLA: a Grasping Foundation Model Pre-trained on Billion-scale Synthetic Action Data* - [![arXiv](https://img.shields.io/badge/arXiv-2505.03233-b31b1b?style=flat-square&logo=arxiv)](https://arxiv.org/pdf/2505.03233)
+
+**Tags:** ![](https://img.shields.io/badge/data--Simulation-15803d)
+
+[[📦 Dataset](https://pku-epic.github.io/GraspVLA-web)] · [[🌍 Webpage](https://pku-epic.github.io/GraspVLA-web)] · [[💻 Code](https://github.com/PKU-EPIC/GraspVLA)]
+***
+#### RoboTwin 2.0 - *RoboTwin 2.0: A Scalable Data Generator and Benchmark with Strong Domain Randomization for Robust Bimanual Robotic Manipulation* - [![arXiv](https://img.shields.io/badge/arXiv-2506.18088-b31b1b?style=flat-square&logo=arxiv)](https://arxiv.org/pdf/2506.18088)
+
+**Tags:** ![](https://img.shields.io/badge/data--Simulation-15803d)
+
+[[📦 Dataset](https://huggingface.co/datasets/TianxingChen/RoboTwin2.0)] · [[🌍 Webpage](https://robotwin-platform.github.io/)] · [[💻 Code](https://github.com/RoboTwin-Platform/RoboTwin)]
+***
+#### TLA - *TLA: Tactile-Language-Action Model for Contact-Rich Manipulation* - [![arXiv](https://img.shields.io/badge/arXiv-2503.08548-b31b1b?style=flat-square&logo=arxiv)](https://arxiv.org/pdf/2503.08548)
+
+**Tags:** ![](https://img.shields.io/badge/data--Simulation-15803d)
+
+[[📦 Dataset](https://sites.google.com/view/tactile-language-action/)] · [[🌍 Webpage](https://sites.google.com/view/tactile-language-action/)]
+***
+#### InternVLA-M1 - *InternVLA-M1: A Spatially Guided Vision-Language-Action Framework for Generalist Robot Policy* - [![arXiv](https://img.shields.io/badge/arXiv-2510.13778-b31b1b?style=flat-square&logo=arxiv)](https://arxiv.org/pdf/2510.13778)
+
+**Tags:** ![](https://img.shields.io/badge/data--Simulation-15803d)
+
+[[📦 Dataset](https://huggingface.co/datasets/InternRobotics/InternData-M1)] · [[🌍 Webpage](https://internrobotics.github.io/internvla-m1.github.io)] · [[💻 Code](https://github.com/InternRobotics/InternVLA-M1)] · [[🤗 Model](https://huggingface.co/InternRobotics/InternVLA-M1)]
+***
+#### InternData-A1 - *InternVLA-A1: Unifying Understanding, Generation and Action for Robotic Manipulation* - [![arXiv](https://img.shields.io/badge/arXiv-2601.02456-b31b1b?style=flat-square&logo=arxiv)](https://arxiv.org/pdf/2601.02456)
+
+**Tags:** ![](https://img.shields.io/badge/data--Simulation-15803d)
+
+[[📦 Dataset](https://huggingface.co/datasets/InternRobotics/InternData-A1)] · [[🌍 Webpage](https://internrobotics.github.io/interndata-a1.github.io/)] · [[💻 Code](https://github.com/InternRobotics/InternVLA-A1)] · [[🤗 Model](https://huggingface.co/InternRobotics/InternVLA-A1-3B)]
+***
+
+
+
 ### Evaluation
 
 
