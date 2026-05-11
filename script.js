@@ -10,7 +10,7 @@ const FALLBACK_PAPERS = [
     links: [
       { label: "arXiv", url: "https://arxiv.org/abs/2602.15922" },
       { label: "Project", url: "https://dreamzero0.github.io/" },
-      { label: "Blog", url: "./report/DreamZero/index.html" },
+      { label: "Blog", url: "./report/2602.15922/index.html" },
     ],
   },
   {
@@ -24,7 +24,7 @@ const FALLBACK_PAPERS = [
     links: [
       { label: "arXiv", url: "https://arxiv.org/abs/2601.16163" },
       { label: "Project", url: "https://research.nvidia.com/labs/dir/cosmos-policy/" },
-      { label: "Blog", url: "./report/CosmosPolicy/index.html" },
+      { label: "Blog", url: "./report/2601.16163/index.html" },
     ],
   },
 ];
@@ -181,11 +181,15 @@ function normalizeArxivUrl(url) {
   return url.replace("/pdf/", "/abs/").replace(/\.pdf$/i, "");
 }
 
-function normalizeLibraryUrl(url) {
+function normalizeLibraryUrl(url, rawLabel, arxiv) {
+  const label = rawLabel.toLowerCase();
+  if (label.includes("summary") && arxiv) {
+    return `./report/${arxiv}/index.html`;
+  }
   const reportMatch = url.match(/github\.com\/OpenMOSS\/WAM-survey\/blob\/main\/Report\/([^/]+)\/index\.html/i);
   if (reportMatch) {
     const slug = decodeURIComponent(reportMatch[1]);
-    return `./report/${slug}/index.html`;
+    return arxiv ? `./report/${arxiv}/index.html` : `./report/${slug}/index.html`;
   }
   return url;
 }
@@ -215,7 +219,7 @@ function parsePaperBlock(block, branch, lane) {
   }
 
   [...block.matchAll(/\[\[([^\]]+)]\((https?:\/\/[^)]+)\)\s*]/g)].forEach((match) => {
-    const url = normalizeLibraryUrl(normalizeArxivUrl(match[2].trim()));
+    const url = normalizeLibraryUrl(normalizeArxivUrl(match[2].trim()), match[1], arxiv);
     if (links.some((link) => link.url === url)) return;
     links.push({ label: labelFromLink(match[1], url), url });
   });
@@ -335,7 +339,7 @@ function createPaperCard(paper, index) {
   paper.links.slice(0, 5).forEach((link) => {
     const a = el("a", "paper-link", link.label);
     a.href = link.url;
-    if (/^https?:\/\//.test(link.url)) {
+    if (link.label === "Blog" || /^https?:\/\//.test(link.url)) {
       a.target = "_blank";
       a.rel = "noopener";
     }
