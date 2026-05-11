@@ -1,11 +1,3 @@
-const REPORT_PATHS = {
-  DreamZero: "./Report/DreamZero/index.html",
-  "World Action Models are Zero-shot Policies": "./Report/DreamZero/index.html",
-  "Cosmos Policy": "./Report/Cosmos%20Policy/index.html",
-  "Cosmos Policy: Fine-Tuning Video Models for Visuomotor Control and Planning":
-    "./Report/Cosmos%20Policy/index.html",
-};
-
 const FALLBACK_PAPERS = [
   {
     name: "DreamZero",
@@ -18,7 +10,7 @@ const FALLBACK_PAPERS = [
     links: [
       { label: "arXiv", url: "https://arxiv.org/abs/2602.15922" },
       { label: "Project", url: "https://dreamzero0.github.io/" },
-      { label: "Analysis", url: "./Report/DreamZero/index.html" },
+      { label: "Blog", url: "./report/DreamZero/index.html" },
     ],
   },
   {
@@ -32,7 +24,7 @@ const FALLBACK_PAPERS = [
     links: [
       { label: "arXiv", url: "https://arxiv.org/abs/2601.16163" },
       { label: "Project", url: "https://research.nvidia.com/labs/dir/cosmos-policy/" },
-      { label: "Analysis", url: "./Report/Cosmos%20Policy/index.html" },
+      { label: "Blog", url: "./report/CosmosPolicy/index.html" },
     ],
   },
 ];
@@ -41,6 +33,7 @@ const state = {
   papers: [],
   activeFilter: "all",
   query: "",
+  sortBy: "newest",
   visible: 18,
 };
 
@@ -50,6 +43,7 @@ const els = {
   branchCount: document.querySelector("#branchCount"),
   resultCount: document.querySelector("#resultCount"),
   search: document.querySelector("#paperSearch"),
+  sort: document.querySelector("#paperSort"),
   loadMore: document.querySelector("#loadMore"),
   resetFilters: document.querySelector("#resetFilters"),
 };
@@ -84,7 +78,22 @@ function setupRevealAnimations() {
 
 function setupSidebarActive() {
   const links = [...document.querySelectorAll(".sidebar-link")];
-  if (!links.length || typeof IntersectionObserver !== "function") return;
+  if (!links.length) return;
+
+  const sectionIds = [
+    "overview",
+    "definition",
+    "vlas-wms",
+    "architecture",
+    "training-data",
+    "evaluation",
+    "challenges",
+    "library",
+  ];
+  const sections = sectionIds
+    .map((id) => document.getElementById(id))
+    .filter(Boolean);
+  if (!sections.length) return;
 
   function setActiveLink(activeId) {
     links.forEach((link) => {
@@ -98,32 +107,37 @@ function setupSidebarActive() {
     });
   }
 
-  const observer = new IntersectionObserver(
-    (entries) => {
-      entries.forEach((entry) => {
-        if (!entry.isIntersecting) return;
-        setActiveLink(entry.target.id);
-      });
-    },
-    { threshold: 0.32, rootMargin: "-86px 0px -42% 0px" },
-  );
+  function updateActiveLink() {
+    const activationLine = window.scrollY + 140;
+    let activeSection = sections[0];
 
-  [
-    "overview",
-    "thesis",
-    "figures",
-    "architecture",
-    "data",
-    "evaluation",
-    "reports",
-    "explorer",
-    "challenges",
-  ].forEach((id) => {
-    const section = document.getElementById(id);
-    if (section) observer.observe(section);
-  });
+    sections.forEach((section) => {
+      if (section.offsetTop <= activationLine) {
+        activeSection = section;
+      }
+    });
 
-  setActiveLink("overview");
+    if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 4) {
+      activeSection = sections[sections.length - 1];
+    }
+
+    setActiveLink(activeSection.id);
+  }
+
+  let ticking = false;
+  function requestUpdate() {
+    if (ticking) return;
+    ticking = true;
+    window.requestAnimationFrame(() => {
+      updateActiveLink();
+      ticking = false;
+    });
+  }
+
+  window.addEventListener("scroll", requestUpdate, { passive: true });
+  window.addEventListener("resize", requestUpdate);
+
+  updateActiveLink();
 }
 
 function stripMarkdown(input) {
@@ -148,7 +162,7 @@ function cleanPaperName(name) {
 
 function labelFromLink(rawLabel, url) {
   const label = rawLabel.toLowerCase();
-  if (label.includes("summary") || url.includes("Report/") || url.includes("htmlpreview")) return "Analysis";
+  if (label.includes("summary")) return "Blog";
   if (label.includes("code") || url.includes("github.com")) return "Code";
   if (label.includes("model") || url.includes("huggingface.co")) return "Model";
   if (label.includes("webpage") || label.includes("website")) return "Project";
@@ -160,14 +174,24 @@ function inferCategory(branch, lane, tags) {
   const haystack = `${branch} ${lane} ${tags.join(" ")}`.toLowerCase();
   if (haystack.includes("joint world-action-model")) return "joint";
   if (haystack.includes("cascaded world-action-model")) return "cascaded";
-  if (haystack.includes("embodied world model")) return "embodied";
-  if (haystack.includes("language-conditioned") || haystack.includes("multimodal")) return "multimodal";
-  if (haystack.includes("action-conditioned")) return "action-conditioned";
   return "all";
 }
 
 function normalizeArxivUrl(url) {
   return url.replace("/pdf/", "/abs/").replace(/\.pdf$/i, "");
+}
+
+function normalizeLibraryUrl(url) {
+  const reportMatch = url.match(/github\.com\/OpenMOSS\/WAM-survey\/blob\/main\/Report\/([^/]+)\/index\.html/i);
+  if (reportMatch) {
+    const slug = decodeURIComponent(reportMatch[1]);
+    return `./report/${slug}/index.html`;
+  }
+  return url;
+}
+
+function keepLibraryPaper(paper) {
+  return paper.category === "cascaded" || paper.category === "joint";
 }
 
 function parsePaperBlock(block, branch, lane) {
@@ -190,18 +214,11 @@ function parsePaperBlock(block, branch, lane) {
     links.push({ label: "arXiv", url: `https://arxiv.org/abs/${arxiv}` });
   }
 
-  const reportPath = REPORT_PATHS[name] || REPORT_PATHS[title];
-
   [...block.matchAll(/\[\[([^\]]+)]\((https?:\/\/[^)]+)\)\s*]/g)].forEach((match) => {
-    const url = normalizeArxivUrl(match[2].trim());
-    if (reportPath && url.includes("htmlpreview.github.io")) return;
+    const url = normalizeLibraryUrl(normalizeArxivUrl(match[2].trim()));
     if (links.some((link) => link.url === url)) return;
     links.push({ label: labelFromLink(match[1], url), url });
   });
-
-  if (reportPath && !links.some((link) => link.url === reportPath)) {
-    links.push({ label: "Analysis", url: reportPath });
-  }
 
   return {
     name,
@@ -273,15 +290,34 @@ function getSearchText(paper) {
 
 function getFilteredPapers() {
   const query = state.query.trim().toLowerCase();
-  return state.papers.filter((paper) => {
+  const filtered = state.papers.filter((paper) => {
     const filterMatch = state.activeFilter === "all" || paper.category === state.activeFilter;
     const queryMatch = !query || getSearchText(paper).includes(query);
     return filterMatch && queryMatch;
   });
+
+  function getSortTimestamp(paper) {
+    if (!paper.arxiv) return 0;
+    const base = paper.arxiv.replace(/^(\d{4}\.\d+).*/, "$1").replace(".", "");
+    const numeric = Number(base);
+    return Number.isFinite(numeric) ? numeric : 0;
+  }
+
+  filtered.sort((a, b) => {
+    if (state.sortBy === "oldest") {
+      return getSortTimestamp(a) - getSortTimestamp(b) || a.name.localeCompare(b.name);
+    }
+    if (state.sortBy === "name-asc") {
+      return a.name.localeCompare(b.name);
+    }
+    return getSortTimestamp(b) - getSortTimestamp(a) || a.name.localeCompare(b.name);
+  });
+
+  return filtered;
 }
 
 function createPaperCard(paper, index) {
-  const card = el("article", `paper-card reveal${REPORT_PATHS[paper.name] ? " is-report" : ""}`);
+  const card = el("article", "paper-card reveal");
   card.style.setProperty("--delay", `${Math.min(index * 35, 280)}ms`);
 
   const head = el("div", "paper-card-head");
@@ -313,7 +349,11 @@ function createPaperCard(paper, index) {
 }
 
 function renderStats() {
-  const branches = new Set(state.papers.map((paper) => paper.lane || paper.branch).filter(Boolean));
+  const branches = new Set(
+    state.papers
+      .map((paper) => paper.category)
+      .filter((category) => category === "cascaded" || category === "joint"),
+  );
   if (els.paperCount) els.paperCount.textContent = String(state.papers.length);
   if (els.branchCount) els.branchCount.textContent = String(branches.size);
 }
@@ -378,6 +418,12 @@ function setupFilters() {
     renderPapers();
   });
 
+  els.sort?.addEventListener("change", (event) => {
+    state.sortBy = event.target.value || "newest";
+    state.visible = 18;
+    renderPapers();
+  });
+
   els.loadMore?.addEventListener("click", () => {
     state.visible += 18;
     renderPapers();
@@ -386,8 +432,10 @@ function setupFilters() {
   els.resetFilters?.addEventListener("click", () => {
     state.activeFilter = "all";
     state.query = "";
+    state.sortBy = "newest";
     state.visible = 18;
     if (els.search) els.search.value = "";
+    if (els.sort) els.sort.value = "newest";
     updateFilterButtons("all");
     renderPapers();
   });
@@ -400,12 +448,13 @@ async function loadPapers() {
     const markdown = await response.text();
     const parsed = parseReadme(markdown);
     if (!parsed.length) throw new Error("No papers parsed from README");
-    state.papers = parsed;
+    state.papers = parsed.filter(keepLibraryPaper);
+    if (!state.papers.length) throw new Error("No cascaded or joint WAM papers parsed from README");
   } catch (error) {
     console.warn(error);
-    state.papers = FALLBACK_PAPERS;
+    state.papers = FALLBACK_PAPERS.filter(keepLibraryPaper);
     if (els.resultCount) {
-      els.resultCount.textContent = "Related papers could not be loaded. Showing representative systems.";
+      els.resultCount.textContent = "Related papers could not be loaded. Showing a small fallback library.";
     }
   }
   renderStats();

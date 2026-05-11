@@ -5,10 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta
       name="description"
-      content="World Action Models for generalist robotics: definitions, architectural taxonomy, training data, evaluation protocols, representative systems, and open challenges."
+      content="World Action Models: The Next Frontier in Embodied AI. A survey of definitions and formalism, VLAs and world models, architecture, training data, evaluation, and open challenges."
     />
     <meta name="theme-color" content="#f6f7f3" />
-    <title>WAM Survey | World Action Models for Generalist Robotics</title>
+    <title>WAM Survey | World Action Models: The Next Frontier in Embodied AI</title>
     <link rel="stylesheet" href="./styles.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -18,7 +18,7 @@
     />
   </head>
   <body>
-    <a class="skip-link" href="#explorer">Skip to paper library</a>
+    <a class="skip-link" href="#library">Skip to paper library</a>
 
     <nav class="sidebar" aria-label="Page navigation">
       <a class="sidebar-brand" href="#overview" aria-label="WAM Survey">
@@ -27,33 +27,30 @@
       </a>
       <div class="sidebar-links">
         <a class="sidebar-link active" href="#overview">Overview</a>
-        <a class="sidebar-link" href="#thesis">Thesis</a>
-        <a class="sidebar-link" href="#figures">Figures</a>
+        <a class="sidebar-link" href="#definition">Definition</a>
+        <a class="sidebar-link" href="#vlas-wms">VLAs and WMs</a>
         <a class="sidebar-link" href="#architecture">Architecture</a>
-        <a class="sidebar-link" href="#data">Data</a>
+        <a class="sidebar-link" href="#training-data">Training Data</a>
         <a class="sidebar-link" href="#evaluation">Evaluation</a>
-        <a class="sidebar-link" href="#reports">Reports</a>
-        <a class="sidebar-link" href="#explorer">Literature</a>
         <a class="sidebar-link" href="#challenges">Challenges</a>
-      </div>
-      <div class="sidebar-utility" aria-label="Primary files">
-        <a href="./WAM_survey/OpenMOSS.pdf">PDF</a>
-        <a href="./WAM_survey/paper.tex">TEX</a>
+        <a class="sidebar-link" href="#library">Library</a>
       </div>
     </nav>
 
     <header class="mobile-header">
       <div class="mobile-topbar">
         <a class="mobile-brand" href="#overview">WAM Survey</a>
-        <a class="btn btn-dark btn-sm" href="#explorer">Literature</a>
+        <a class="btn btn-dark btn-sm" href="#library">Library</a>
       </div>
       <nav class="mobile-section-nav" aria-label="Mobile page sections">
         <a href="#overview">Overview</a>
-        <a href="#figures">Figures</a>
+        <a href="#definition">Definition</a>
+        <a href="#vlas-wms">VLAs and WMs</a>
         <a href="#architecture">Architecture</a>
+        <a href="#training-data">Training Data</a>
         <a href="#evaluation">Evaluation</a>
-        <a href="#reports">Reports</a>
         <a href="#challenges">Challenges</a>
+        <a href="#library">Library</a>
       </nav>
     </header>
 
@@ -62,255 +59,233 @@
         <div class="hero-copy">
           <div class="paper-tags">
             <span class="tag">Embodied AI</span>
+            <span class="tag">VLA</span>
             <span class="tag">World Models</span>
-            <span class="tag">Robot Policies</span>
-            <span class="tag">Predictive Policies</span>
+            <span class="tag">World Action Models</span>
           </div>
 
-          <p class="eyebrow">from next token prediction to next state synthesis</p>
-          <h1>World Action Models for Generalist Robotics</h1>
+          <p class="eyebrow">survey of world action models</p>
+          <h1>World Action Models: The Next Frontier in Embodied AI</h1>
           <p class="paper-subtitle">
-            We present a systematic survey of World Action Models (WAMs), a paradigm that couples
-            predictive state modeling with action generation for generalist robotics. We clarify
-            terminology, organize architectures, analyze data sources, and identify evaluation gaps.
+            This survey formalizes World Action Models (WAMs) as embodied foundation models that
+            unify forward predictive modeling with action generation. It traces how VLAs and world
+            models converge, organizes methods into Cascaded and Joint WAMs, reviews the training
+            data ecosystem, and summarizes evaluation protocols and open challenges.
           </p>
 
           <div class="paper-actions">
-            <a class="btn btn-dark" href="./WAM_survey/OpenMOSS.pdf">Open Survey PDF</a>
-            <a class="btn btn-outline" href="./WAM_survey/paper.tex">LaTeX</a>
-            <a class="btn btn-outline" href="#figures">Core Figures</a>
+            <a class="btn btn-dark btn-icon" href="./docs/WAM_survey.pdf">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M7 3.75h7.5L19.25 8.5v11.75a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1v-15.5a1 1 0 0 1 1-1Z" fill="none" stroke="currentColor" stroke-linejoin="round" stroke-width="1.8"/>
+                <path d="M14.5 3.75V8.5h4.75" fill="none" stroke="currentColor" stroke-linejoin="round" stroke-width="1.8"/>
+                <path d="M8.75 15.25h6.5M8.75 18.25h4.75" fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.8"/>
+              </svg>
+              <span>Paper</span>
+            </a>
+            <a class="btn btn-dark btn-icon" href="https://github.com/OpenMOSS/WAM-survey" target="_blank" rel="noopener">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M12 3.75a8.75 8.75 0 0 0-2.77 17.05c.44.08.6-.19.6-.42v-1.66c-2.46.53-2.98-1.18-2.98-1.18-.4-1.03-.98-1.3-.98-1.3-.8-.54.06-.53.06-.53.89.06 1.36.92 1.36.92.79 1.35 2.07.96 2.58.73.08-.57.31-.96.56-1.18-1.96-.22-4.02-.98-4.02-4.37 0-.97.35-1.77.92-2.39-.09-.23-.4-1.13.09-2.36 0 0 .75-.24 2.46.91a8.5 8.5 0 0 1 4.48 0c1.71-1.15 2.46-.91 2.46-.91.49 1.23.18 2.13.09 2.36.57.62.92 1.42.92 2.39 0 3.4-2.07 4.15-4.05 4.36.32.27.6.8.6 1.61v2.39c0 .23.16.5.61.42A8.75 8.75 0 0 0 12 3.75Z" fill="currentColor"/>
+              </svg>
+              <span>Project</span>
+            </a>
           </div>
 
           <div class="hero-metrics" aria-label="Survey quick facts">
-            <a class="metric-tile" href="#explorer">
+            <a class="metric-tile" href="#library">
               <strong id="paperCount">120+</strong>
               <span>papers indexed</span>
             </a>
-            <a class="metric-tile" href="#figures">
-              <strong>3</strong>
-              <span>core figures</span>
+            <a class="metric-tile" href="#definition">
+              <strong>7</strong>
+              <span>survey sections</span>
             </a>
             <a class="metric-tile" href="#architecture">
-              <strong id="branchCount">5</strong>
-              <span>method lanes</span>
+              <strong id="branchCount">2</strong>
+              <span>core architectures</span>
             </a>
           </div>
         </div>
 
-        <div class="thesis-board" aria-label="WAM thesis diagram">
-          <div class="board-header">
-            <span>core formulation</span>
-            <strong>What changes from VLA to WAM?</strong>
-          </div>
-          <div class="coupling-rail" aria-label="Predictive policy flow">
-            <span>observation + language</span>
-            <span>future state synthesis</span>
-            <span>executable action</span>
-          </div>
-          <div class="formula-ladder">
-            <div class="formula-row muted-row">
-              <span class="formula-name">VLA</span>
-              <code>p(a | o, l)</code>
-              <p>Generates actions directly from observations and language; semantic generalization is strong, but physical futures remain implicit.</p>
-            </div>
-            <div class="formula-row muted-row">
-              <span class="formula-name">WM</span>
-              <code>p(o' | o, a)</code>
-              <p>Predicts the post-action environment state; it can imagine futures, but does not necessarily output a policy.</p>
-            </div>
-            <div class="formula-row active-row">
-              <span class="formula-name">WAM</span>
-              <code>p(o', a | o, l)</code>
-              <p>Couples future-state modeling with action generation to form a predictive policy for robot control.</p>
-            </div>
-          </div>
-        </div>
+        <figure class="architecture-figure section-stack section-figure overview-figure" aria-label="Overview roadmap">
+          <img
+            src="./figs/tree_map.svg"
+            alt="Temporal evolution and taxonomy of representative World Action Model methods"
+            loading="lazy"
+          />
+          <figcaption>
+            Temporal evolution and taxonomy of representative World Action Models. The figure organizes
+            the field into Joint and Cascaded WAM branches and highlights the dominant architectural
+            directions explored across recent work.
+          </figcaption>
+        </figure>
+
       </header>
 
-      <section class="paper-section reveal" id="thesis">
-        <div class="section-grid">
-          <div class="section-heading sticky-heading">
-            <p class="eyebrow">paper thesis</p>
-            <h2>Our Position: Robot Policies Need Predictive Commitment</h2>
-            <p class="section-note">
-              Vision-Language-Action models have achieved strong semantic generalization, but standard
-              observation-to-action learning does not explicitly model how the world evolves under intervention.
-              WAMs address this gap by making future-state prediction part of the policy learning problem.
-            </p>
-          </div>
-
-          <div class="argument-stack">
-            <article class="argument-card">
-              <span class="argument-index">01</span>
-              <h3>VLA models ground semantic priors into actions</h3>
-              <p>
-                RT-2, OpenVLA, π0 and related systems demonstrate that pretrained vision-language
-                representations can support language-conditioned robot control.
-              </p>
-            </article>
-            <article class="argument-card">
-              <span class="argument-index">02</span>
-              <h3>Reactive policies leave world dynamics implicit</h3>
-              <p>
-                Long-horizon manipulation, contact-rich interaction, and cross-embodiment transfer
-                require anticipating the physical consequences of actions.
-              </p>
-            </article>
-            <article class="argument-card emphasis">
-              <span class="argument-index">03</span>
-              <h3>WAMs bind future states and executable actions</h3>
-              <p>
-                We define WAMs by two criteria: predictive state modeling and coupled action generation.
-                Actions must be aligned with the anticipated future state representation.
-              </p>
-            </article>
-          </div>
+      <section class="paper-section reveal" id="definition">
+        <div class="section-heading">
+          <p class="eyebrow">definition</p>
+          <h2>Definitions and Formalism</h2>
+          <p class="section-note">
+            World Action Models are defined by forward predictive modeling and coupled action
+            generation. The key boundary is that future-state prediction must be part of the policy,
+            not just an auxiliary backbone or external simulator.
+          </p>
         </div>
+
+        <div class="argument-stack section-stack">
+          <article class="argument-card">
+            <span class="argument-index">01</span>
+            <h3>Vision-Language-Action (VLA)</h3>
+            <p>
+              VLAs are embodied foundation models that frame robot control as a multimodal sequence
+              modeling task. They process current observation <code>o</code> and language instruction
+              <code>l</code> to generate actions under the objective <code>p(a | o, l)</code>.
+            </p>
+            <p>
+              In this formulation, observation and language map directly to action. Semantic grounding
+              is strong, but the model remains fundamentally reactive because future physical evolution
+              is not explicitly represented.
+            </p>
+          </article>
+          <article class="argument-card">
+            <span class="argument-index">02</span>
+            <h3>World Models (WM)</h3>
+            <p>
+              World models are predictive transition functions that internalize environment dynamics.
+              Their role is to model how a current state evolves under intervention, typically as
+              <code>p(o' | o, a)</code>, so they can simulate future observations rather than output a policy by themselves.
+            </p>
+            <p>
+              This makes them predictive rather than directly executable: they imagine what the world
+              will look like after action, but do not by themselves define a robot policy.
+            </p>
+          </article>
+          <article class="argument-card emphasis">
+            <span class="argument-index">03</span>
+            <h3>World Action Models (WAMs)</h3>
+            <p>
+              WAMs unify environmental dynamics modeling with motor control. A model qualifies as a
+              WAM only when it performs forward predictive modeling of future state and couples action
+              generation to that anticipated future, targeting <code>p(o', a | o, l)</code>.
+            </p>
+            <p>
+              The defining shift is that future-state synthesis and executable action are learned
+              together inside one embodied policy framework rather than being treated as unrelated outputs.
+            </p>
+          </article>
+        </div>
+
+        <figure class="architecture-figure section-stack section-figure" aria-label="Definition diagram">
+          <img
+            src="./figs/definition.svg"
+            alt="Conceptual definition of VLA, WM, and WAM"
+            loading="lazy"
+          />
+          <figcaption>
+            Conceptual definition and comparison of VLA, WM, and WAM. The figure contrasts their
+            input-output formulations and highlights that WAMs jointly predict future observations and
+            executable actions rather than modeling either side alone.
+          </figcaption>
+        </figure>
       </section>
 
-      <section class="paper-section reveal figures-section" id="figures">
+      <section class="paper-section reveal figures-section" id="vlas-wms">
         <div class="section-heading">
-          <p class="eyebrow">visual overview</p>
-          <h2>Taxonomy, Roadmap, and Definition</h2>
+          <p class="eyebrow">vlas and wms</p>
+          <h2>VLAs and World Models: Foundations and Early Integration</h2>
           <p class="section-note">
-            We use these three figures to make the scope of WAMs explicit: the architectural taxonomy
-            of current methods, the organization of the survey, and the formal boundary between VLA,
-            world models, and WAMs.
+            WAMs emerge from the convergence of Vision-Language-Action policies and predictive world
+            models. The survey positions VLA, world-modeling, and WM-for-VLA integration as the
+            background that made predictive embodied policies possible.
           </p>
         </div>
 
         <div class="storyline" aria-label="Key survey figures">
-          <article class="story-step story-step-hero">
+          <article class="story-step story-step-textonly">
             <div class="story-copy">
               <span class="story-number">01</span>
-              <p class="figure-kicker">Figure 1 · Temporal evolution and taxonomy</p>
-              <h3>Representative WAM architectures split into Cascaded and Joint paradigms</h3>
+              <p class="figure-kicker">Vision-Language-Action Models</p>
+              <h3>VLAs establish scalable, semantically grounded robot control</h3>
               <p>
-                The taxonomy separates methods that decouple world modeling and execution from methods
-                that co-optimize future-state prediction and action generation within a shared representation space.
+                VLAs cast robot control as multimodal sequence modeling. They read the current
+                observation and language context, then generate actions directly from those inputs.
               </p>
               <dl class="figure-logic">
                 <div>
-                  <dt>Role</dt>
-                  <dd>Locate representative works by architectural coupling, not by chronology alone.</dd>
+                  <dt>Key point</dt>
+                  <dd>They transfer internet-scale semantic priors into embodied behavior and enable strong task and object generalization.</dd>
                 </div>
                 <div>
-                  <dt>Takeaway</dt>
-                  <dd>Cascaded and Joint WAMs expose different trade-offs in interpretability, latency, and control grounding.</dd>
+                  <dt>Limitation</dt>
+                  <dd>They still treat the world implicitly and do not explicitly predict how physical states evolve after intervention.</dd>
                 </div>
               </dl>
-              <a class="text-link" href="./WAM_survey/pic/tree_map.pdf">Open Figure 1</a>
             </div>
-            <figure class="story-figure story-taxonomy">
-              <img
-                src="./figures/figure1_wam_taxonomy.svg"
-                alt="Temporal taxonomy of World Action Model methods"
-                loading="lazy"
-              />
-              <figcaption>Cascaded and Joint WAM branches organized by coupling and generation modality.</figcaption>
-            </figure>
           </article>
 
-          <article class="story-step story-step-reverse">
+          <article class="story-step story-step-textonly">
             <div class="story-copy">
               <span class="story-number">02</span>
-              <p class="figure-kicker">Figure 2 · Comprehensive roadmap</p>
-              <h3>We organize the survey around background, architecture, data, and evaluation</h3>
+              <p class="figure-kicker">World Models</p>
+              <h3>World models provide predictive structure over future state evolution</h3>
               <p>
-                The roadmap shows how VLA and world-model foundations lead into WAM architectures,
-                followed by the data sources and evaluation protocols needed to assess whether predictive
-                futures remain useful for control.
+                World models internalize environment dynamics and predict how states evolve under
+                intervention. The survey organizes them across action-conditioned, language-conditioned,
+                and embodied settings, spanning both explicit observation prediction and latent dynamics.
               </p>
               <dl class="figure-logic">
                 <div>
                   <dt>Role</dt>
-                  <dd>Connect method families to the background, data, and evaluation evidence used in the survey.</dd>
+                  <dd>They function as predictive transition models of the environment rather than as direct action policies.</dd>
                 </div>
                 <div>
-                  <dt>Takeaway</dt>
-                  <dd>WAMs require a joint view of definitions, architectures, datasets, benchmarks, and open problems.</dd>
+                  <dt>Design split</dt>
+                  <dd>Explicit prediction favors interpretability, while latent-space modeling improves efficiency and compactness.</dd>
                 </div>
               </dl>
-              <a class="text-link" href="./WAM_survey/OpenMOSS.pdf">Open Survey PDF</a>
-            </div>
-            <div class="story-figure story-roadmap" aria-label="Figure 2 roadmap reconstruction">
-              <div class="roadmap-axis">
-                <span>Roadmap to WAM</span>
-              </div>
-              <div class="roadmap-stage">
-                <strong>Background</strong>
-                <span>VLA · World Model · WM for VLA</span>
-              </div>
-              <div class="roadmap-stage main-stage">
-                <strong>Architecture</strong>
-                <span>Cascaded WAM · Joint WAM · coupling mechanisms</span>
-              </div>
-              <div class="roadmap-stage">
-                <strong>Training Data</strong>
-                <span>Robot teleop · UMI · simulation · egocentric video</span>
-              </div>
-              <div class="roadmap-stage">
-                <strong>Evaluation</strong>
-                <span>Visual fidelity · physical commonsense · action plausibility</span>
-              </div>
             </div>
           </article>
 
-          <article class="story-step story-step-definition">
+          <article class="story-step story-step-stack">
             <div class="story-copy">
               <span class="story-number">03</span>
-              <p class="figure-kicker">Figure 3 · Conceptual definition</p>
-              <h3>WAMs are defined by predictive state modeling and coupled action generation</h3>
+              <p class="figure-kicker">World Models for VLA</p>
+              <h3>Early integration treated world models as tools for learning, planning, and evaluation</h3>
               <p>
-                This figure contrasts VLA models, world models, and WAMs through their input-output
-                formulations, while distinguishing WAMs from video policies and video action models.
+                Before becoming part of the policy core, world models already helped embodied agents as
+                simulators, reward models, planning modules, and evaluation environments. WAMs begin
+                when that predictive machinery is structurally integrated with action generation itself.
               </p>
               <dl class="figure-logic">
                 <div>
-                  <dt>Role</dt>
-                  <dd>Specify the conceptual boundary used throughout the survey.</dd>
+                  <dt>Learning side</dt>
+                  <dd>Predictive models support imitation learning and reinforcement learning through future-aware supervision.</dd>
                 </div>
                 <div>
-                  <dt>Takeaway</dt>
-                  <dd>A model qualifies as a WAM only when future-state modeling is coupled to action generation.</dd>
+                  <dt>Evaluation side</dt>
+                  <dd>They also serve as interactive testbeds and benchmarks before being fused into end-to-end predictive policies.</dd>
                 </div>
               </dl>
-              <a class="text-link" href="./WAM_survey/pic/def.pdf">Open Figure 3</a>
             </div>
-            <div class="story-figure definition-panel" aria-label="Figure 3 WAM definition diagram">
-              <div class="definition-map">
-                <div class="concept-card concept-vla">
-                  <span>VLA</span>
-                  <code>p(a | o, l)</code>
-                  <p>Observation and language map directly to action.</p>
-                </div>
-                <div class="concept-card concept-wm">
-                  <span>World Model</span>
-                  <code>p(o' | o, a)</code>
-                  <p>Action-conditioned future state prediction.</p>
-                </div>
-                <div class="concept-card concept-wam">
-                  <span>WAM</span>
-                  <code>p(o', a | o, l)</code>
-                  <p>Future state prediction and executable action are coupled.</p>
-                </div>
-                <div class="definition-flow">
-                  <span>predictive state modeling</span>
-                  <span>coupled action generation</span>
-                </div>
-              </div>
-            </div>
+            <figure class="story-figure story-figure-pdf" aria-label="WM for VLA diagram">
+              <img
+                src="./figs/wm4vla.svg"
+                alt="World models for VLA overview diagram"
+                loading="lazy"
+              />
+            </figure>
           </article>
         </div>
       </section>
 
       <section class="paper-section reveal" id="architecture">
         <div class="section-heading">
-          <p class="eyebrow">architecture taxonomy</p>
-          <h2>Two Core Architectures: Imagine Then Act, or Generate Futures and Actions Together</h2>
+          <p class="eyebrow">architecture</p>
+          <h2>Architecture</h2>
           <p class="section-note">
-            We divide WAM methods into Cascaded and Joint families, then further organize them by
-            generation modality, conditioning mechanism, and action decoding strategy.
+            The decisive design question is how world prediction and action generation are structurally
+            coupled. The survey organizes methods into Cascaded WAMs and Joint WAMs, each with
+            different training regimes, representations, and latency trade-offs.
           </p>
         </div>
 
@@ -320,15 +295,16 @@
               <span>Cascaded WAM</span>
               <code>future plan -> action</code>
             </div>
-            <h3>Stage-wise coupling</h3>
+            <h3>Sequential two-stage pipeline</h3>
             <p>
-              The world model first generates an anticipated future; the action module then produces
-              controls through inverse dynamics, geometric extraction, or latent policy conditioning.
+              A world model first synthesizes the anticipated future state, then a separate action model
+              decodes executable commands from that plan. This factorization gives clear modular structure,
+              but makes coupling quality between the two stages the central bottleneck.
             </p>
             <div class="stage-list">
-              <div><strong>Explicit planning</strong><span>video, optical flow, pose, 4D point maps</span></div>
-              <div><strong>Implicit planning</strong><span>latent features, future tokens, semantic masks</span></div>
-              <div><strong>Trade-off</strong><span>More interpretable, but potentially slower; stage coupling can affect robustness.</span></div>
+              <div><strong>Explicit planning</strong><span>pixel-space carriers such as video, flow, depth, normals, or 4D structure</span></div>
+              <div><strong>Implicit planning</strong><span>latent features, future tokens, masks, and hidden-state conditioning</span></div>
+              <div><strong>Trade-off</strong><span>Interpretable and modular, but sensitive to generation cost and stage mismatch.</span></div>
             </div>
           </article>
 
@@ -337,183 +313,213 @@
               <span>Joint WAM</span>
               <code>future + action</code>
             </div>
-            <h3>Unified-space coupling</h3>
+            <h3>Unified predictive model</h3>
             <p>
-              Future states and actions are co-trained in a single-stream or multi-stream model.
-              Actions become internal variables of prediction rather than add-on decoders after vision.
+              Future states and actions are predicted within one shared model and trained under joint
+              supervision. The main question becomes how coupling is realized across discrete tokenization,
+              autoregressive sequence modeling, diffusion, flow matching, or parallel generation.
             </p>
             <div class="stage-list">
-              <div><strong>Discrete tokenization</strong><span>visual tokens, action tokens, autoregressive rollout</span></div>
-              <div><strong>Continuous diffusion</strong><span>single DiT, multi-DiT, cross-attention, hidden-state coupling</span></div>
-              <div><strong>Trade-off</strong><span>Deeper coupling, but requires clearer leakage control and evaluation protocols.</span></div>
+              <div><strong>Autoregressive route</strong><span>shared token spaces, multi-head routing, unified vocabularies, latent predictive interfaces</span></div>
+              <div><strong>Parallel route</strong><span>single-engine or multi-engine diffusion and non-autoregressive generation</span></div>
+              <div><strong>Trade-off</strong><span>Richer coupling and better closed-loop potential, but harder to analyze and benchmark.</span></div>
             </div>
           </article>
         </div>
+
+        <div class="architecture-figures section-stack" aria-label="Architecture figures">
+          <figure class="architecture-figure">
+            <img
+              src="./figs/cascaded.svg"
+              alt="Cascaded World Action Model architecture diagram"
+              loading="lazy"
+            />
+            <figcaption>
+              Cascaded WAM architectures first predict future state representations and then derive executable actions from that predicted plan.
+            </figcaption>
+          </figure>
+          <figure class="architecture-figure">
+            <img
+              src="./figs/joint.svg"
+              alt="Joint World Action Model architecture diagram"
+              loading="lazy"
+            />
+            <figcaption>
+              Joint WAM architectures model future world state and action generation inside one shared predictive system with tighter coupling.
+            </figcaption>
+          </figure>
+        </div>
       </section>
 
-      <section class="paper-section reveal" id="data">
-        <div class="section-grid">
-          <div class="section-heading sticky-heading">
-            <p class="eyebrow">training data</p>
-            <h2>The Data Question for WAMs Is Not Just Scale, but Mixture Design</h2>
-            <p class="section-note">
-              We organize training data into four source types. They complement one another in action
-              annotation, physical realism, scale, cross-embodiment generalization, and modal richness.
-            </p>
-          </div>
+      <section class="paper-section reveal" id="training-data">
+        <div class="section-heading">
+          <p class="eyebrow">training data</p>
+          <h2>Training Data</h2>
+          <p class="section-note">
+            WAM data is a mixture-design problem rather than a scale-only problem. The survey groups
+            the ecosystem into robot-centric teleoperation, portable human demonstration, simulation,
+            and human or egocentric video.
+          </p>
+        </div>
 
-          <div class="data-matrix">
-            <article class="data-row">
-              <span>Robot Teleoperation</span>
-              <h3>Precise action supervision</h3>
-              <p>High-quality robot trajectories support executable action learning, but are expensive to collect and constrained by embodiment.</p>
-            </article>
-            <article class="data-row">
-              <span>UMI-style Demonstrations</span>
-              <h3>Low-cost real-world operation</h3>
-              <p>Portable human demonstrations connect real environments with robot execution and add scene diversity beyond laboratory data.</p>
-            </article>
-            <article class="data-row">
-              <span>Simulation</span>
-              <h3>Controlled physics and dense labels</h3>
-              <p>Simulation provides privileged signals such as 3D structure, collisions, depth, normals, and poses for learning spatial and physical dynamics.</p>
-            </article>
-            <article class="data-row">
-              <span>Egocentric Human Video</span>
-              <h3>Internet-scale physical priors</h3>
-              <p>Action labels are weak, but large-scale object interaction, material change, and first-person manipulation provide transferable world knowledge for WAMs.</p>
-            </article>
-          </div>
+        <div class="data-matrix section-stack">
+          <article class="data-row">
+            <span>Robot-Centric Teleoperation</span>
+            <h3>Aligned state-action supervision</h3>
+            <p>These datasets provide the high-frequency, executable action-state pairs needed to learn precise action-conditioned dynamics with minimal sim-to-real gap.</p>
+          </article>
+          <article class="data-row">
+            <span>Portable Human Demonstration</span>
+            <h3>Low-cost real-world diversity</h3>
+            <p>UMI-style collection bridges structured robot data and uncontrolled environments by retargeting human demonstrations into robot-executable trajectories.</p>
+          </article>
+          <article class="data-row">
+            <span>Simulation</span>
+            <h3>Privileged physics supervision</h3>
+            <p>Simulation provides controllable scale plus exact depth, pose, collision, and 3D structure, letting WAMs distill physical laws from rendering and physics engines.</p>
+          </article>
+          <article class="data-row">
+            <span>Human and Ego-Centric Data</span>
+            <h3>Massive-scale world priors</h3>
+            <p>Internet-scale human video supplies long-tail physical interactions and semantic diversity, while pose grounding and pretraining mixtures help bridge the action gap.</p>
+          </article>
         </div>
       </section>
 
       <section class="paper-section reveal" id="evaluation">
         <div class="section-heading">
           <p class="eyebrow">evaluation</p>
-          <h2>Evaluation Must Test Both World Credibility and Action Executability</h2>
+          <h2>Evaluation</h2>
           <p class="section-note">
-            A WAM is both a predictive simulator and an embodied controller, so it cannot be judged
-            by video-generation metrics or task success alone.
+            Evaluation has two axes: world modeling capability and action policy capability. WAMs
+            cannot be judged by visual plausibility alone, and they also cannot be judged by task success
+            alone without testing whether imagined futures are physically and causally meaningful.
           </p>
         </div>
 
-        <div class="eval-grid">
-          <article class="eval-card">
-            <span>World modeling capability</span>
-            <h3>Visual fidelity</h3>
-            <p>PSNR, SSIM, LPIPS, DreamSim, DINO, and FVD measure visual quality, perceptual consistency, and distribution-level video realism.</p>
+        <div class="eval-sections">
+          <article class="eval-section-card">
+            <div class="eval-section-head">
+              <p class="eyebrow">world modeling capability</p>
+              <h3>How to Evaluate World Modeling Capability?</h3>
+              <p>
+                The survey treats world-model evaluation as a three-part question: whether generated
+                futures are visually faithful, physically plausible, and still informative enough to recover executable control.
+              </p>
+            </div>
+            <div class="eval-subgrid">
+              <article class="eval-card">
+                <span>Visual fidelity</span>
+                <h3>Reconstruction, perception, and realism</h3>
+                <p>PSNR and SSIM cover low-level fidelity; LPIPS, DreamSim, and DINO test perceptual and semantic consistency; FVD measures distribution-level realism and temporal quality.</p>
+              </article>
+              <article class="eval-card">
+                <span>Physical commonsense</span>
+                <h3>Object dynamics and trajectory plausibility</h3>
+                <p>Physical commonsense asks whether generated worlds obey object continuity, material behavior, causal order, and plausible motion. Benchmarks such as VideoPhy, PhyGenBench, VBench-2.0, WorldModelBench, Physics-IQ, WorldScore, and EWMBench cover both physical interactions and long-horizon motion consistency.</p>
+              </article>
+              <article class="eval-card">
+                <span>Action plausibility</span>
+                <h3>Can imagined futures support control?</h3>
+                <p>WorldSimBench and the IDM Turing Test ask whether generated futures preserve enough action-relevant information to infer correct controls and support downstream execution.</p>
+              </article>
+            </div>
           </article>
-          <article class="eval-card">
-            <span>World modeling capability</span>
-            <h3>Physical commonsense</h3>
-            <p>VideoPhy, PhyGenBench, WorldModelBench, Physics-IQ, and related benchmarks focus on object continuity, physical rules, and trajectory plausibility.</p>
-          </article>
-          <article class="eval-card emphasis">
-            <span>WAM-specific capability</span>
-            <h3>Action plausibility</h3>
-            <p>The key question is whether generated futures can be converted by inverse dynamics or policies into real executable actions, not merely plausible videos.</p>
-          </article>
-          <article class="eval-card">
-            <span>Action policy capability</span>
-            <h3>Task execution</h3>
-            <p>Benchmarks span general manipulation, humanoids, mobile manipulation, contact-rich tasks, and real-device evaluation.</p>
+
+          <article class="eval-section-card">
+            <div class="eval-section-head">
+              <p class="eyebrow">action policy capability</p>
+              <h3>How to Evaluate Action Policy?</h3>
+              <p>
+                The survey reviews benchmark families by robot morphology and manipulation setting,
+                emphasizing generalization, long-horizon control, dexterity, sim-to-real transfer, and real-device performance.
+              </p>
+            </div>
+            <div class="eval-subgrid eval-subgrid-policy">
+              <article class="eval-card">
+                <span>General manipulation</span>
+                <h3>Multi-task and broad policy capability</h3>
+                <p>Meta-World, RLBench, ManiSkill, LIBERO, RoboCasa, GemBench, CALVIN, and related suites test multi-task learning, scaling, language conditioning, robustness, and long-horizon execution.</p>
+              </article>
+              <article class="eval-card">
+                <span>Bimanual and humanoid form</span>
+                <h3>Higher-DoF coordinated control</h3>
+                <p>RoboTwin, BiGym, HumanoidBench, and HumanoidGen raise the difficulty through dual-arm coordination, humanoid locomotion, tactile sensing, and large action spaces.</p>
+              </article>
+              <article class="eval-card">
+                <span>Mobile manipulation</span>
+                <h3>Navigation plus manipulation</h3>
+                <p>ManipulaTHOR, HomeRobot, and BEHAVIOR-1K evaluate policies that must combine scene navigation, open-vocabulary perception, and object interaction inside larger environments.</p>
+              </article>
+              <article class="eval-card">
+                <span>Contact and deformation</span>
+                <h3>Physics beyond rigid-body control</h3>
+                <p>SoftGym, PlasticineLab, DaXBench, TacSL, and ManiFeel assess cloth, liquid, deformable objects, and tactile-driven fine manipulation where contact modeling becomes central.</p>
+              </article>
+              <article class="eval-card">
+                <span>Real-device evaluation</span>
+                <h3>Deployment in physical environments</h3>
+                <p>RoboArena, RoboChallenge, and Maniparena measure whether policy performance survives the reality gap and remains reliable when moved onto real robots.</p>
+              </article>
+            </div>
           </article>
         </div>
       </section>
-
-      <section class="paper-section reveal" id="reports">
+      <section class="paper-section reveal" id="challenges">
         <div class="section-heading">
-          <p class="eyebrow">representative systems</p>
-          <h2>Two Recent Examples of Joint WAMs</h2>
+          <p class="eyebrow">open challenges</p>
+          <h2>Open Challenges and Opportunities</h2>
           <p class="section-note">
-            DreamZero and Cosmos Policy both follow a continuous-diffusion path, turning video foundation
-            models into policy systems that handle future-state generation and action prediction together.
+            WAMs are still a nascent paradigm. The next phase depends on resolving coupling, modality,
+            data-mixture, long-horizon, efficiency, evaluation, and safety problems.
           </p>
         </div>
 
-        <div class="report-grid">
-          <article class="report-card">
-            <a class="report-media" href="./Report/DreamZero/index.html" aria-label="Open DreamZero analysis">
-              <img
-                src="./Report/DreamZero/figure/dreamzero-header-v2.png"
-                alt="DreamZero visual overview"
-                loading="lazy"
-              />
-            </a>
-            <div class="report-body">
-              <p class="report-kicker">NVIDIA · 2602.15922</p>
-              <h3>World Action Models are Zero-shot Policies</h3>
-              <p>
-                DreamZero adapts a pretrained video diffusion model into a WAM that can generate future
-                video and actions jointly, emphasizing zero-shot policies, cross-embodiment transfer,
-                and action-free video priors.
-              </p>
-              <div class="report-actions">
-                <a class="text-link" href="./Report/DreamZero/index.html">Read analysis</a>
-                <a class="text-link" href="https://dreamzero0.github.io/" target="_blank" rel="noopener">Project</a>
-              </div>
-            </div>
-          </article>
-
-          <article class="report-card">
-            <a class="report-media" href="./Report/Cosmos%20Policy/index.html" aria-label="Open Cosmos Policy analysis">
-              <img
-                src="./Report/Cosmos%20Policy/figures/cosmos_policy_figure1.jpeg"
-                alt="Cosmos Policy method overview"
-                loading="lazy"
-              />
-            </a>
-            <div class="report-body">
-              <p class="report-kicker">NVIDIA / Stanford · 2601.16163</p>
-              <h3>Cosmos Policy</h3>
-              <p>
-                Cosmos Policy fine-tunes pretrained video models into visuomotor policies, organizing
-                planning, action prediction, and value functions through a shared latent interface for
-                closed-loop control.
-              </p>
-              <div class="report-actions">
-                <a class="text-link" href="./Report/Cosmos%20Policy/index.html">Read analysis</a>
-                <a class="text-link" href="https://research.nvidia.com/labs/dir/cosmos-policy/" target="_blank" rel="noopener">Project</a>
-              </div>
-            </div>
-          </article>
+        <div class="challenge-grid">
+          <article><span>01</span><h3>Architectural Coupling</h3><p>Systematic comparisons under matched scale, data, and protocols are still missing.</p></article>
+          <article><span>02</span><h3>Multimodal Physical State</h3><p>RGB-only prediction misses tactile, force, acoustic, and deformation cues that matter most in contact-rich manipulation.</p></article>
+          <article><span>03</span><h3>Data Utilization and Mixture Design</h3><p>The marginal role of robot data, simulation, and egocentric human video is still poorly understood.</p></article>
+          <article><span>04</span><h3>Long-Horizon Planning</h3><p>Distribution drift, compounding action error, and weak temporal abstraction still block sustained predictive control.</p></article>
+          <article><span>05</span><h3>Inference Latency and Efficiency</h3><p>Diffusion and autoregressive prediction remain too slow for many closed-loop settings without aggressive compression.</p></article>
+          <article><span>06</span><h3>Evaluation and Safe Deployment</h3><p>The field still lacks joint metrics for causal consistency between imagined futures and executed actions, plus robust safety checks.</p></article>
         </div>
       </section>
 
-      <section class="paper-section" id="explorer">
+      <section class="paper-section" id="library">
         <div class="section-heading reveal">
-          <p class="eyebrow">related literature</p>
+          <p class="eyebrow">library</p>
           <h2>Paper Library</h2>
           <p class="section-note">
-            We maintain related papers, project pages, code links, and reading reports by research
-            direction, covering action-conditioned world models, embodied world models, Cascaded WAMs,
-            and Joint WAMs for method-level comparison.
+            This library is populated from the survey repository and keeps the paper list searchable.
+            For quick browsing, the top-level filters focus only on the two architectural families
+            emphasized by the paper: Cascaded WAM and Joint WAM.
           </p>
         </div>
 
         <div class="explorer-panel reveal">
-          <label class="search-box" for="paperSearch">
-            <span>Search</span>
-            <input
-              id="paperSearch"
-              type="search"
-              placeholder="DreamZero, JEPA, diffusion, 2602..."
-              autocomplete="off"
-            />
-          </label>
+          <div class="library-tools">
+            <label class="search-box" for="paperSearch">
+              <span>Search</span>
+              <input
+                id="paperSearch"
+                type="search"
+                placeholder="DreamZero, JEPA, diffusion, 2602..."
+                autocomplete="off"
+              />
+            </label>
+            <label class="sort-box" for="paperSort">
+              <span>Sort</span>
+              <select id="paperSort">
+                <option value="newest">Newest first</option>
+                <option value="oldest">Oldest first</option>
+                <option value="name-asc">Name A-Z</option>
+              </select>
+            </label>
+          </div>
 
           <div class="filter-tabs" role="group" aria-label="Paper category filters">
             <button class="filter-tab active" type="button" data-filter="all" aria-pressed="true">
               <span>All</span><span class="filter-count" data-count-for="all">0</span>
-            </button>
-            <button class="filter-tab" type="button" data-filter="action-conditioned" aria-pressed="false">
-              <span>Action-conditioned</span><span class="filter-count" data-count-for="action-conditioned">0</span>
-            </button>
-            <button class="filter-tab" type="button" data-filter="multimodal" aria-pressed="false">
-              <span>Multimodal</span><span class="filter-count" data-count-for="multimodal">0</span>
-            </button>
-            <button class="filter-tab" type="button" data-filter="embodied" aria-pressed="false">
-              <span>Embodied WM</span><span class="filter-count" data-count-for="embodied">0</span>
             </button>
             <button class="filter-tab" type="button" data-filter="cascaded" aria-pressed="false">
               <span>Cascaded WAM</span><span class="filter-count" data-count-for="cascaded">0</span>
@@ -534,43 +540,18 @@
           <button class="btn btn-outline" id="loadMore" type="button" hidden>Load more</button>
         </div>
       </section>
-
-      <section class="paper-section reveal" id="challenges">
-        <div class="section-heading">
-          <p class="eyebrow">open challenges</p>
-          <h2>Open Problems for the Next Stage of WAM Research</h2>
-          <p class="section-note">
-            These issues will determine whether WAMs can move from predicting world states toward
-            reliable, deployable generalist robot policies.
-          </p>
-        </div>
-
-        <div class="challenge-grid">
-          <article><span>01</span><h3>Architectural Coupling</h3><p>Systematic comparisons under matched scale, data, and protocols are still missing.</p></article>
-          <article><span>02</span><h3>Multimodal State</h3><p>RGB alone cannot capture contact force, touch, sound, and material deformation.</p></article>
-          <article><span>03</span><h3>Data Mixture</h3><p>The optimal ratio among human video, simulation, and robot data remains unclear.</p></article>
-          <article><span>04</span><h3>Long Horizon</h3><p>Long rollouts introduce world-prediction drift and accumulated action errors.</p></article>
-          <article><span>05</span><h3>Inference Latency</h3><p>Video diffusion and autoregressive generation still struggle to meet closed-loop control rates.</p></article>
-          <article><span>06</span><h3>Safety & Evaluation</h3><p>Unified protocols are needed for physical correctness, causal grounding, and deployment safety.</p></article>
-        </div>
-      </section>
     </main>
 
     <footer class="site-footer">
       <div class="footer-inner">
-        <p>World Action Models for Generalist Robotics · From Next Token Prediction to Next State Synthesis</p>
-        <nav class="footer-links" aria-label="Footer links">
-          <a href="./WAM_survey/OpenMOSS.pdf">Survey PDF</a>
-          <a href="./WAM_survey/paper.tex">LaTeX</a>
-          <a href="./README.md">Bibliography</a>
-          <a href="#overview">Back to top</a>
-        </nav>
+        <p>World Action Models: The Next Frontier in Embodied AI</p>
+        <p>OpenMOSS</p>
       </div>
     </footer>
 
     <noscript>
       <div class="noscript-banner">
-        Paper-library filtering requires JavaScript; the survey PDF and representative-system links remain directly accessible.
+        Paper-library filtering requires JavaScript; the survey PDF and bibliography remain directly accessible.
       </div>
     </noscript>
 
