@@ -48,10 +48,10 @@
   - ![](https://img.shields.io/badge/Predictive--Latent-c026d3) Predictive Latent Representation
 
 - ![](https://img.shields.io/badge/Diffusion-e11d48) Diffusion-based Generation
-  - ![](https://img.shields.io/badge/Unified--DiT-be123c) Unified Stream
+  - ![](https://img.shields.io/badge/Unified--Stream-be123c) Unified Stream
     - ![](https://img.shields.io/badge/Explicit-f43f5e) Explicit Future Generation
     - ![](https://img.shields.io/badge/Implicit-fda4af) Implicit Future Prediction
-  - ![](https://img.shields.io/badge/Multi--Dit-9f1239) Multi-Stream
+  - ![](https://img.shields.io/badge/Multi--Stream-9f1239) Multi-Stream
     - ![](https://img.shields.io/badge/Cross--Attention-f97316) Cross-Attention Coupling
     - ![](https://img.shields.io/badge/Hidden--State-fb7185) Hidden-State Coupling
     - ![](https://img.shields.io/badge/Shared--Rep-db2777) Shared Representation
