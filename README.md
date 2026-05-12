@@ -728,7 +728,7 @@
 | **PSNR / SSIM** - *Image Quality Assessment: From Error Visibility to Structural Similarity* | 2004 | [📄 Paper](https://ieeexplore.ieee.org/document/1284395) · [🌍&nbsp;Web](https://ece.uwaterloo.ca/~z70wang/research/ssim/) · [💻&nbsp;Code](https://ece.uwaterloo.ca/~z70wang/research/ssim/) |
 | **LPIPS** - *The Unreasonable Effectiveness of Deep Features as a Perceptual Metric* | 2018-01 | [📄 Paper](https://arxiv.org/pdf/1801.03924) · [🌍&nbsp;Web](https://richzhang.github.io/PerceptualSimilarity/) · [💻&nbsp;Code](https://github.com/richzhang/PerceptualSimilarity) |
 | **DreamSim** - *DreamSim: Learning New Dimensions of Human Visual Similarity Using Synthetic Data* | 2023-06 | [📄 Paper](https://arxiv.org/pdf/2306.09344) · [🌍&nbsp;Web](https://dreamsim-nights.github.io/) · [💻&nbsp;Code](https://github.com/ssundaram21/dreamsim) |
-| **DINOv2** - *DINOv2: Learning Robust Visual Features without Supervision* | 2023-04 | [📄 Paper](https://arxiv.org/pdf/2304.07193) · [🌍&nbsp;Web](https://dinov2.metademolab.com/) · [💻&nbsp;Code](https://github.com/facebookresearch/dinov2) · [🤗&nbsp;Model](https://huggingface.co/facebook/dinov2-large) |
+| **DINOv2** - *DINOv2: Learning Robust Visual Features without Supervision* | 2023-04 | [📄 Paper](https://arxiv.org/pdf/2304.07193) · [🌍&nbsp;Web](https://dinov2.metademolab.com/) · [💻&nbsp;Code](https://github.com/facebookresearch/dinov2) |
 | **FVD** - *Towards Accurate Generative Models of Video: A New Metric & Challenges* | 2018-12 | [📄 Paper](https://arxiv.org/pdf/1812.01717) · [💻&nbsp;Code](https://github.com/google-research/google-research/tree/master/frechet_video_distance) |
 
 ---
