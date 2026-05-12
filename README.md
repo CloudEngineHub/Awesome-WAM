@@ -29,37 +29,32 @@
 ## Roadmap
 
 <p align="center">
-  <img src="[ROADMAP FIGURE PATH]" alt="[这里可以放figure1]" width="100%">
+  <img src="Figures/roadmap.svg" alt="Temporal evolution and taxonomy of representative works on World Action Models (WAMs). " width="100%">
 </p>
 
-Roadmap 是这个仓库的主导航。后面的分支章节应与图中的命名保持一致，这样 README、网页和报告目录可以长期对齐。
-
-示例：如果路线图中有 `[Branch A] -> [Branch B] -> [Branch C]`，那么下方就按相同层级组织对应论文与报告。
 
 ## Tag Legend
-
-
 ### World Action Model tags
 **![](https://img.shields.io/badge/Cascaded-f59e0b) Cascaded WAM**
-- ![](https://img.shields.io/badge/Explicit-d97706) Explicit Planning
+- ![](https://img.shields.io/badge/Pixel--Space-d97706) Pixel-space Representations
   - ![](https://img.shields.io/badge/Learned-b45309) Learned Action Extraction
-  - ![](https://img.shields.io/badge/Geometric-fbbf24) Geometric Action Extraction
-- ![](https://img.shields.io/badge/Implicit-ea580c) Implicit Planning
+  - ![](https://img.shields.io/badge/Geometric-fbbf24) Geometric Extraction
+- ![](https://img.shields.io/badge/Implicit-ea580c) Implicit Planning via Latent Representations
 
 **![](https://img.shields.io/badge/Joint-ec4899) Joint WAM**
-- ![](https://img.shields.io/badge/Discrete-db2777) Discrete Tokenization
-  - ![](https://img.shields.io/badge/Causal--TF-be185d) Causal Transformer
-  - ![](https://img.shields.io/badge/MLLM-f472b6) Unified MLLM
-  - ![](https://img.shields.io/badge/LatentPred-c026d3) Latent Predictive
-  - ![](https://img.shields.io/badge/Parallel-fb7185) Parallel Decoding
-- ![](https://img.shields.io/badge/Continuous-e11d48) Continuous Diffusion
-  - ![](https://img.shields.io/badge/Single--DiT-be123c) Single Dit
+- ![](https://img.shields.io/badge/Autoregressive-db2777) Autoregressive Generation
+  - ![](https://img.shields.io/badge/Explicit--Decoupled-be185d) Explicit Decoupled Representation
+  - ![](https://img.shields.io/badge/Unified--Discrete-f472b6) Unified Discrete Representations
+  - ![](https://img.shields.io/badge/Predictive--Latent-c026d3) Predictive Latent Representation
+
+- ![](https://img.shields.io/badge/Diffusion-e11d48) Diffusion-based Generation
+  - ![](https://img.shields.io/badge/Unified--DiT-be123c) Unified Stream
     - ![](https://img.shields.io/badge/Explicit-f43f5e) Explicit Future Generation
-    - ![](https://img.shields.io/badge/Implicit-fda4af) Implicit Future-Representation Alignment
-  - ![](https://img.shields.io/badge/Multi--Dit-9f1239) Multi Dit
-    - ![](https://img.shields.io/badge/CrossAttention-f97316) Cross-Attention Coupling
-    - ![](https://img.shields.io/badge/HiddenState-fb7185) Hidden-State Coupling
-    - ![](https://img.shields.io/badge/SharedRep-db2777) Unified Encoder
+    - ![](https://img.shields.io/badge/Implicit-fda4af) Implicit Future Prediction
+  - ![](https://img.shields.io/badge/Multi--Dit-9f1239) Multi-Stream
+    - ![](https://img.shields.io/badge/Cross--Attention-f97316) Cross-Attention Coupling
+    - ![](https://img.shields.io/badge/Hidden--State-fb7185) Hidden-State Coupling
+    - ![](https://img.shields.io/badge/Shared--Rep-db2777) Shared Representation
 
 ### World Model tags
 **![](https://img.shields.io/badge/Imitation-0284c7) Imitation Learning**
@@ -67,6 +62,7 @@ Roadmap 是这个仓库的主导航。后面的分支章节应与图中的命名
 **![](https://img.shields.io/badge/RL-0891b2) Reinforcement Learning**
 
 **![](https://img.shields.io/badge/Eval-06b6d4) Evaluation**
+
 
 ***
 #### S-VAM - *S-VAM: Shortcut Video-Action Model by Self-Distilling Geometric and Semantic Foresight* - [![arXiv](https://img.shields.io/badge/arXiv-2603.16195-b31b1b?style=flat-square&logo=arxiv)](https://arxiv.org/pdf/2603.16195)
