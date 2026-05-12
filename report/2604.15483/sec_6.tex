@@ -1,0 +1,16 @@
+
+\label{subsec:metadata}
+
+A key goal in expanding the context provided to the model is to train on a broader, more diverse dataset of trajectories. Instead of just using high-quality demonstration data, \MethodName{} leverages lower quality demonstrations (including failures) and even autonomous data from prior models. Since we still want \MethodName{} to perform the task as well as possible at test time, we need to appropriately label these diverse trajectories with information about \emph{how} the task was performed so that the model can correctly contextualize them. To this end, we add a variety of ``episode metadata'' information to the context with attributes of the given training episode. We denote the set of metadata $m$, which may contain various labels including
+
+
+
+\begin{itemize}[leftmargin=10pt]
+    \item \textbf{Overall speed}: the length of the episode in timesteps. We discretize the values in an interval of 500 steps, i.e., values between 1750 and 2250 are binned to ``2000 steps''. Often faster speed also corresponds to higher quality, e.g., the episode has fewer mistakes.
+    \item \textbf{Overall quality}: task execution quality expressed as a score between 1 and 5, with 5 being the highest quality.
+    \item \textbf{Mistake}: label indicating whether the robot made a mistake within a given action segment (e.g., failing to grasp an object or performing the wrong subtask). These labels are provided by humans coarsely annotating our data.
+\end{itemize}
+
+The \MethodName{} model is thus trained with ground-truth episode speed and manual annotations of the episode quality and mistake segments from a diverse data mixture. The data diversity (e.g., episodes of varying speed) provides the necessary signals for the model to learn to correlate such metadata with the target action.
+At runtime, the model can then be instructed to perform the task at high speed, with high quality, and without mistakes, through metadata prompting.
+

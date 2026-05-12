@@ -1,0 +1,889 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Video Prediction Policy - Paper Reading Report</title>
+<script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']]
+      },
+      svg: { fontCache: 'global' }
+    };
+  </script>
+<script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&amp;family=Geist+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<style>
+    :root {
+      --paper: #f6f7f3;
+      --paper-deep: #e8ede7;
+      --surface: #fffefb;
+      --surface-raised: rgba(255, 254, 251, 0.9);
+      --surface-2: #f0f4ee;
+      --ink: #20241f;
+      --ink-soft: #3a4038;
+      --muted: #697166;
+      --muted-2: #838a7f;
+      --line: rgba(32, 29, 25, 0.12);
+      --line-strong: rgba(32, 29, 25, 0.22);
+      --state: #2f766f;
+      --state-soft: #e6f0ed;
+      --action: #a45f38;
+      --action-soft: #f3e8dd;
+      --planning: #4f6542;
+      --planning-soft: #e7eddf;
+      --warn: #9a6a21;
+      --warn-soft: #f3ead8;
+      --font-body: "Sora", "PingFang SC", "Noto Sans SC", system-ui, sans-serif;
+      --font-mono: "Geist Mono", "SFMono-Regular", Menlo, monospace;
+      --sidebar-w: 188px;
+      --content-max: 1080px;
+      --desktop-gutter: 2.6rem;
+    }
+    *,
+    *::before,
+    *::after { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background:
+        linear-gradient(90deg, rgba(32, 29, 25, 0.035) 1px, transparent 1px),
+        linear-gradient(180deg, rgba(32, 29, 25, 0.03) 1px, transparent 1px),
+        var(--paper);
+      background-size: 32px 32px;
+      color: var(--ink);
+      font-family: var(--font-body);
+      font-size: 15px;
+      line-height: 1.75;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+    main {
+      width: min(100%, var(--content-max));
+      margin: 0 auto;
+      padding: 2.4rem 1.15rem 5.6rem;
+      min-height: 100vh;
+    }
+    h1 {
+      max-width: 900px;
+      margin: 0 0 1rem;
+      color: var(--ink);
+      font-size: clamp(1.75rem, 3.6vw, 3.7rem);
+      font-weight: 650;
+      line-height: 0.98;
+      letter-spacing: 0;
+    }
+    h2 {
+      margin: 0 0 1rem;
+      color: var(--ink);
+      font-size: clamp(1.55rem, 3vw, 2.7rem);
+      font-weight: 650;
+      line-height: 1.08;
+      letter-spacing: 0;
+    }
+    h3 {
+      margin: 1.8rem 0 0.55rem;
+      color: var(--ink);
+      font-size: 1.08rem;
+      font-weight: 650;
+      line-height: 1.35;
+    }
+    h4 {
+      margin: 1.35rem 0 0.45rem;
+      color: var(--ink-soft);
+      font-size: 0.95rem;
+      font-weight: 650;
+      line-height: 1.35;
+    }
+    p { margin: 0.65rem 0; }
+    a {
+      color: var(--state);
+      text-decoration: none;
+      text-underline-offset: 0.18em;
+    }
+    a:hover { text-decoration: underline; }
+    code {
+      padding: 0.12rem 0.32rem;
+      background: rgba(47, 118, 111, 0.08);
+      border: 1px solid rgba(47, 118, 111, 0.12);
+      border-radius: 4px;
+      color: var(--ink);
+      font-family: var(--font-mono);
+      font-size: 0.86em;
+    }
+    header {
+      padding: 1rem 0 2.5rem;
+      border-bottom: 1px solid var(--line);
+      margin-bottom: 1.2rem;
+    }
+    header::before {
+      display: inline-flex;
+      align-items: center;
+      min-height: 1.7rem;
+      margin-bottom: 1rem;
+      padding: 0.25rem 0.55rem;
+      border: 1px solid rgba(32, 29, 25, 0.13);
+      border-radius: 999px;
+      background: rgba(255, 254, 251, 0.68);
+      color: var(--state);
+      content: "paper report";
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    .meta {
+      display: grid;
+      gap: 0.35rem;
+      max-width: 900px;
+      background: linear-gradient(180deg, var(--surface-raised), rgba(255, 254, 251, 0.72));
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      box-shadow: 0 18px 55px rgba(55, 63, 48, 0.08);
+      padding: 1rem 1.05rem;
+      color: var(--muted);
+    }
+    .meta p {
+      margin: 0;
+      font-size: 0.86rem;
+      line-height: 1.62;
+    }
+    .meta strong {
+      color: var(--ink);
+      font-weight: 650;
+    }
+    .title-wrap {
+      display: grid;
+      gap: 0.75rem;
+      max-width: 900px;
+    }
+    .subtitle,
+    .lead {
+      max-width: 860px;
+      color: var(--muted);
+      font-size: 0.98rem;
+      line-height: 1.72;
+    }
+    .lead {
+      padding: 1rem 1.05rem;
+      background: linear-gradient(180deg, var(--state-soft), rgba(255, 254, 251, 0.74));
+      border: 1px solid rgba(47, 118, 111, 0.2);
+      border-radius: 8px;
+      color: var(--ink-soft);
+    }
+    .title-wrap .meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.45rem;
+      box-shadow: none;
+    }
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      min-height: 1.7rem;
+      padding: 0.2rem 0.55rem;
+      border: 1px solid rgba(32, 29, 25, 0.13);
+      border-radius: 999px;
+      background: rgba(255, 254, 251, 0.72);
+      color: var(--muted);
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      font-weight: 600;
+      line-height: 1.25;
+    }
+    .toc {
+      background: rgba(255, 254, 251, 0.84);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 0.95rem;
+      margin: 1.2rem 0 1.6rem;
+      backdrop-filter: blur(12px);
+    }
+    .toc strong {
+      display: block;
+      margin-bottom: 0.35rem;
+      color: var(--ink);
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    .toc ul,
+    ul.toc,
+    ol.toc {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0.12rem 0.35rem;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+    .toc li { min-width: 0; }
+    .toc a {
+      display: block;
+      padding: 0.42rem 0.52rem;
+      border-radius: 6px;
+      color: var(--muted);
+      font-size: 0.82rem;
+      line-height: 1.38;
+    }
+    .toc a:hover {
+      background: rgba(47, 118, 111, 0.08);
+      color: var(--ink);
+      text-decoration: none;
+    }
+    .tldr {
+      background: linear-gradient(180deg, var(--action-soft), rgba(255, 254, 251, 0.74));
+      border: 1px solid rgba(164, 95, 56, 0.22);
+      border-radius: 8px;
+      padding: 1rem 1.05rem;
+      margin: 1rem 0 1.1rem;
+      color: var(--ink-soft);
+      font-size: 0.98rem;
+      line-height: 1.72;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0.85rem;
+    }
+    .grid.three {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+    .note, .audit-card, .formula-block, .card, .danger {
+      background: var(--surface-raised);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      box-shadow: 0 14px 42px rgba(55, 63, 48, 0.055);
+      padding: 0.95rem 1rem;
+      margin: 0.85rem 0;
+    }
+    .card {
+      margin: 0;
+    }
+    .danger {
+      background: linear-gradient(180deg, var(--warn-soft), rgba(255, 254, 251, 0.78));
+      border-color: rgba(154, 106, 33, 0.22);
+    }
+    .kpi {
+      color: var(--ink);
+      font-family: var(--font-mono);
+      font-size: clamp(1.35rem, 2.8vw, 2.15rem);
+      font-weight: 700;
+      line-height: 1;
+    }
+    .kpi-label {
+      margin-top: 0.45rem;
+      color: var(--muted);
+      font-size: 0.82rem;
+      line-height: 1.5;
+    }
+    .note strong { color: var(--ink); }
+    .appendix-ref {
+      color: var(--planning);
+      background: var(--planning-soft);
+      border: 1px solid rgba(79, 101, 66, 0.18);
+      border-radius: 999px;
+      padding: 0.08rem 0.38rem;
+      font-family: var(--font-mono);
+      font-size: 0.74rem;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+    .formula-block .intuition {
+      font-weight: 650;
+      color: var(--state);
+      margin-bottom: 8px;
+    }
+    .symbol-table td:first-child {
+      width: 26%;
+      color: var(--state);
+      font-family: var(--font-mono);
+      font-weight: 600;
+    }
+    section {
+      padding: 3rem 0;
+      border-bottom: 1px solid var(--line);
+      scroll-margin-top: 1.4rem;
+    }
+    section:last-child { border-bottom: none; }
+    section > h2 {
+      max-width: 760px;
+      margin-right: auto;
+      margin-left: auto;
+      text-align: center;
+    }
+    section > h2::before {
+      display: block;
+      margin-bottom: 0.45rem;
+      color: var(--state);
+      content: "section";
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      line-height: 1.4;
+      text-transform: uppercase;
+    }
+    figure,
+    .figure {
+      margin: 1.35rem auto;
+      text-align: center;
+    }
+    figure img,
+    .figure img,
+    .pdf-frame {
+      display: block;
+      max-width: 100%;
+      max-height: min(72vh, 760px);
+      margin: 0 auto;
+      background: white;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      box-shadow: 0 18px 50px rgba(55, 63, 48, 0.08);
+    }
+    .pdf-frame {
+      width: auto;
+      height: auto;
+    }
+    figcaption,
+    .caption {
+      max-width: 920px;
+      margin: 0.65rem auto 0;
+      color: var(--muted);
+      font-size: 0.82rem;
+      line-height: 1.6;
+      text-align: center;
+    }
+    table {
+      width: 100%;
+      overflow: hidden;
+      border-collapse: separate;
+      border-spacing: 0;
+      margin: 1rem 0 1.25rem;
+      background: var(--surface-raised);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      box-shadow: 0 14px 42px rgba(55, 63, 48, 0.045);
+      font-size: 0.88rem;
+    }
+    th, td {
+      border-right: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+      padding: 0.62rem 0.68rem;
+      vertical-align: top;
+      text-align: left;
+    }
+    th:last-child,
+    td:last-child { border-right: none; }
+    tbody tr:last-child td { border-bottom: none; }
+    th {
+      background: var(--surface-2);
+      color: var(--ink);
+      font-family: var(--font-mono);
+      font-size: 0.76rem;
+      font-weight: 600;
+    }
+    tbody tr:nth-child(even) td { background: rgba(240, 244, 238, 0.45); }
+    ul, ol { padding-left: 1.25rem; }
+    li { margin: 0.35rem 0; }
+    .best { font-weight: 650; color: var(--state); }
+    .warn { color: var(--warn); font-weight: 650; }
+    .pseudocode {
+      background: #20241f;
+      color: #eef2e7;
+      border: 1px solid rgba(255, 254, 251, 0.12);
+      border-radius: 8px;
+      padding: 1rem 1.05rem;
+      overflow-x: auto;
+      font-family: var(--font-mono);
+      font-size: 0.82rem;
+      line-height: 1.58;
+      margin: 0.9rem 0;
+    }
+    pre {
+      max-width: 100%;
+      overflow-x: auto;
+      margin: 0.9rem 0;
+      padding: 1rem 1.05rem;
+      background: #20241f;
+      border: 1px solid rgba(255, 254, 251, 0.12);
+      border-radius: 8px;
+      color: #eef2e7;
+      font-family: var(--font-mono);
+      font-size: 0.82rem;
+      line-height: 1.58;
+    }
+    pre code {
+      padding: 0;
+      background: transparent;
+      border: 0;
+      color: inherit;
+      font: inherit;
+    }
+    article {
+      display: block;
+    }
+    .small {
+      color: var(--muted-2);
+      font-size: 0.78rem;
+      line-height: 1.55;
+    }
+    .checklist li { margin: 5px 0; }
+    @media (min-width: 980px) {
+      main {
+        width: min(100%, calc(var(--content-max) + var(--sidebar-w) + var(--desktop-gutter)));
+        margin: 0;
+        padding: 3.2rem var(--desktop-gutter) 6rem calc(var(--sidebar-w) + var(--desktop-gutter));
+      }
+      .toc {
+        position: fixed;
+        inset: 0 auto 0 0;
+        z-index: 50;
+        width: var(--sidebar-w);
+        min-height: 100vh;
+        margin: 0;
+        padding: 2.25rem 1.25rem;
+        border-width: 0 1px 0 0;
+        border-radius: 0;
+        background: rgba(246, 247, 243, 0.9);
+        box-shadow: none;
+      }
+      .toc strong::before {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 2rem;
+        height: 2rem;
+        margin-right: 0.55rem;
+        border-radius: 7px;
+        background: var(--ink);
+        color: var(--paper);
+        content: "R";
+        font-family: var(--font-body);
+        font-size: 0.75rem;
+        font-weight: 700;
+        letter-spacing: 0;
+      }
+      .toc ul,
+      ul.toc,
+      ol.toc {
+        grid-template-columns: 1fr;
+        margin-top: 1.35rem;
+      }
+      .toc a {
+        padding: 0.62rem 0.7rem;
+        font-size: 0.84rem;
+      }
+    }
+    @media (max-width: 760px) {
+      main { padding: 1.35rem 0.9rem 4rem; }
+      h1 { font-size: 1.85rem; }
+      section { padding: 2.2rem 0; }
+      .toc ul, ul.toc, ol.toc { grid-template-columns: 1fr; }
+      .grid { grid-template-columns: 1fr; }
+      .grid.three { grid-template-columns: 1fr; }
+      table {
+        display: block;
+        overflow-x: auto;
+        font-size: 0.82rem;
+      }
+      th, td { padding: 0.55rem; }
+    }
+
+    .language-switch {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.2rem;
+      width: fit-content;
+      margin: 0 0 1rem;
+      padding: 0.18rem;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(255, 254, 251, 0.74);
+      box-shadow: 0 10px 28px rgba(55, 63, 48, 0.08);
+    }
+    .language-switch a,
+    .language-switch span {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 1.55rem;
+      padding: 0.18rem 0.55rem;
+      border-radius: 999px;
+      color: var(--muted);
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      font-weight: 650;
+      line-height: 1;
+      text-transform: uppercase;
+    }
+    .language-switch a:hover {
+      background: var(--state-soft);
+      color: var(--state);
+      text-decoration: none;
+    }
+    .language-switch .active {
+      background: var(--ink);
+      color: var(--paper);
+    }
+</style>
+<link href="./index.en.html" hreflang="en" rel="alternate"/>
+<link href="./index.html" hreflang="zh-CN" rel="alternate"/>
+</head>
+<body>
+<main>
+<header>
+<div aria-label="Language switch" class="language-switch">
+<span aria-current="page" class="active">EN</span>
+<a href="./index.html" lang="zh-CN">中文</a>
+</div>
+<h1>Video Prediction Policy: A Generalist Robot Policy with Predictive Visual Representations</h1>
+<div class="meta">
+<p><strong>arXiv ID：</strong><a href="https://arxiv.org/abs/2412.14803">2412.14803</a>, v2, submitted 2024-12-19, revised 2025-05-04</p>
+<p><strong>Authors:</strong>Yucheng Hu*; Yanjiang Guo*; Pengchao Wang; Xiaoyu Chen; Yen-Jen Wang; Jianke Zhang; Koushil Sreenath; Chaochao Lu; Jianyu Chen</p>
+<p><strong>Affiliations:</strong>Tsinghua University; UC Berkeley; Shanghai AI Lab; Shanghai Qi Zhi Institute; RobotEra</p>
+<p><strong>Publication:</strong>ICML 2025 Spotlight Paper</p>
+<p><strong>Project page:</strong><a href="https://video-prediction-policy.github.io/">video-prediction-policy.github.io</a>；
+       <strong>Code:</strong><a href="https://github.com/roboterax/video-prediction-policy">roboterax/video-prediction-policy</a>，MIT license</p>
+<p><strong>source:</strong>arXiv abs, PDF, native LaTeX source, project page, and GitHub README.</p>
+</div>
+</header>
+<nav class="toc">
+<strong>Contents</strong>
+<ul>
+<li><a href="#sec1">1. Quick overview of the paper</a></li>
+<li><a href="#sec2">2. Motivation and related work</a></li>
+<li><a href="#sec3">3. Preliminary knowledge</a></li>
+<li><a href="#sec4">4. Detailed explanation of method</a></li>
+<li><a href="#sec5">5. Intensive reading of experimental results and charts</a></li>
+<li><a href="#sec6">6. Reproduction list and project details</a></li>
+<li><a href="#sec7">7. Analysis, Limitations and Boundaries</a></li>
+</ul>
+</nav>
+<div class="tldr">
+<strong>One-sentence summary:</strong>VPP transforms the video diffusion model from a "slow module that generates complete future videos" to a "predictive visual encoder that only forwards once": first fine-tune Stable Video Diffusion into a manipulation text-guided video prediction model, then extract its internal future representation, use Video Former aggregation and then follow the diffusion transformer policy, allowing the robot strategy to learn implicit inverse dynamics by predicting future visual trajectories.
+  </div>
+<h2 id="sec1">1. Quick overview of the paper</h2>
+<table>
+<tr><th>Introductory items</th><th>What does this paper answer?</th><th>Where do you focus when reading?</th></tr>
+<tr>
+<td><strong>What should the paper solve?</strong></td>
+<td>Existing robot vision encoders mostly learn static information from single image reconstruction, double image comparison or image and text comparison, and lack explicit future dynamics; VPP should transform the future prediction representation inside the video diffusion model into the visual conditions of a general robot strategy.</td>
+<td>Introduction to the hypothesis of predictive visual representations, and Fig. 1 Comparison of current/future representations.</td>
+</tr>
+<tr>
+<td><strong>The author's approach</strong></td>
+<td>Two stages: first fine-tune SVD to manipulation TVP, then aggregate multi-layer features in TVP forward into predictive representations, output tokens through Video Former, and finally use diffusion transformer policy to generate actions.</td>
+<td>Method's TVP objective, feature aggregation, Video Former spatial-temporal attention and diffusion action loss.</td>
+</tr>
+<tr>
+<td><strong>most important results</strong></td>
+<td>CALVIN ABC-D Avg. Len reaches 4. 33; MetaWorld 50-task average success rate is 0. 682; Panda seen/unseen is 0. 85/0. 73; XHand seen/unseen/tool-use is 0. 75/0. 60/0. 68.</td>
+<td>Table 1, MetaWorld table, Table 6, appendix Panda/XHand breakdown table and ablation table.</td>
+</tr>
+<tr>
+<td><strong>Things to note when reading</strong></td>
+<td>VPP does not rely on complete 30-step video denoising to control the robot, but only uses the internal representation of TVP forward once; this is both the key to high-frequency closed-loop control and the main difference from SuSIE/Uni-Pi/GR-1.</td>
+<td>Policy roll-out details, one-step representation of Fig. 5, latency comparison in Video Former and ablation.</td>
+</tr>
+</table>
+<p><strong>Difficulty rating:</strong>★★★★☆. Need to understand video diffusion, latent/upsampling features of Stable Video Diffusion, Diffusion Policy/DiT and multi-view spatiotemporal attention. The paper does not have complex theorems, but the method implementation chain is long. During group meetings, it is most likely to be asked "why a forward rough representation of the future is enough to guide actions. "</p>
+<div class="warn">
+<strong>Numerical caliber reminder:</strong>arXiv The summary writing of CALVIN ABC-D is 18. 6% higher than the previous SOTA, corresponding to VPP 4. 33 in Table 1 compared with RoboUniview 3. 65; the introduction and project page writing is 41. 5%, corresponding to the improvement of 3. 06 relative to GR-1. The report explains the two calibers in tables.
+  </div>
+<h3>1. 1 Contribution list</h3>
+<ul>
+<li><strong>Propose predictive visual representations:</strong>The author believes that the internal latent of VDM contains information about both the current frame and future frames, which is more suitable for sequential control than the visual encoder that only encodes the current observation.</li>
+<li><strong>Construct VPP two-stage training:</strong>The first stage fine-tunes SVD to manipulation TVP; the second stage trains a generalist action policy conditioned on TVP representations.</li>
+<li><strong>High-frequency closed-loop deployment:</strong>Incomplete generation of clear video, only one forward representation, combined with Video Former and action chunking, reaches 7-10 Hz on RTX 4090.</li>
+<li><strong>Validated across simulation and real platforms:</strong>Covers CALVIN, MetaWorld, Franka Panda and XArm+XHand dexterous manipulation.</li>
+</ul>
+<h2 id="sec2">2. Motivation and related work</h2>
+<h3>2. 1 Why static visual representation is not enough</h3>
+<p>
+    Robot strategies need to understand "how the world will change next" from the image. Although visual representation learning methods such as R3M, VIP, VC-1, and Voltron can learn semantic and spatial information from video or graphic data, the training goals are usually single image reconstruction, two image comparison, MAE, or language generation, and the model input and output do not explicitly require prediction of the continuous future. These representations are therefore biased toward current states rather than future dynamics.
+  </p>
+<h3>2. 2 Why video diffusion model is a suitable candidate</h3>
+<p>
+    The video diffusion model directly models the complete video sequence, and the text-guided video prediction model can also predict future frames based on current observations and language. The author's assumption is that even if future videos are not completely denoised to pixel-level clarity, the intermediate features inside the VDM already contain coarse-grained information about how objects and robots will move. VPP calls these intermediate features predictive visual representations.
+  </p>
+<div class="figure">
+<img alt="Predictive visual representations" src="figures/fig1_v3.png"/>
+<div class="caption">Figure 1: VDM internal representation explicitly spans current and future time steps; traditional visual encoders usually only represent the current observation. The core assumption of VPP is that future representations can guide action learning.</div>
+</div>
+<h3>2. 3 Differences from future predictive control methods</h3>
+<p>
+    SuSIE first generates a future goal image and then lets the policy track the image; Uni-Pi learns inverse dynamics between two frames; GR-1 autoregressively generates future frames and actions. The paper believes that these methods have two shortcomings: either they only use a single future prediction and cannot cover complex continuous dynamics; or they require complete denoising/autoregression and low control frequency. The difference of VPP is to use the VDM intermediate representation directly instead of waiting for the final pixel video generation to be completed.
+  </p>
+<h2 id="sec3">3. Preliminary knowledge</h2>
+<h3>3.1 Video Diffusion Models</h3>
+<div class="formula-block">
+    $$q(x_t|x_{t-1})=\mathcal{N}(x_t;\sqrt{\alpha_t}x_{t-1},(1-\alpha_t)\mathbb{I}),$$
+    $$x_t=\sqrt{\bar{\alpha}_t}x_0+\sqrt{1-\bar{\alpha}_t}\epsilon_t,\quad \bar{\alpha}_t=\prod_{i=1}^t\alpha_i.$$
+    <p class="intuition">Intuitive understanding:</p>
+<p>The forward process continuously adds noise to the real video $x_0$ until it approaches Gaussian noise. Training the video generation model is the reverse process of learning to gradually restore clean video from noisy video.</p>
+</div>
+<div class="formula-block">
+    $$p(x_{t-1}|x_t)=\mathcal{N}\big(x_{t-1};\sqrt{\bar{\alpha}_{t-1}}\mu_\theta(x_t,t),(1-\bar{\alpha}_{t-1})\mathbb{I}\big),$$
+    $$\mu_\theta(x_t,t)=\frac{x_t-\sqrt{1-\bar{\alpha}_t}\epsilon_\theta(x_t,t)}{\sqrt{\bar{\alpha}_t}}.$$
+    <p>In text-guided video generation, the model also learns $\epsilon_\theta(x_t,c)$ conditioned on the initial frame and language prompt. VPP subsequently uses this conditional video prediction model as a visual encoder.</p>
+</div>
+<h3>3.2 Diffusion Policy</h3>
+<p>
+    Diffusion policy treats the action sequence $a_i=(\hat{a}_i,\ldots,\hat{a}_{i+m})$ as a denoising object. Compared with unimodal regression, diffusion policy can express multi-modal action distribution. VPP uses a diffusion transformer block in the action head and uses the predicted visual tokens output by Video Former as cross-attention conditions.
+  </p>
+<h2 id="sec4">4. Detailed explanation of method</h2>
+<div class="figure">
+<img alt="VPP method" src="figures/fig3_v4.png"/>
+<div class="caption">Figure 2: VPP two-stage process. First fine-tune the TVP model, then use Video Former to aggregate the TVP internal predictive representations, and finally use the diffusion transformer policy to output the robot action.</div>
+</div>
+<h3>4. 1 Stage 1: Training manipulation TVP model</h3>
+<p>
+    The authors build on the open source Stable Video Diffusion (SVD) with 1. 5B parameters. The original SVD is mainly conditioned on the initial frame $s_0$; VPP adds the CLIP language feature $l_{emb}$, injects language conditions through cross-attention, and sets the output video to $16\times256\times256$ to improve training and inference efficiency. Apart from these changes the main components of SVD are retained.
+  </p>
+<div class="formula-block">
+    $$\mathcal{L}_D=\mathbb{E}_{x_0\sim D,\epsilon,t}\left\|V_\theta(x_t,l_{emb},s_0)-x_0\right\|^2,$$
+    <p>Here $x_0=s_{0:T}$ is the complete video sequence, and $x_t=\sqrt{\bar{\alpha}_t}x_0+\sqrt{1-\bar{\alpha}_t}\epsilon$ is the noise-added video. The model learns to reconstruct the entire future sequence based on initial observations and language.</p>
+</div>
+<div class="formula-block">
+    $$\mathcal{L}_{video}=\lambda_H\mathcal{L}_{D_H}+\lambda_R\mathcal{L}_{D_R}+\lambda_C\mathcal{L}_{D_C}.$$
+    <p>The three types of data are internet human manipulation, internet robot manipulation and self-collected/downstream data. The appendix gives the sampling proportions of each data set; these weights are used to balance data of different sizes and qualities.</p>
+</div>
+<table>
+<tr><th>TVP training data</th><th>number of trajectories</th><th>Sampling ratio</th></tr>
+<tr><td>Something-Something-v2</td><td>191,642</td><td>0.30</td></tr>
+<tr><td>RT-1</td><td>87,212</td><td>0.15</td></tr>
+<tr><td>Bridge</td><td>23,377</td><td>0.15</td></tr>
+<tr><td>BC-Z</td><td>43,264</td><td>0.08</td></tr>
+<tr><td>Taco-Play / Jaco-Play</td><td>3,603 / 1,085</td><td>0.01 / 0.01</td></tr>
+<tr><td>CALVIN-ABC / MetaWorld</td><td>18,033 / 2,500</td><td>0.10 / 0.05</td></tr>
+<tr><td>Panda Arm / Dexterous Hand</td><td>2,000 / 2,476</td><td>0.05 / 0.10</td></tr>
+<tr><td><strong>Total</strong></td><td><strong>375,192</strong></td><td><strong>1.00</strong></td></tr>
+</table>
+<p class="small">Appendix description: 5, 558 items in Bridge and 2, 048 items in Something-Something-v2 are reserved for validation according to Seer settings; 3% of other data sets are reserved for validation.</p>
+<h3>4. 2 Stage 2: Treat TVP as a forward vision encoder</h3>
+<p>
+    Fully denoising high-quality video is very slow and results in open-loops or low-frequency domination. The key engineering choice of VPP is to only perform one forward step of TVP to extract features of the internal up-sampling layers without waiting for the final pixel video.
+  </p>
+<div class="formula-block">
+    $$L_m=V_\theta(x_{t'},l_{emb},s_0)_{(m)},\quad L_m\in\mathbb{R}^{T\times C_m\times W_m\times H_m}.$$
+    <p>$m$ represents an up-sampling layer in TVP. The input is the splicing of the current image $s_0$ and the noisy latent $q(x_{t'}|x_0)$; $t'$ usually corresponds to white noise or a latent close to white noise.</p>
+</div>
+<div class="formula-block">
+    $$L'_m=\mathrm{Interpolation}(L_m),\quad L'_m\in\mathbb{R}^{T\times C_m\times W_p\times H_p},$$
+    $$F_p=\mathrm{concat}\big((L'_0,L'_1,\ldots,L'_m),\mathrm{dim}=1\big).$$
+    <p class="intuition">Why aggregate multiple layers:</p>
+<p>The final pixel layer contains a lot of texture detail that is irrelevant to control; intermediate upsampling features are often more preserving motion and spatial structure. VPP does not manually select a single layer, but interpolates to the same resolution and then splices it by channel.</p>
+</div>
+<p>
+    For multi-view robots, VPP predicts future representations for static camera and wrist camera respectively, and obtains $F_p^{static}$ and $F_p^{wrist}$. This keeps the input form of TVP simple and allows Video Former to handle multiple views uniformly.
+  </p>
+<h3>4. 3 Video Former: Compressed spatio-temporal multi-view representation</h3>
+<p>
+    The predictive representation is a high-dimensional feature sequence of $T\times C\times W\times H$. Video Former uses a fixed number of learnable tokens $Q_{[0:T,0:L]}$ to aggregate these representations. Each frame first performs spatial attention, and then performs temporal attention across time.
+  </p>
+<div class="formula-block">
+    $$Q'=\{\mathrm{Spat\text{-}Attn}(Q[i],(F_p^{static}[i],F_p^{wrist}[i]))\}_{i=0}^{T},$$
+    $$Q''=\mathrm{FFN}(\mathrm{Temp\text{-}Attn}(Q')).$$
+    <p>The output $Q''$ is fixed-length tokens, which are subsequently used as the cross-attention condition of the diffusion policy.</p>
+</div>
+<h3>4.4 Diffusion transformer action head</h3>
+<p>
+    The action head takes the noised action sequence as input and uses DiT/decoder blocks to gradually restore the action. The aggregated $Q''$ is injected into each transformer block through cross-attention. The goal of motion denoising is:
+  </p>
+<div class="formula-block">
+    $$a_k=\sqrt{\bar{\beta}_k}a_0+\sqrt{1-\bar{\beta}_k}\epsilon,$$
+    $$\mathcal{L}_{\mathrm{diff}}(\psi;A)=\mathbb{E}_{a_0,\epsilon,k}\left\|D_\psi(a_k,l_{emb},Q'')-a_0\right\|^2.$$
+    <p>Here $a_0$ is the real action sequence, and $D_\psi$ directly predicts the denoised action. VPP also uses action chunking to output multiple action steps to increase control frequency.</p>
+</div>
+<h2 id="sec5">5. Intensive reading of experimental results and charts</h2>
+<h3>5. 1 Simulation settings</h3>
+<p>
+    Simulations include CALVIN ABC$\rightarrow$D and MetaWorld. The training environment in CALVIN is ABC, the test environment is unseen D, and only language-annotated ABC data is used for training according to the GR-1 settings. MetaWorld contains 50 Sawyer robot tasks, each task collects 50 trajectories using the official Oracle policy. TVP fine-tuning requires 8 A100s for 2-3 days; policy training requires 4 A100s for 6-12 hours.
+  </p>
+<div class="figure">
+<img alt="CALVIN and MetaWorld" src="figures/fig4.png"/>
+<div class="caption">Figure 3: CALVIN and MetaWorld task environments, and MetaWorld 50-task success rate table.</div>
+</div>
+<h3>5.2 CALVIN ABC-D long-horizon</h3>
+<table>
+<tr><th>Category</th><th>Method</th><th>Data</th><th>Task 1</th><th>Task 3</th><th>Task 5</th><th>Avg. Len</th></tr>
+<tr><td>Direct action</td><td>RT-1</td><td>100% ABC</td><td>0.533</td><td>0.094</td><td>0.013</td><td>0.90</td></tr>
+<tr><td>Direct action</td><td>Diffusion Policy</td><td>100% ABC</td><td>0.402</td><td>0.026</td><td>0.000</td><td>0.56</td></tr>
+<tr><td>Future prediction</td><td>SuSIE</td><td>100% ABC</td><td>0.870</td><td>0.490</td><td>0.260</td><td>2.69</td></tr>
+<tr><td>Future prediction</td><td>GR-1</td><td>100% ABC</td><td>0.854</td><td>0.596</td><td>0.401</td><td>3.06</td></tr>
+<tr><td>Future prediction</td><td>VidMan</td><td>100% ABC</td><td>0.915</td><td>0.682</td><td>0.467</td><td>3.42</td></tr>
+<tr><td>3D method</td><td>RoboUniview</td><td>100% ABC</td><td>0.942</td><td>0.734</td><td>0.507</td><td>3.65</td></tr>
+<tr><td><strong>Ours</strong></td><td><strong>VPP</strong></td><td>100% ABC</td><td><strong>0.965</strong></td><td><strong>0.866</strong></td><td><strong>0.769</strong></td><td><strong>4.33</strong></td></tr>
+<tr><td>Data efficiency</td><td>GR-1</td><td>10% ABC</td><td>0.672</td><td>0.198</td><td>0.069</td><td>1.41</td></tr>
+<tr><td>Data efficiency</td><td><strong>VPP</strong></td><td>10% ABC</td><td><strong>0.878</strong></td><td><strong>0.632</strong></td><td><strong>0.453</strong></td><td><strong>3.25</strong></td></tr>
+</table>
+<p>
+    CALVIN is evaluated by completing 5 command tasks in a row. The higher the Avg. Len, the better. The success rate of VPP on the fifth mission is still 0. 769, indicating that the attenuation of long-chain missions is significantly smaller than that of GR-1 and VidMan. VPP's 3. 25 also outperforms multiple full-data future prediction methods in the 10% data setting.
+  </p>
+<h3>5.3 MetaWorld 50-task</h3>
+<table>
+<tr><th>Method</th><th>Easy (28)</th><th>Middle (11)</th><th>Hard (11)</th><th>Average</th></tr>
+<tr><td>RT-1</td><td>0.605</td><td>0.042</td><td>0.015</td><td>0.346</td></tr>
+<tr><td>Diffusion Policy</td><td>0.442</td><td>0.062</td><td>0.095</td><td>0.279</td></tr>
+<tr><td>SuSIE</td><td>0.560</td><td>0.196</td><td>0.255</td><td>0.410</td></tr>
+<tr><td>GR-1</td><td>0.725</td><td>0.327</td><td>0.451</td><td>0.574</td></tr>
+<tr><td><strong>VPP</strong></td><td><strong>0.818</strong></td><td><strong>0.493</strong></td><td><strong>0.526</strong></td><td><strong>0.682</strong></td></tr>
+</table>
+<p>
+    MetaWorld results are used to demonstrate that VPP is not only applicable to CALVIN long-chain language tasks. On hard tasks, the VPP is 0. 526, which is higher than GR-1's 0. 451; the average success rate ranges from 0. 574 to 0. 682, which the paper claims is 10. 8 percentage points higher than the strongest GR-1 baseline.
+  </p>
+<h3>5. 4 Visualization of one-time forward prediction representation</h3>
+<div class="figure">
+<img alt="One-step predictive representations" src="figures/fig5.png"/>
+<div class="caption">Figure 4: Single-step forward representation compared to full 30-step denoised prediction. Single step means that the texture is not accurate, but it already reflects the movement direction of the object and the robot arm.</div>
+</div>
+<p>
+    This picture is the key to understanding VPP: the author is not saying that one-shot forward can generate beautiful videos, but that it can encode dynamic trends in the intermediate representation that are sufficient to support action learning. The control doesn't need a pixel-perfect future, it just needs to enable the inverse dynamics tracker to track future motion.
+  </p>
+<h3>5.5 Ablations</h3>
+<table>
+<tr><th>Ablation</th><th>Avg. Len</th><th>Latency</th><th>explain</th></tr>
+<tr><td>VPP</td><td><strong>4.33</strong></td><td><strong>about 140 ms</strong></td><td>complete model</td></tr>
+<tr><td>w/o Internet data</td><td>3.97</td><td>about 140 ms</td><td>Remove internet manipulation co-training</td></tr>
+<tr><td>w/o Calvin video</td><td>3.31</td><td>about 140 ms</td><td>Do not fine-tune TVP on downstream CALVIN videos</td></tr>
+<tr><td>w/o Internet data + w/o SVD pretrain</td><td>1.63</td><td>about 140 ms</td><td>Training video prediction model from scratch, performance drops significantly</td></tr>
+<tr><td>w/o Video Former</td><td>3.86</td><td>about 450 ms</td><td>Accuracy drops and inference slows down</td></tr>
+<tr><td>w/o Feature Aggregation</td><td>3.60</td><td>about 140 ms</td><td>Use only final layer features instead of multi-layer aggregation</td></tr>
+</table>
+<table>
+<tr><th>Visual encoder</th><th>Pre-training type</th><th>Avg. Len</th></tr>
+<tr><td><strong>VDM (VPP)</strong></td><td>Video generation</td><td><strong>4.33</strong></td></tr>
+<tr><td>Stable-VAE</td><td>VAE reconstruction</td><td>2.58</td></tr>
+<tr><td>VC-1</td><td>MAE reconstruction</td><td>1.23</td></tr>
+<tr><td>Voltron</td><td>MAE reconstruction + language generation</td><td>1.54</td></tr>
+</table>
+<table>
+<tr><th>More appendix ablation</th><th>result</th></tr>
+<tr><td>Feature layer</td><td>Layer-3 3.72；Layer-6 3.88；Layer-9 4.29；Layer-12 4.05；VPP 4.33</td></tr>
+<tr><td>Diffusion time-step</td><td>Time-step 10: 4.21；20: 4.33；30: 4.25</td></tr>
+<tr><td>Single-view</td><td>Avg. Len 3. 58, using only static view; the author points out that this result still exceeds 3. 35 for 3D Diffuser Actor</td></tr>
+<tr><td>Ablation 1</td><td>Remove the Temporal-attn of Video Former, Avg. Len 4. 18</td></tr>
+<tr><td>Ablation 2</td><td>TVP is characterized by 2-step denoising, Avg. Len 4. 19, the delay is nearly doubled</td></tr>
+</table>
+<h3>5.6 Real-world results</h3>
+<div class="figure">
+<img alt="Real-world platforms" src="figures/fig6_v2.png"/>
+<div class="caption">Figure 5: Real hardware platform: Franka Panda arm and XArm + 12-DoF XHand dexterous hand, with some examples of tasks.</div>
+</div>
+<p>
+    The Panda platform collects 2, 000 trajectories, covering 30+ tasks and 6 categories, including picking, placing, pressing, routing, opening, and closing. The XHand platform uses Vision Pro to capture human hand joint motion and retarget it to a 12-DoF dexterous hand; the main text contains 4, 000 items, 100+ tasks, and 13 categories, and the appendix is ​​expressed as 2. 5k trajectories, 100+ tasks, and 10 categories, and additional tool-use tasks are reported. The report is presented separately as main text and appendices. Please note that there is a difference in caliber here.
+  </p>
+<table>
+<tr><th>Platform / setting</th><th>Diffusion Policy</th><th>SuSIE</th><th>GR-1</th><th>VPP</th></tr>
+<tr><td>Panda seen</td><td>0.42</td><td>0.56</td><td>0.52</td><td><strong>0.85</strong></td></tr>
+<tr><td>Panda unseen</td><td>0.25</td><td>0.46</td><td>0.38</td><td><strong>0.73</strong></td></tr>
+<tr><td>XHand seen</td><td>0.28</td><td>0.45</td><td>0.32</td><td><strong>0.75</strong></td></tr>
+<tr><td>XHand unseen</td><td>0.11</td><td>0.28</td><td>0.15</td><td><strong>0.60</strong></td></tr>
+<tr><td>XHand tool-use</td><td>0.05</td><td>0.23</td><td>0.15</td><td><strong>0.68</strong></td></tr>
+</table>
+<p>
+    The appendix breakdown shows that pick/place/press/route/drawer in Panda unseen are 0. 80/0. 72/0. 80/0. 70/0. 60 respectively. XHand tool-use includes Spoon 0. 9, Hammer 0. 6, Drill 0. 8, Pipette 0. 4, with an average of 0. 68.
+  </p>
+<div class="figure">
+<img alt="Predictions and executions on unseen tasks" src="figures/fig7.png"/>
+<div class="caption">Figure 6: Prediction and execution in unseen tasks. Red is the predicted future, and green is the actual execution trajectory; the paper uses this to show that the actual actions will be close to the future predicted by TVP.</div>
+</div>
+<h3>5.7 Prediction quality</h3>
+<p>
+    Appendix reports FVD on Bridge validation: VideoFusion 501. 2, Tune-A-Video 515. 7, Seer 246. 3, VPP 41. 4. The author explains that this improvement comes from using pre-trained SVD as the basis, while early TVP such as Seer did not utilize this video foundation model.
+  </p>
+<div class="grid2">
+<div class="figure">
+<img alt="Human manipulation prediction" src="figures/sth_all.jpg"/>
+<div class="caption">Appendix: 30-step denoising prediction on human manipulation validation.</div>
+</div>
+<div class="figure">
+<img alt="Robot prediction" src="figures/robot_all.jpg"/>
+<div class="caption">Appendix: TVP prediction on robotic datasets, green is ground truth, red is predicted future.</div>
+</div>
+</div>
+<div class="figure">
+<img alt="Predictive representations" src="figures/step1_all.jpg"/>
+<div class="caption">Appendix: one-step predictive representations, visualized as blue frames. The authors emphasize that their textures are inaccurate but reflect key physical evolutions.</div>
+</div>
+<h2 id="sec6">6. Reproduction list and project details</h2>
+<h3>6. 1 Official code and checkpoints</h3>
+<p>
+    GitHub README provides PyTorch implementation, the main directories include <code>video_models</code>、<code>policy_models</code>、<code>policy_training</code>、<code>policy_evaluation</code>、<code>video_dataset</code>、<code>video_conf</code> and <code>policy_conf</code>. To reproduce CALVIN, you need to first install the official CALVIN environment and download the ABC-D dataset. The README estimates that the data is about 500 GB.
+  </p>
+<table>
+<tr><th>step</th><th>Entrance</th><th>illustrate</th></tr>
+<tr><td>environment</td><td><code>conda create -n vpp python==3.10</code>；<code>pip install -r requirements.txt</code></td><td>CALVIN needs to be installed according to mees/calvin; the README mentions that the torch version warning can be ignored.</td></tr>
+<tr><td>Video model</td><td><code>step1_prepare_latent.py</code> / <code>step1_train_svd.py</code></td><td>README is called the main function entry; the file name in the warehouse also contains <code>step1_prepare_latent.py</code>。</td></tr>
+<tr><td>Action model</td><td><code>step2_train_action_calvin.py</code> / <code>step2_train_action_xbot.py</code></td><td>Train CALVIN and XBot/XHand strategies separately.</td></tr>
+<tr><td>CALVIN evaluation</td><td><code>policy_evaluation/calvin_evaluate.py</code></td><td>need <code>svd-robot-calvin</code>、<code>dp-calvin</code>, CLIP and CALVIN ABC dataset paths.</td></tr>
+<tr><td>Video prediction demo</td><td><code>make_prediction.py --eval --config video_conf/val_svd.yaml ...</code></td><td>Available at provided <code>video_dataset_instance</code> Test prediction on the sample.</td></tr>
+</table>
+<p>
+    README provides Hugging Face checkpoints: CLIP text encoder about 600M;<code>svd-robot</code> About 8G;<code>svd-robot-calvin</code> About 8G;<code>dp-calvin</code> About 1G.
+  </p>
+<h3>6. 2 Architecture hyperparameters</h3>
+<table>
+<tr><th>Type</th><th>CALVIN</th><th>MetaWorld</th><th>Franka Panda</th><th>XHand</th></tr>
+<tr><td>Video length</td><td>16</td><td>8</td><td>16</td><td>16</td></tr>
+<tr><td>Action shape</td><td>10 x 7</td><td>4 x 4</td><td>10 x 7</td><td>10 x 18</td></tr>
+<tr><td>Language shape</td><td>20 x 512</td><td>20 x 512</td><td>20 x 512</td><td>20 x 512</td></tr>
+<tr><td>Image shape</td><td>256 x 256</td><td>256 x 256</td><td>256 x 256</td><td>256 x 256</td></tr>
+<tr><td>Video Former token shape</td><td>16 x 14 x 384</td><td>8 x 28 x 384</td><td>14 x 16 x 384</td><td>14 x 16 x 384</td></tr>
+<tr><td>Video Former input/latent dim</td><td>1280 / 512</td><td>1280 / 512</td><td>1280 / 512</td><td>1280 / 512</td></tr>
+<tr><td>Video Former heads/layers</td><td>8 / 6</td><td>8 / 6</td><td>8 / 6</td><td>8 / 6</td></tr>
+<tr><td>Diffusion Transformer latent dim</td><td>384</td><td>384</td><td>384</td><td>384</td></tr>
+<tr><td>Condition shape</td><td>225 x 384</td><td>225 x 384</td><td>225 x 384</td><td>225 x 384</td></tr>
+<tr><td>Encoder/decoder layers</td><td>4 / 4</td><td>4 / 4</td><td>4 / 4</td><td>4 / 4</td></tr>
+<tr><td>Sampling steps</td><td>10</td><td>10</td><td>10</td><td>10</td></tr>
+<tr><td>TVP batch / policy batch</td><td>4 / 76</td><td>4 / 64</td><td>4 / 128</td><td>4 / 128</td></tr>
+<tr><td>Epochs / LR</td><td>12 / 1e-4</td><td>30 / 5e-5</td><td>30 / 1e-4</td><td>40 / 1e-4</td></tr>
+</table>
+<h3>6. 3 Recurrence risk points</h3>
+<ul>
+<li><strong>Large amount of data:</strong>The official CALVIN dataset is about 500 GB, and TVP training also involves multi-source internet/robot/self-collected data.</li>
+<li><strong>High training resources:</strong>TVP fine-tuning requires 8 A100s for 2-3 days; policy training requires 4 A100s for 6-12 hours.</li>
+<li><strong>There is a small difference between the code README and the paper name:</strong>mentioned in README <code>step1_prepare_latent_data.py</code>, also in the warehouse list <code>step1_prepare_latent.py</code>; Actual reproduction needs to be checked against the current files in the warehouse.</li>
+<li><strong>The core is not to generate clear video:</strong>If you focus on the complete 30-step denoising instead of one-step internal features when reproducing, it will deviate from the high-frequency control setting of the paper.</li>
+<li><strong>Multi-layer features and timestep need to be set according to the paper:</strong>The appendix shows that Layer-9 is close to optimal, diffusion time-step 20 is optimal, and blindly changing layers will affect the results.</li>
+</ul>
+<h2 id="sec7">7. Analysis, Limitations and Boundaries</h2>
+<h3>7. 1 The most valuable part of this paper</h3>
+<p>
+    According to the paper's own experimental evidence, the core value of VPP is to rewrite "future prediction" from expensive pixel video generation to a representation extraction problem that can be deployed in a closed-loop. Table 1, Fig. 5 and w/o Video Former/2-step denoising ablation jointly illustrate that the control strategy does not need to wait for clear future video, and only needs a predictive representation of TVP forward, plus Video Former compression, to improve performance and maintain a 7-10 Hz control frequency on CALVIN, MetaWorld and real robot tasks.
+  </p>
+<h3>7. 2 Why the results hold up</h3>
+<p>
+    The paper supports the claim through four types of evidence: first, after replacing with Stable-VAE, VC-1, and Voltron, Avg. Len dropped from 4. 33 to 2. 58/1. 23/1. 54, indicating that not any visual encoder can achieve this effect; second, removing internet data, Calvin video, or SVD pretrain all decreased, indicating that video foundation prior and manipulation domain adaptation both contributed; third, layer/time-step/Video Former Ablation explains which designs work; fourth, seen/unseen/tool-use results on real Panda and XHand check for cross-platform generalization.
+  </p>
+<h3>7. 3 The boundaries of the paper itself that are explicit or exposed by experiments</h3>
+<ul>
+<li><strong>Requires a strong video basic model and a large amount of video data:</strong>When training from scratch and not using SVD pretrain, Avg. Len is only 1. 63, indicating that VPP obviously relies on video foundation prior.</li>
+<li><strong>TVP domain adaptation is critical:</strong>w/o Calvin video dropped from 4. 33 to 3. 31; w/o Internet data dropped from 4. 33 to 3. 97, indicating that downstream domain video and multi-source data jointly affect the representation quality.</li>
+<li><strong>Control frequency depends on one-step encoder design:</strong>2-step denoising did not improve performance and almost doubled the inference time; complete video denoising does not comply with the closed-loop control route of the paper.</li>
+<li><strong>Real tasks still rely on data alignment within the platform:</strong>Although the author emphasizes that internet pretraining helps unseen tasks, real Panda and XHand still collect platform data respectively and train the corresponding generalist policy.</li>
+<li><strong>The indicator caliber needs to be distinguished:</strong>CALVIN relative improvement uses different baseline calibers in the abstract, text and project pages; Table 1 values ​​should be displayed directly when reporting in group meetings.</li>
+</ul>
+<h3>7. 4 Group discussion question 1: What is the essential difference between predictive representation and world model?</h3>
+<p>
+    VPP's TVP will predict future visual sequences, but the policy does not rollout or plan in the prediction world, but uses the internal representation of a forward as a conditional input to learn inverse dynamics. It can be discussed: Is this approach more like representation learning or implicit planning? If it is to be combined with MPC/world-model RL in the future, what state, action, reward or uncertainty structures need to be added?
+  </p>
+<h3>7. 5 Group meeting discussion question 2: Where does the information of one-step predictive representation come from?</h3>
+<p>
+    Appendix layer/time-step ablation shows that Layer-9 and time-step 20 are better; Fig. 5 shows that one-step representation is blurry but can express motion. The discussion point is: does this information come from physical priors in SVD pre-training, manipulation TVP fine-tuning, language conditions, or multi-layer feature aggregation? This relates to whether VPP can be transferred to more complex contact, occlusion or long-range tasks.
+  </p>
+<div class="note">
+<strong>Suggestions for closing the group meeting:</strong>The main line of this paper can be summed up in one sentence: VPP does not require the video model to be "beautifully imagined", but requires it to be "imagined sufficiently controllable" in the internal representation; Video Former and diffusion action head convert this controllable future representation into a closed-loop action.
+  </div>
+</main>
+</body>
+</html>

@@ -1,0 +1,942 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Video Prediction Policy - 论文精读报告</title>
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']]
+      },
+      svg: { fontCache: 'global' }
+    };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --paper: #f6f7f3;
+      --paper-deep: #e8ede7;
+      --surface: #fffefb;
+      --surface-raised: rgba(255, 254, 251, 0.9);
+      --surface-2: #f0f4ee;
+      --ink: #20241f;
+      --ink-soft: #3a4038;
+      --muted: #697166;
+      --muted-2: #838a7f;
+      --line: rgba(32, 29, 25, 0.12);
+      --line-strong: rgba(32, 29, 25, 0.22);
+      --state: #2f766f;
+      --state-soft: #e6f0ed;
+      --action: #a45f38;
+      --action-soft: #f3e8dd;
+      --planning: #4f6542;
+      --planning-soft: #e7eddf;
+      --warn: #9a6a21;
+      --warn-soft: #f3ead8;
+      --font-body: "Sora", "PingFang SC", "Noto Sans SC", system-ui, sans-serif;
+      --font-mono: "Geist Mono", "SFMono-Regular", Menlo, monospace;
+      --sidebar-w: 188px;
+      --content-max: 1080px;
+      --desktop-gutter: 2.6rem;
+    }
+    *,
+    *::before,
+    *::after { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background:
+        linear-gradient(90deg, rgba(32, 29, 25, 0.035) 1px, transparent 1px),
+        linear-gradient(180deg, rgba(32, 29, 25, 0.03) 1px, transparent 1px),
+        var(--paper);
+      background-size: 32px 32px;
+      color: var(--ink);
+      font-family: var(--font-body);
+      font-size: 15px;
+      line-height: 1.75;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+    main {
+      width: min(100%, var(--content-max));
+      margin: 0 auto;
+      padding: 2.4rem 1.15rem 5.6rem;
+      min-height: 100vh;
+    }
+    h1 {
+      max-width: 900px;
+      margin: 0 0 1rem;
+      color: var(--ink);
+      font-size: clamp(1.75rem, 3.6vw, 3.7rem);
+      font-weight: 650;
+      line-height: 0.98;
+      letter-spacing: 0;
+    }
+    h2 {
+      margin: 0 0 1rem;
+      color: var(--ink);
+      font-size: clamp(1.55rem, 3vw, 2.7rem);
+      font-weight: 650;
+      line-height: 1.08;
+      letter-spacing: 0;
+    }
+    h3 {
+      margin: 1.8rem 0 0.55rem;
+      color: var(--ink);
+      font-size: 1.08rem;
+      font-weight: 650;
+      line-height: 1.35;
+    }
+    h4 {
+      margin: 1.35rem 0 0.45rem;
+      color: var(--ink-soft);
+      font-size: 0.95rem;
+      font-weight: 650;
+      line-height: 1.35;
+    }
+    p { margin: 0.65rem 0; }
+    a {
+      color: var(--state);
+      text-decoration: none;
+      text-underline-offset: 0.18em;
+    }
+    a:hover { text-decoration: underline; }
+    code {
+      padding: 0.12rem 0.32rem;
+      background: rgba(47, 118, 111, 0.08);
+      border: 1px solid rgba(47, 118, 111, 0.12);
+      border-radius: 4px;
+      color: var(--ink);
+      font-family: var(--font-mono);
+      font-size: 0.86em;
+    }
+    header {
+      padding: 1rem 0 2.5rem;
+      border-bottom: 1px solid var(--line);
+      margin-bottom: 1.2rem;
+    }
+    header::before {
+      display: inline-flex;
+      align-items: center;
+      min-height: 1.7rem;
+      margin-bottom: 1rem;
+      padding: 0.25rem 0.55rem;
+      border: 1px solid rgba(32, 29, 25, 0.13);
+      border-radius: 999px;
+      background: rgba(255, 254, 251, 0.68);
+      color: var(--state);
+      content: "paper report";
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    .meta {
+      display: grid;
+      gap: 0.35rem;
+      max-width: 900px;
+      background: linear-gradient(180deg, var(--surface-raised), rgba(255, 254, 251, 0.72));
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      box-shadow: 0 18px 55px rgba(55, 63, 48, 0.08);
+      padding: 1rem 1.05rem;
+      color: var(--muted);
+    }
+    .meta p {
+      margin: 0;
+      font-size: 0.86rem;
+      line-height: 1.62;
+    }
+    .meta strong {
+      color: var(--ink);
+      font-weight: 650;
+    }
+    .title-wrap {
+      display: grid;
+      gap: 0.75rem;
+      max-width: 900px;
+    }
+    .subtitle,
+    .lead {
+      max-width: 860px;
+      color: var(--muted);
+      font-size: 0.98rem;
+      line-height: 1.72;
+    }
+    .lead {
+      padding: 1rem 1.05rem;
+      background: linear-gradient(180deg, var(--state-soft), rgba(255, 254, 251, 0.74));
+      border: 1px solid rgba(47, 118, 111, 0.2);
+      border-radius: 8px;
+      color: var(--ink-soft);
+    }
+    .title-wrap .meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.45rem;
+      box-shadow: none;
+    }
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      min-height: 1.7rem;
+      padding: 0.2rem 0.55rem;
+      border: 1px solid rgba(32, 29, 25, 0.13);
+      border-radius: 999px;
+      background: rgba(255, 254, 251, 0.72);
+      color: var(--muted);
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      font-weight: 600;
+      line-height: 1.25;
+    }
+    .toc {
+      background: rgba(255, 254, 251, 0.84);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 0.95rem;
+      margin: 1.2rem 0 1.6rem;
+      backdrop-filter: blur(12px);
+    }
+    .toc strong {
+      display: block;
+      margin-bottom: 0.35rem;
+      color: var(--ink);
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    .toc ul,
+    ul.toc,
+    ol.toc {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0.12rem 0.35rem;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+    .toc li { min-width: 0; }
+    .toc a {
+      display: block;
+      padding: 0.42rem 0.52rem;
+      border-radius: 6px;
+      color: var(--muted);
+      font-size: 0.82rem;
+      line-height: 1.38;
+    }
+    .toc a:hover {
+      background: rgba(47, 118, 111, 0.08);
+      color: var(--ink);
+      text-decoration: none;
+    }
+    .tldr {
+      background: linear-gradient(180deg, var(--action-soft), rgba(255, 254, 251, 0.74));
+      border: 1px solid rgba(164, 95, 56, 0.22);
+      border-radius: 8px;
+      padding: 1rem 1.05rem;
+      margin: 1rem 0 1.1rem;
+      color: var(--ink-soft);
+      font-size: 0.98rem;
+      line-height: 1.72;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0.85rem;
+    }
+    .grid.three {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+    .note, .audit-card, .formula-block, .card, .danger {
+      background: var(--surface-raised);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      box-shadow: 0 14px 42px rgba(55, 63, 48, 0.055);
+      padding: 0.95rem 1rem;
+      margin: 0.85rem 0;
+    }
+    .card {
+      margin: 0;
+    }
+    .danger {
+      background: linear-gradient(180deg, var(--warn-soft), rgba(255, 254, 251, 0.78));
+      border-color: rgba(154, 106, 33, 0.22);
+    }
+    .kpi {
+      color: var(--ink);
+      font-family: var(--font-mono);
+      font-size: clamp(1.35rem, 2.8vw, 2.15rem);
+      font-weight: 700;
+      line-height: 1;
+    }
+    .kpi-label {
+      margin-top: 0.45rem;
+      color: var(--muted);
+      font-size: 0.82rem;
+      line-height: 1.5;
+    }
+    .note strong { color: var(--ink); }
+    .appendix-ref {
+      color: var(--planning);
+      background: var(--planning-soft);
+      border: 1px solid rgba(79, 101, 66, 0.18);
+      border-radius: 999px;
+      padding: 0.08rem 0.38rem;
+      font-family: var(--font-mono);
+      font-size: 0.74rem;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+    .formula-block .intuition {
+      font-weight: 650;
+      color: var(--state);
+      margin-bottom: 8px;
+    }
+    .symbol-table td:first-child {
+      width: 26%;
+      color: var(--state);
+      font-family: var(--font-mono);
+      font-weight: 600;
+    }
+    section {
+      padding: 3rem 0;
+      border-bottom: 1px solid var(--line);
+      scroll-margin-top: 1.4rem;
+    }
+    section:last-child { border-bottom: none; }
+    section > h2 {
+      max-width: 760px;
+      margin-right: auto;
+      margin-left: auto;
+      text-align: center;
+    }
+    section > h2::before {
+      display: block;
+      margin-bottom: 0.45rem;
+      color: var(--state);
+      content: "section";
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      line-height: 1.4;
+      text-transform: uppercase;
+    }
+    figure,
+    .figure {
+      margin: 1.35rem auto;
+      text-align: center;
+    }
+    figure img,
+    .figure img,
+    .pdf-frame {
+      display: block;
+      max-width: 100%;
+      max-height: min(72vh, 760px);
+      margin: 0 auto;
+      background: white;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      box-shadow: 0 18px 50px rgba(55, 63, 48, 0.08);
+    }
+    .pdf-frame {
+      width: auto;
+      height: auto;
+    }
+    figcaption,
+    .caption {
+      max-width: 920px;
+      margin: 0.65rem auto 0;
+      color: var(--muted);
+      font-size: 0.82rem;
+      line-height: 1.6;
+      text-align: center;
+    }
+    table {
+      width: 100%;
+      overflow: hidden;
+      border-collapse: separate;
+      border-spacing: 0;
+      margin: 1rem 0 1.25rem;
+      background: var(--surface-raised);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      box-shadow: 0 14px 42px rgba(55, 63, 48, 0.045);
+      font-size: 0.88rem;
+    }
+    th, td {
+      border-right: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+      padding: 0.62rem 0.68rem;
+      vertical-align: top;
+      text-align: left;
+    }
+    th:last-child,
+    td:last-child { border-right: none; }
+    tbody tr:last-child td { border-bottom: none; }
+    th {
+      background: var(--surface-2);
+      color: var(--ink);
+      font-family: var(--font-mono);
+      font-size: 0.76rem;
+      font-weight: 600;
+    }
+    tbody tr:nth-child(even) td { background: rgba(240, 244, 238, 0.45); }
+    ul, ol { padding-left: 1.25rem; }
+    li { margin: 0.35rem 0; }
+    .best { font-weight: 650; color: var(--state); }
+    .warn { color: var(--warn); font-weight: 650; }
+    .pseudocode {
+      background: #20241f;
+      color: #eef2e7;
+      border: 1px solid rgba(255, 254, 251, 0.12);
+      border-radius: 8px;
+      padding: 1rem 1.05rem;
+      overflow-x: auto;
+      font-family: var(--font-mono);
+      font-size: 0.82rem;
+      line-height: 1.58;
+      margin: 0.9rem 0;
+    }
+    pre {
+      max-width: 100%;
+      overflow-x: auto;
+      margin: 0.9rem 0;
+      padding: 1rem 1.05rem;
+      background: #20241f;
+      border: 1px solid rgba(255, 254, 251, 0.12);
+      border-radius: 8px;
+      color: #eef2e7;
+      font-family: var(--font-mono);
+      font-size: 0.82rem;
+      line-height: 1.58;
+    }
+    pre code {
+      padding: 0;
+      background: transparent;
+      border: 0;
+      color: inherit;
+      font: inherit;
+    }
+    article {
+      display: block;
+    }
+    .small {
+      color: var(--muted-2);
+      font-size: 0.78rem;
+      line-height: 1.55;
+    }
+    .checklist li { margin: 5px 0; }
+    @media (min-width: 980px) {
+      main {
+        width: min(100%, calc(var(--content-max) + var(--sidebar-w) + var(--desktop-gutter)));
+        margin: 0;
+        padding: 3.2rem var(--desktop-gutter) 6rem calc(var(--sidebar-w) + var(--desktop-gutter));
+      }
+      .toc {
+        position: fixed;
+        inset: 0 auto 0 0;
+        z-index: 50;
+        width: var(--sidebar-w);
+        min-height: 100vh;
+        margin: 0;
+        padding: 2.25rem 1.25rem;
+        border-width: 0 1px 0 0;
+        border-radius: 0;
+        background: rgba(246, 247, 243, 0.9);
+        box-shadow: none;
+      }
+      .toc strong::before {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 2rem;
+        height: 2rem;
+        margin-right: 0.55rem;
+        border-radius: 7px;
+        background: var(--ink);
+        color: var(--paper);
+        content: "R";
+        font-family: var(--font-body);
+        font-size: 0.75rem;
+        font-weight: 700;
+        letter-spacing: 0;
+      }
+      .toc ul,
+      ul.toc,
+      ol.toc {
+        grid-template-columns: 1fr;
+        margin-top: 1.35rem;
+      }
+      .toc a {
+        padding: 0.62rem 0.7rem;
+        font-size: 0.84rem;
+      }
+    }
+    @media (max-width: 760px) {
+      main { padding: 1.35rem 0.9rem 4rem; }
+      h1 { font-size: 1.85rem; }
+      section { padding: 2.2rem 0; }
+      .toc ul, ul.toc, ol.toc { grid-template-columns: 1fr; }
+      .grid { grid-template-columns: 1fr; }
+      .grid.three { grid-template-columns: 1fr; }
+      table {
+        display: block;
+        overflow-x: auto;
+        font-size: 0.82rem;
+      }
+      th, td { padding: 0.55rem; }
+    }
+
+    .language-switch {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.2rem;
+      width: fit-content;
+      margin: 0 0 1rem;
+      padding: 0.18rem;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(255, 254, 251, 0.74);
+      box-shadow: 0 10px 28px rgba(55, 63, 48, 0.08);
+    }
+    .language-switch a,
+    .language-switch span {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 1.55rem;
+      padding: 0.18rem 0.55rem;
+      border-radius: 999px;
+      color: var(--muted);
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      font-weight: 650;
+      line-height: 1;
+      text-transform: uppercase;
+    }
+    .language-switch a:hover {
+      background: var(--state-soft);
+      color: var(--state);
+      text-decoration: none;
+    }
+    .language-switch .active {
+      background: var(--ink);
+      color: var(--paper);
+    }
+</style>
+  <link rel="alternate" hreflang="zh-CN" href="./index.html">
+  <link rel="alternate" hreflang="en" href="./index.en.html">
+</head>
+<body>
+<main>
+<header>
+    <div class="language-switch" aria-label="语言切换">
+      <span class="active" aria-current="page">中文</span>
+      <a href="./index.en.html" lang="en">EN</a>
+    </div>
+<h1>Video Prediction Policy: A Generalist Robot Policy with Predictive Visual Representations</h1>
+  <div class="meta">
+    <p><strong>arXiv ID：</strong><a href="https://arxiv.org/abs/2412.14803">2412.14803</a>，v2，提交 2024-12-19，修订 2025-05-04</p>
+    <p><strong>作者：</strong>Yucheng Hu*; Yanjiang Guo*; Pengchao Wang; Xiaoyu Chen; Yen-Jen Wang; Jianke Zhang; Koushil Sreenath; Chaochao Lu; Jianyu Chen</p>
+    <p><strong>机构：</strong>Tsinghua University; UC Berkeley; Shanghai AI Lab; Shanghai Qi Zhi Institute; RobotEra</p>
+    <p><strong>发表：</strong>ICML 2025 Spotlight Paper</p>
+    <p><strong>项目页：</strong><a href="https://video-prediction-policy.github.io/">video-prediction-policy.github.io</a>；
+       <strong>代码：</strong><a href="https://github.com/roboterax/video-prediction-policy">roboterax/video-prediction-policy</a>，MIT license</p>
+    <p><strong>来源：</strong>arXiv abs、PDF、本地 LaTeX 源码、项目页和 GitHub README。</p>
+  </div>
+
+</header>
+
+<nav class="toc">
+    <strong>目录</strong>
+    <ul>
+      <li><a href="#sec1">1. 论文速览</a></li>
+      <li><a href="#sec2">2. 动机与相关工作</a></li>
+      <li><a href="#sec3">3. 预备知识</a></li>
+      <li><a href="#sec4">4. 方法详解</a></li>
+      <li><a href="#sec5">5. 实验结果与图表精读</a></li>
+      <li><a href="#sec6">6. 复现清单与工程细节</a></li>
+      <li><a href="#sec7">7. 分析、局限与边界</a></li>
+    </ul>
+  </nav>
+<div class="tldr">
+    <strong>一句话总结：</strong>VPP 将视频扩散模型从“生成完整未来视频的慢模块”改造成“只前向一次的 predictive visual encoder”：先把 Stable Video Diffusion 微调成 manipulation text-guided video prediction model，再抽取其内部未来表征，用 Video Former 聚合后接 diffusion transformer policy，让机器人策略通过预测未来的视觉轨迹学习隐式 inverse dynamics。
+  </div>
+
+  
+
+  <h2 id="sec1">1. 论文速览</h2>
+  <table>
+    <tr><th>导读项</th><th>这篇论文回答什么</th><th>读的时候重点看哪里</th></tr>
+    <tr>
+      <td><strong>论文要解决什么</strong></td>
+      <td>已有机器人 vision encoder 多从单图重建、双图对比或图文对比学静态信息，缺少显式未来动态；VPP 要把 video diffusion model 内部的未来预测表征转化为通用机器人策略的视觉条件。</td>
+      <td>Introduction 的 predictive visual representations 假设，以及 Fig. 1 对当前/未来表征的对比。</td>
+    </tr>
+    <tr>
+      <td><strong>作者的方法抓手</strong></td>
+      <td>两阶段：先把 SVD 微调为 manipulation TVP，再把 TVP 一次前向中的多层特征聚合为 predictive representations，经 Video Former 输出 tokens，最后用 diffusion transformer policy 生成动作。</td>
+      <td>Method 的 TVP objective、feature aggregation、Video Former spatial-temporal attention 和 diffusion action loss。</td>
+    </tr>
+    <tr>
+      <td><strong>最重要的结果</strong></td>
+      <td>CALVIN ABC-D Avg. Len 达到 4.33；MetaWorld 50-task 平均成功率 0.682；Panda seen/unseen 为 0.85/0.73；XHand seen/unseen/tool-use 为 0.75/0.60/0.68。</td>
+      <td>Table 1、MetaWorld 表、Table 6、附录 Panda/XHand 细分表和 ablation 表。</td>
+    </tr>
+    <tr>
+      <td><strong>阅读时要注意的点</strong></td>
+      <td>VPP 不依赖完整 30-step 视频去噪来控制机器人，而是只用一次 TVP forward 的内部表征；这既是高频闭环控制的关键，也是和 SuSIE/Uni-Pi/GR-1 的主要差别。</td>
+      <td>Policy roll-out details、Fig. 5 的 one-step representation、Video Former 和消融中的 latency 对比。</td>
+    </tr>
+  </table>
+
+  <p><strong>难度评级：</strong>★★★★☆。需要理解 video diffusion、Stable Video Diffusion 的 latent/upsampling features、Diffusion Policy/DiT 和多视角时空 attention。论文没有复杂定理，但方法实现链条长，组会时最容易被追问“为什么一次前向的粗糙未来表征足以指导动作”。</p>
+
+  <div class="warn">
+    <strong>数值口径提醒：</strong>arXiv 摘要写 CALVIN ABC-D 相对 previous SOTA 提升 18.6%，对应 Table 1 中 VPP 4.33 相对 RoboUniview 3.65；Introduction 和项目页写 41.5%，对应相对 GR-1 3.06 的提升。报告中按表格解释两个口径。
+  </div>
+
+  <h3>1.1 贡献清单</h3>
+  <ul>
+    <li><strong>提出 predictive visual representations：</strong>作者认为 VDM 的内部 latent 同时包含当前帧和未来帧的信息，比只编码当前观测的视觉 encoder 更适合顺序控制。</li>
+    <li><strong>构建 VPP 两阶段训练：</strong>第一阶段将 SVD 微调为 manipulation TVP；第二阶段训练 conditioned on TVP representations 的 generalist action policy。</li>
+    <li><strong>高频闭环部署：</strong>不完整生成清晰视频，只取一次 forward 的表示，配合 Video Former 和 action chunking，在 RTX 4090 上达到 7-10 Hz。</li>
+    <li><strong>跨仿真和真实平台验证：</strong>覆盖 CALVIN、MetaWorld、Franka Panda 和 XArm+XHand dexterous manipulation。</li>
+  </ul>
+
+  <h2 id="sec2">2. 动机与相关工作</h2>
+  <h3>2.1 为什么静态视觉表征不够</h3>
+  <p>
+    机器人策略需要从图像中理解“接下来世界会怎么变”。R3M、VIP、VC-1、Voltron 等视觉表征学习方法虽然可从视频或图文数据中学到语义和空间信息，但训练目标通常是单图重建、两图对比、MAE 或语言生成，模型输入输出并不显式要求预测连续未来。因此这些表征更偏向当前状态，而不是未来动力学。
+  </p>
+
+  <h3>2.2 为什么 video diffusion model 是合适候选</h3>
+  <p>
+    Video diffusion model 直接建模完整视频序列，text-guided video prediction model 还能基于当前观测和语言预测未来帧。作者的假设是：即使不把未来视频完整去噪到像素级清晰，VDM 内部的中间特征也已经包含物体和机器人将如何运动的粗粒度信息。VPP 将这些中间特征称为 predictive visual representations。
+  </p>
+
+  <div class="figure">
+    <img src="figures/fig1_v3.png" alt="Predictive visual representations">
+    <div class="caption">图 1：VDM 内部表示显式跨越当前与未来时间步；传统视觉 encoder 通常只给当前观测表征。VPP 的核心假设是未来表征可以指导动作学习。</div>
+  </div>
+
+  <h3>2.3 与未来预测控制方法的差别</h3>
+  <p>
+    SuSIE 先生成未来 goal image，再让 policy 追踪该图；Uni-Pi 在两帧之间学习 inverse dynamics；GR-1 自回归生成未来帧和动作。论文认为这些方法有两个不足：要么只用单个未来预测，无法覆盖复杂连续动态；要么需要完整去噪/自回归，控制频率低。VPP 的差异是直接使用 VDM 中间表征，而不是等待最终像素视频生成完成。
+  </p>
+
+  <h2 id="sec3">3. 预备知识</h2>
+  <h3>3.1 Video Diffusion Models</h3>
+  <div class="formula-block">
+    $$q(x_t|x_{t-1})=\mathcal{N}(x_t;\sqrt{\alpha_t}x_{t-1},(1-\alpha_t)\mathbb{I}),$$
+    $$x_t=\sqrt{\bar{\alpha}_t}x_0+\sqrt{1-\bar{\alpha}_t}\epsilon_t,\quad \bar{\alpha}_t=\prod_{i=1}^t\alpha_i.$$
+    <p class="intuition">直观理解：</p>
+    <p>前向过程不断给真实视频 $x_0$ 加噪，直到接近高斯噪声。训练视频生成模型就是学习从 noisy video 逐步恢复 clean video 的反向过程。</p>
+  </div>
+
+  <div class="formula-block">
+    $$p(x_{t-1}|x_t)=\mathcal{N}\big(x_{t-1};\sqrt{\bar{\alpha}_{t-1}}\mu_\theta(x_t,t),(1-\bar{\alpha}_{t-1})\mathbb{I}\big),$$
+    $$\mu_\theta(x_t,t)=\frac{x_t-\sqrt{1-\bar{\alpha}_t}\epsilon_\theta(x_t,t)}{\sqrt{\bar{\alpha}_t}}.$$
+    <p>在 text-guided video generation 中，模型还以初始帧和语言 prompt 为条件学习 $\epsilon_\theta(x_t,c)$。VPP 后续把这种条件视频预测模型当作视觉 encoder。</p>
+  </div>
+
+  <h3>3.2 Diffusion Policy</h3>
+  <p>
+    Diffusion policy 将动作序列 $a_i=(\hat{a}_i,\ldots,\hat{a}_{i+m})$ 也看作可去噪对象。相比单峰回归，diffusion policy 可以表达多模态动作分布。VPP 在 action head 中采用 diffusion transformer block，并把 Video Former 输出的预测视觉 tokens 作为 cross-attention 条件。
+  </p>
+
+  <h2 id="sec4">4. 方法详解</h2>
+  <div class="figure">
+    <img src="figures/fig3_v4.png" alt="VPP method">
+    <div class="caption">图 2：VPP 两阶段流程。先微调 TVP 模型，再用 Video Former 聚合 TVP 内部 predictive representations，最后由 diffusion transformer policy 输出机器人动作。</div>
+  </div>
+
+  <h3>4.1 Stage 1：训练 manipulation TVP model</h3>
+  <p>
+    作者以 1.5B 参数的开源 Stable Video Diffusion (SVD) 为基础。原始 SVD 主要以初始帧 $s_0$ 为条件；VPP 增加 CLIP language feature $l_{emb}$，通过 cross-attention 注入语言条件，并把输出视频设置为 $16\times256\times256$ 来提升训练和推理效率。除这些改动外保留 SVD 主要组件。
+  </p>
+
+  <div class="formula-block">
+    $$\mathcal{L}_D=\mathbb{E}_{x_0\sim D,\epsilon,t}\left\|V_\theta(x_t,l_{emb},s_0)-x_0\right\|^2,$$
+    <p>这里 $x_0=s_{0:T}$ 是完整视频序列，$x_t=\sqrt{\bar{\alpha}_t}x_0+\sqrt{1-\bar{\alpha}_t}\epsilon$ 是加噪视频。模型学习基于初始观测和语言重建整个未来序列。</p>
+  </div>
+
+  <div class="formula-block">
+    $$\mathcal{L}_{video}=\lambda_H\mathcal{L}_{D_H}+\lambda_R\mathcal{L}_{D_R}+\lambda_C\mathcal{L}_{D_C}.$$
+    <p>三类数据分别是 internet human manipulation、internet robot manipulation 和 self-collected/downstream data。附录给出各数据集采样比例；这些权重用于平衡不同规模和质量的数据。</p>
+  </div>
+
+  <table>
+    <tr><th>TVP 训练数据</th><th>轨迹数</th><th>采样比例</th></tr>
+    <tr><td>Something-Something-v2</td><td>191,642</td><td>0.30</td></tr>
+    <tr><td>RT-1</td><td>87,212</td><td>0.15</td></tr>
+    <tr><td>Bridge</td><td>23,377</td><td>0.15</td></tr>
+    <tr><td>BC-Z</td><td>43,264</td><td>0.08</td></tr>
+    <tr><td>Taco-Play / Jaco-Play</td><td>3,603 / 1,085</td><td>0.01 / 0.01</td></tr>
+    <tr><td>CALVIN-ABC / MetaWorld</td><td>18,033 / 2,500</td><td>0.10 / 0.05</td></tr>
+    <tr><td>Panda Arm / Dexterous Hand</td><td>2,000 / 2,476</td><td>0.05 / 0.10</td></tr>
+    <tr><td><strong>Total</strong></td><td><strong>375,192</strong></td><td><strong>1.00</strong></td></tr>
+  </table>
+
+  <p class="small">附录说明：Bridge 中 5,558 条和 Something-Something-v2 中 2,048 条按 Seer 设置留作 validation；其他数据集留 3% 作为 validation。</p>
+
+  <h3>4.2 Stage 2：把 TVP 当作一次前向视觉 encoder</h3>
+  <p>
+    完整去噪高质量视频非常慢，且会导致 open-loop 或低频控制。VPP 的关键工程选择是：只执行 TVP 的一次 forward step，提取内部 up-sampling layers 的特征，不等待最终像素视频。
+  </p>
+
+  <div class="formula-block">
+    $$L_m=V_\theta(x_{t'},l_{emb},s_0)_{(m)},\quad L_m\in\mathbb{R}^{T\times C_m\times W_m\times H_m}.$$
+    <p>$m$ 表示 TVP 中某个 up-sampling layer。输入是当前图像 $s_0$ 与 noisy latent $q(x_{t'}|x_0)$ 的拼接；$t'$ 通常对应白噪声或接近白噪声的 latent。</p>
+  </div>
+
+  <div class="formula-block">
+    $$L'_m=\mathrm{Interpolation}(L_m),\quad L'_m\in\mathbb{R}^{T\times C_m\times W_p\times H_p},$$
+    $$F_p=\mathrm{concat}\big((L'_0,L'_1,\ldots,L'_m),\mathrm{dim}=1\big).$$
+    <p class="intuition">为什么要聚合多层：</p>
+    <p>最终像素层包含很多与控制无关的纹理细节；中间 upsampling features 通常更保留运动和空间结构。VPP 不手选单层，而是插值到同一分辨率后按 channel 拼接。</p>
+  </div>
+
+  <p>
+    对多视角机器人，VPP 分别为 static camera 和 wrist camera 预测未来表示，得到 $F_p^{static}$ 和 $F_p^{wrist}$。这保持了 TVP 的输入形式简单，也让 Video Former 统一处理多视角。
+  </p>
+
+  <h3>4.3 Video Former：压缩时空多视角表征</h3>
+  <p>
+    Predictive representation 是 $T\times C\times W\times H$ 的高维特征序列。Video Former 用固定数量 learnable tokens $Q_{[0:T,0:L]}$ 汇聚这些表征，每个 frame 先做 spatial attention，再跨时间做 temporal attention。
+  </p>
+
+  <div class="formula-block">
+    $$Q'=\{\mathrm{Spat\text{-}Attn}(Q[i],(F_p^{static}[i],F_p^{wrist}[i]))\}_{i=0}^{T},$$
+    $$Q''=\mathrm{FFN}(\mathrm{Temp\text{-}Attn}(Q')).$$
+    <p>输出 $Q''$ 是固定长度 tokens，后续作为 diffusion policy 的 cross-attention 条件。</p>
+  </div>
+
+  <h3>4.4 Diffusion transformer action head</h3>
+  <p>
+    Action head 以 noised action sequence 为输入，用 DiT/decoder blocks 逐步恢复动作。聚合后的 $Q''$ 通过 cross-attention 注入每个 transformer block。动作去噪目标为：
+  </p>
+  <div class="formula-block">
+    $$a_k=\sqrt{\bar{\beta}_k}a_0+\sqrt{1-\bar{\beta}_k}\epsilon,$$
+    $$\mathcal{L}_{\mathrm{diff}}(\psi;A)=\mathbb{E}_{a_0,\epsilon,k}\left\|D_\psi(a_k,l_{emb},Q'')-a_0\right\|^2.$$
+    <p>这里 $a_0$ 是真实动作序列，$D_\psi$ 直接预测去噪后的动作。VPP 也使用 action chunking，输出多个动作步以提升控制频率。</p>
+  </div>
+
+  <h2 id="sec5">5. 实验结果与图表精读</h2>
+  <h3>5.1 仿真设置</h3>
+  <p>
+    仿真包括 CALVIN ABC$\rightarrow$D 和 MetaWorld。CALVIN 中训练环境是 ABC，测试环境是 unseen D，按照 GR-1 设置只使用 language-annotated ABC 数据训练。MetaWorld 包含 50 个 Sawyer 机器人任务，每个任务用官方 Oracle policy 采集 50 条轨迹。TVP fine-tuning 需要 8 张 A100 训练 2-3 天；policy 训练约需 4 张 A100 训练 6-12 小时。
+  </p>
+
+  <div class="figure">
+    <img src="figures/fig4.png" alt="CALVIN and MetaWorld">
+    <div class="caption">图 3：CALVIN 与 MetaWorld 任务环境，以及 MetaWorld 50-task 成功率表。</div>
+  </div>
+
+  <h3>5.2 CALVIN ABC-D long-horizon</h3>
+  <table>
+    <tr><th>Category</th><th>Method</th><th>Data</th><th>Task 1</th><th>Task 3</th><th>Task 5</th><th>Avg. Len</th></tr>
+    <tr><td>Direct action</td><td>RT-1</td><td>100% ABC</td><td>0.533</td><td>0.094</td><td>0.013</td><td>0.90</td></tr>
+    <tr><td>Direct action</td><td>Diffusion Policy</td><td>100% ABC</td><td>0.402</td><td>0.026</td><td>0.000</td><td>0.56</td></tr>
+    <tr><td>Future prediction</td><td>SuSIE</td><td>100% ABC</td><td>0.870</td><td>0.490</td><td>0.260</td><td>2.69</td></tr>
+    <tr><td>Future prediction</td><td>GR-1</td><td>100% ABC</td><td>0.854</td><td>0.596</td><td>0.401</td><td>3.06</td></tr>
+    <tr><td>Future prediction</td><td>VidMan</td><td>100% ABC</td><td>0.915</td><td>0.682</td><td>0.467</td><td>3.42</td></tr>
+    <tr><td>3D method</td><td>RoboUniview</td><td>100% ABC</td><td>0.942</td><td>0.734</td><td>0.507</td><td>3.65</td></tr>
+    <tr><td><strong>Ours</strong></td><td><strong>VPP</strong></td><td>100% ABC</td><td><strong>0.965</strong></td><td><strong>0.866</strong></td><td><strong>0.769</strong></td><td><strong>4.33</strong></td></tr>
+    <tr><td>Data efficiency</td><td>GR-1</td><td>10% ABC</td><td>0.672</td><td>0.198</td><td>0.069</td><td>1.41</td></tr>
+    <tr><td>Data efficiency</td><td><strong>VPP</strong></td><td>10% ABC</td><td><strong>0.878</strong></td><td><strong>0.632</strong></td><td><strong>0.453</strong></td><td><strong>3.25</strong></td></tr>
+  </table>
+  <p>
+    CALVIN 的评价是连续完成 5 个指令任务，Avg. Len 越高越好。VPP 在第 5 个任务成功率仍有 0.769，说明长链任务衰减明显小于 GR-1 和 VidMan。10% 数据设置中，VPP 的 3.25 也超过多种 full-data future prediction 方法。
+  </p>
+
+  <h3>5.3 MetaWorld 50-task</h3>
+  <table>
+    <tr><th>Method</th><th>Easy (28)</th><th>Middle (11)</th><th>Hard (11)</th><th>Average</th></tr>
+    <tr><td>RT-1</td><td>0.605</td><td>0.042</td><td>0.015</td><td>0.346</td></tr>
+    <tr><td>Diffusion Policy</td><td>0.442</td><td>0.062</td><td>0.095</td><td>0.279</td></tr>
+    <tr><td>SuSIE</td><td>0.560</td><td>0.196</td><td>0.255</td><td>0.410</td></tr>
+    <tr><td>GR-1</td><td>0.725</td><td>0.327</td><td>0.451</td><td>0.574</td></tr>
+    <tr><td><strong>VPP</strong></td><td><strong>0.818</strong></td><td><strong>0.493</strong></td><td><strong>0.526</strong></td><td><strong>0.682</strong></td></tr>
+  </table>
+  <p>
+    MetaWorld 结果用于证明 VPP 不只适用于 CALVIN 长链语言任务。在 hard tasks 上 VPP 为 0.526，高于 GR-1 的 0.451；平均成功率从 0.574 到 0.682，论文称比最强 GR-1 baseline 高 10.8 个百分点。
+  </p>
+
+  <h3>5.4 一次前向预测表征可视化</h3>
+  <div class="figure">
+    <img src="figures/fig5.png" alt="One-step predictive representations">
+    <div class="caption">图 4：单步 forward representation 与完整 30-step denoised prediction 的对比。单步表示纹理不精确，但已经反映物体和机械臂运动方向。</div>
+  </div>
+  <p>
+    这张图是理解 VPP 的关键：作者不是说一次前向能生成漂亮视频，而是说它能在中间表示中编码足以支持 action learning 的动态趋势。控制不需要 pixel-perfect future，只需要能让 inverse dynamics tracker 追踪未来运动。
+  </p>
+
+  <h3>5.5 Ablations</h3>
+  <table>
+    <tr><th>Ablation</th><th>Avg. Len</th><th>Latency</th><th>解释</th></tr>
+    <tr><td>VPP</td><td><strong>4.33</strong></td><td><strong>约 140 ms</strong></td><td>完整模型</td></tr>
+    <tr><td>w/o Internet data</td><td>3.97</td><td>约 140 ms</td><td>去掉 internet manipulation co-training</td></tr>
+    <tr><td>w/o Calvin video</td><td>3.31</td><td>约 140 ms</td><td>不在下游 CALVIN 视频上微调 TVP</td></tr>
+    <tr><td>w/o Internet data + w/o SVD pretrain</td><td>1.63</td><td>约 140 ms</td><td>从头训练视频预测模型，性能大幅下降</td></tr>
+    <tr><td>w/o Video Former</td><td>3.86</td><td>约 450 ms</td><td>准确率下降且推理变慢</td></tr>
+    <tr><td>w/o Feature Aggregation</td><td>3.60</td><td>约 140 ms</td><td>只用最终层特征而非多层聚合</td></tr>
+  </table>
+
+  <table>
+    <tr><th>Visual encoder</th><th>Pre-training type</th><th>Avg. Len</th></tr>
+    <tr><td><strong>VDM (VPP)</strong></td><td>Video generation</td><td><strong>4.33</strong></td></tr>
+    <tr><td>Stable-VAE</td><td>VAE reconstruction</td><td>2.58</td></tr>
+    <tr><td>VC-1</td><td>MAE reconstruction</td><td>1.23</td></tr>
+    <tr><td>Voltron</td><td>MAE reconstruction + language generation</td><td>1.54</td></tr>
+  </table>
+
+  <table>
+    <tr><th>更多附录消融</th><th>结果</th></tr>
+    <tr><td>Feature layer</td><td>Layer-3 3.72；Layer-6 3.88；Layer-9 4.29；Layer-12 4.05；VPP 4.33</td></tr>
+    <tr><td>Diffusion time-step</td><td>Time-step 10: 4.21；20: 4.33；30: 4.25</td></tr>
+    <tr><td>Single-view</td><td>Avg. Len 3.58，只用 static view；作者指出该结果仍超过 3D Diffuser Actor 的 3.35</td></tr>
+    <tr><td>Ablation 1</td><td>去掉 Video Former 的 Temporal-attn，Avg. Len 4.18</td></tr>
+    <tr><td>Ablation 2</td><td>TVP 用 2-step denoising 得表征，Avg. Len 4.19，延迟接近翻倍</td></tr>
+  </table>
+
+  <h3>5.6 Real-world results</h3>
+  <div class="figure">
+    <img src="figures/fig6_v2.png" alt="Real-world platforms">
+    <div class="caption">图 5：真实硬件平台：Franka Panda arm 和 XArm + 12-DoF XHand dexterous hand，以及部分任务示例。</div>
+  </div>
+
+  <p>
+    Panda 平台收集 2,000 条轨迹，覆盖 30+ tasks、6 categories，包括 picking、placing、pressing、routing、opening、closing。XHand 平台使用 Vision Pro 捕捉人手关节运动并 retarget 到 12-DoF dexterous hand；正文写 4,000 条、100+ tasks、13 categories，附录表述为 2.5k trajectories、100+ tasks、10 categories，并额外报告 tool-use tasks。报告按正文和附录分别呈现，注意该处存在口径差异。
+  </p>
+
+  <table>
+    <tr><th>Platform / setting</th><th>Diffusion Policy</th><th>SuSIE</th><th>GR-1</th><th>VPP</th></tr>
+    <tr><td>Panda seen</td><td>0.42</td><td>0.56</td><td>0.52</td><td><strong>0.85</strong></td></tr>
+    <tr><td>Panda unseen</td><td>0.25</td><td>0.46</td><td>0.38</td><td><strong>0.73</strong></td></tr>
+    <tr><td>XHand seen</td><td>0.28</td><td>0.45</td><td>0.32</td><td><strong>0.75</strong></td></tr>
+    <tr><td>XHand unseen</td><td>0.11</td><td>0.28</td><td>0.15</td><td><strong>0.60</strong></td></tr>
+    <tr><td>XHand tool-use</td><td>0.05</td><td>0.23</td><td>0.15</td><td><strong>0.68</strong></td></tr>
+  </table>
+
+  <p>
+    附录细分显示，Panda unseen 中 pick/place/press/route/drawer 分别为 0.80/0.72/0.80/0.70/0.60。XHand tool-use 包括 Spoon 0.9、Hammer 0.6、Drill 0.8、Pipette 0.4，平均 0.68。
+  </p>
+
+  <div class="figure">
+    <img src="figures/fig7.png" alt="Predictions and executions on unseen tasks">
+    <div class="caption">图 6：未见任务中的预测和执行。红色是预测未来，绿色是真实执行轨迹；论文用此说明实际动作会贴近 TVP 预测的未来。</div>
+  </div>
+
+  <h3>5.7 Prediction quality</h3>
+  <p>
+    附录在 Bridge validation 上报告 FVD：VideoFusion 501.2，Tune-A-Video 515.7，Seer 246.3，VPP 41.4。作者解释该提升来自使用预训练 SVD 作为基础，而 Seer 等早期 TVP 没有利用这种视频 foundation model。
+  </p>
+  <div class="grid2">
+    <div class="figure">
+      <img src="figures/sth_all.jpg" alt="Human manipulation prediction">
+      <div class="caption">附录：human manipulation validation 上的 30-step denoising prediction。</div>
+    </div>
+    <div class="figure">
+      <img src="figures/robot_all.jpg" alt="Robot prediction">
+      <div class="caption">附录：robotic datasets 上的 TVP prediction，绿色为 ground truth，红色为 predicted future。</div>
+    </div>
+  </div>
+  <div class="figure">
+    <img src="figures/step1_all.jpg" alt="Predictive representations">
+    <div class="caption">附录：one-step predictive representations，可视化为蓝色帧。作者强调它们纹理不准，但反映关键物理演化。</div>
+  </div>
+
+  <h2 id="sec6">6. 复现清单与工程细节</h2>
+  <h3>6.1 官方代码与 checkpoints</h3>
+  <p>
+    GitHub README 提供 PyTorch 实现，主要目录包括 <code>video_models</code>、<code>policy_models</code>、<code>policy_training</code>、<code>policy_evaluation</code>、<code>video_dataset</code>、<code>video_conf</code> 和 <code>policy_conf</code>。复现 CALVIN 需要先安装官方 CALVIN 环境并下载 ABC-D dataset，README 估计数据约 500 GB。
+  </p>
+  <table>
+    <tr><th>步骤</th><th>入口</th><th>说明</th></tr>
+    <tr><td>环境</td><td><code>conda create -n vpp python==3.10</code>；<code>pip install -r requirements.txt</code></td><td>CALVIN 需按 mees/calvin 安装；README 提到 torch 版本 warning 可忽略。</td></tr>
+    <tr><td>Video model</td><td><code>step1_prepare_latent.py</code> / <code>step1_train_svd.py</code></td><td>README 称主函数入口；仓库中文件名也包含 <code>step1_prepare_latent.py</code>。</td></tr>
+    <tr><td>Action model</td><td><code>step2_train_action_calvin.py</code> / <code>step2_train_action_xbot.py</code></td><td>分别训练 CALVIN 和 XBot/XHand 策略。</td></tr>
+    <tr><td>CALVIN evaluation</td><td><code>policy_evaluation/calvin_evaluate.py</code></td><td>需要 <code>svd-robot-calvin</code>、<code>dp-calvin</code>、CLIP 和 CALVIN ABC dataset 路径。</td></tr>
+    <tr><td>Video prediction demo</td><td><code>make_prediction.py --eval --config video_conf/val_svd.yaml ...</code></td><td>可在 provided <code>video_dataset_instance</code> 样例上试预测。</td></tr>
+  </table>
+
+  <p>
+    README 提供 Hugging Face checkpoints：CLIP text encoder 约 600M；<code>svd-robot</code> 约 8G；<code>svd-robot-calvin</code> 约 8G；<code>dp-calvin</code> 约 1G。
+  </p>
+
+  <h3>6.2 架构超参</h3>
+  <table>
+    <tr><th>Type</th><th>CALVIN</th><th>MetaWorld</th><th>Franka Panda</th><th>XHand</th></tr>
+    <tr><td>Video length</td><td>16</td><td>8</td><td>16</td><td>16</td></tr>
+    <tr><td>Action shape</td><td>10 x 7</td><td>4 x 4</td><td>10 x 7</td><td>10 x 18</td></tr>
+    <tr><td>Language shape</td><td>20 x 512</td><td>20 x 512</td><td>20 x 512</td><td>20 x 512</td></tr>
+    <tr><td>Image shape</td><td>256 x 256</td><td>256 x 256</td><td>256 x 256</td><td>256 x 256</td></tr>
+    <tr><td>Video Former token shape</td><td>16 x 14 x 384</td><td>8 x 28 x 384</td><td>14 x 16 x 384</td><td>14 x 16 x 384</td></tr>
+    <tr><td>Video Former input/latent dim</td><td>1280 / 512</td><td>1280 / 512</td><td>1280 / 512</td><td>1280 / 512</td></tr>
+    <tr><td>Video Former heads/layers</td><td>8 / 6</td><td>8 / 6</td><td>8 / 6</td><td>8 / 6</td></tr>
+    <tr><td>Diffusion Transformer latent dim</td><td>384</td><td>384</td><td>384</td><td>384</td></tr>
+    <tr><td>Condition shape</td><td>225 x 384</td><td>225 x 384</td><td>225 x 384</td><td>225 x 384</td></tr>
+    <tr><td>Encoder/decoder layers</td><td>4 / 4</td><td>4 / 4</td><td>4 / 4</td><td>4 / 4</td></tr>
+    <tr><td>Sampling steps</td><td>10</td><td>10</td><td>10</td><td>10</td></tr>
+    <tr><td>TVP batch / policy batch</td><td>4 / 76</td><td>4 / 64</td><td>4 / 128</td><td>4 / 128</td></tr>
+    <tr><td>Epochs / LR</td><td>12 / 1e-4</td><td>30 / 5e-5</td><td>30 / 1e-4</td><td>40 / 1e-4</td></tr>
+  </table>
+
+  <h3>6.3 复现风险点</h3>
+  <ul>
+    <li><strong>数据量大：</strong>CALVIN 官方 dataset 约 500 GB，TVP 训练还涉及多源 internet/robot/self-collected 数据。</li>
+    <li><strong>训练资源高：</strong>TVP fine-tuning 需要 8 张 A100 训练 2-3 天；policy 训练需要 4 张 A100 训练 6-12 小时。</li>
+    <li><strong>代码 README 与论文名字有小差异：</strong>README 中提到 <code>step1_prepare_latent_data.py</code>，仓库列表中也有 <code>step1_prepare_latent.py</code>；实际复现需按仓库当前文件核对。</li>
+    <li><strong>核心不是生成清晰视频：</strong>如果复现时把重点放在完整 30-step denoising，而不是 one-step internal features，会偏离论文的高频控制设定。</li>
+    <li><strong>多层特征和 timestep 需要按论文设置：</strong>附录显示 Layer-9 接近最优，diffusion time-step 20 最优，盲目换层会影响结果。</li>
+  </ul>
+
+  <h2 id="sec7">7. 分析、局限与边界</h2>
+  <h3>7.1 这篇论文最有价值的地方</h3>
+  <p>
+    按论文自己的实验证据，VPP 最核心的价值是把“未来预测”从昂贵的像素视频生成改写为可闭环部署的表征抽取问题。Table 1、Fig. 5 和 w/o Video Former/2-step denoising 消融共同说明：控制策略并不需要等待清晰未来视频，只需 TVP 一次 forward 的 predictive representation，加上 Video Former 压缩，就能在 CALVIN、MetaWorld 和真实机器人任务上提升表现并保持 7-10 Hz 控制频率。
+  </p>
+
+  <h3>7.2 结果为什么站得住</h3>
+  <p>
+    论文通过四类证据支撑主张：第一，替换成 Stable-VAE、VC-1、Voltron 后 Avg. Len 从 4.33 降到 2.58/1.23/1.54，说明不是任意视觉 encoder 都能达到该效果；第二，去掉 internet data、Calvin video 或 SVD pretrain 都下降，说明视频 foundation prior 和 manipulation domain adaptation 都有贡献；第三，layer/time-step/Video Former 消融解释哪些设计在起作用；第四，真实 Panda 和 XHand 上的 seen/unseen/tool-use 结果检查了跨平台泛化。
+  </p>
+
+  <h3>7.3 论文自身显式或由实验暴露出的边界</h3>
+  <ul>
+    <li><strong>需要较强视频基础模型和大量视频数据：</strong>从头训练且不使用 SVD pretrain 时 Avg. Len 只有 1.63，说明 VPP 对 video foundation prior 依赖明显。</li>
+    <li><strong>TVP domain adaptation 很关键：</strong>w/o Calvin video 从 4.33 降到 3.31；w/o Internet data 从 4.33 降到 3.97，说明下游域视频和多源数据共同影响表征质量。</li>
+    <li><strong>控制频率依赖 one-step encoder 设计：</strong>2-step denoising 没有提升性能，还几乎翻倍推理时间；完整视频去噪不符合论文的闭环控制路线。</li>
+    <li><strong>真实任务仍依赖平台内数据对齐：</strong>虽然作者强调 internet pretraining 帮助未见任务，但真实 Panda 和 XHand 仍分别收集了平台数据，并训练对应 generalist policy。</li>
+    <li><strong>指标口径需要区分：</strong>CALVIN relative improvement 在摘要、正文和项目页使用了不同 baseline 口径；组会报告时应直接展示 Table 1 数值。</li>
+  </ul>
+
+  <h3>7.4 组会讨论题 1：预测表征和世界模型有什么本质差别？</h3>
+  <p>
+    VPP 的 TVP 会预测未来视觉序列，但 policy 并不在预测世界里 rollout 或规划，而是把一次 forward 的内部表征当作条件输入来学 inverse dynamics。可以讨论：这种方法更像 representation learning，还是 implicit planning？如果未来要和 MPC/world-model RL 结合，需要补上哪些状态、动作、reward 或 uncertainty 结构？
+  </p>
+
+  <h3>7.5 组会讨论题 2：one-step predictive representation 的信息到底来自哪里？</h3>
+  <p>
+    附录 layer/time-step 消融显示 Layer-9、time-step 20 较好；Fig. 5 显示 one-step representation 虽然模糊但能表达运动。讨论点是：该信息来自 SVD 预训练中的物理先验、manipulation TVP fine-tuning、语言条件，还是多层 feature aggregation？这关系到 VPP 是否能迁移到更复杂接触、遮挡或长程任务。
+  </p>
+
+  <div class="note">
+    <strong>组会收束建议：</strong>可以把这篇论文的主线讲成一句话：VPP 不要求视频模型“想象得很漂亮”，而要求它在内部表征里“想象得足够可控”；Video Former 和 diffusion action head 则把这种可控的未来表征转成闭环动作。
+  </div>
+</main>
+</body>
+</html>

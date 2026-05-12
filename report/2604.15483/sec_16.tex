@@ -1,0 +1,75 @@
+ \label{sec:cross_emb_transfer}
+
+While a number of models have used data from multiple different robot embodiments~\citep{open_x_embodiment_rt_x_2023,yang2024pushing, team2024octo,wang2024hpt}, zero-shot transfer of complex tasks from a source embodiment to a target robot that has never seen the task presents a major challenge. In these experiments, we aim to study whether cross-embodiment transfer is an \emph{emergent} property of \MethodName{}. Namely, can \MethodName{} directly transfer capabilities to robot embodiments where no task-specific data was ever collected?
+
+We find that for several tasks, \MethodName{} succeeds on target embodiments entirely out of the box, on tasks for which the target robot has no training data. For more modest embodiment differences, the \Pizf{} and \Pizs{} models also show some amount of emergent cross-embodiment transfer. However, as the gap in the robot morphology increases, effectively transferring complex skills requires more significant changes in strategy. In these cases, \MethodName{} significantly outperforms the prior models, and even matches the ``zero-shot'' performance of human teleoperators for the shirt folding task, as we discuss below. Experimental results below apply joint-space control, as we find that end-effector control does not yield noticeable gains in performance with our prior models (Appendix~\ref{app:xemb_joint_vs_ee}).
+
+
+\noindent \textbf{Zero-shot cross-embodiment transfer for object re-arrangement tasks. }
+We first study a set of simpler object rearrangement tasks, where we test \MethodName{} on a robot other than the one that was used to collect data for that task. The results are presented in Fig.~\ref{fig:cross_embodiment}. For the first task, ``Table Setting,'' the data was collected with several different robot types, including mobile, static, and single-arm systems. This is the most favorable setting for cross-embodiment transfer, since the models can infer the common structure of the task from multiple different robots. When evaluated on a static bimanual robot system, we find that all methods show strong signs of cross-embodiment transfer. However, when we increase the embodiment gap more significantly and test policies on the smaller static bimanual platform when all data was collected on the larger UR5e bimanual platform (``Bag In Backpack'' and ``Organize Tupperware'' tasks), we find that the performance of \Pizf{} degrades significantly, while both \Pizs{} and \MethodName{} still are able to achieve strong performance. We then increase the embodiment gap even more, studying transfer for a task where data was collected on the smaller static bimanual platform and evaluated on a \emph{single-arm} UR5e platform (``Shirt Bagging'' task). This necessitates a significantly different strategy, as the target robot has only one arm, is much larger, and also heavier. Here, \MethodName{} significantly outperforms the prior models.
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=\linewidth]{compressed_images_final/human_vs_policy.pdf}
+    \caption{\textbf{Cross-embodiment transfer produces emergent strategies adapted to the target embodiment.} (a) On the source robot, human teleoperators use one arm to hold the bag open while the other performs insertion. On the UR5e target robot, \MethodName{} instead discovers a single-arm pick-and-place strategy suited to the robot's greater reach. (b) Human teleoperators approach the shirt with a tilted end-effector on the source robot, while \MethodName{} produces vertical grasps on the UR5e, which is more suitable for the larger robot's arm placement. In both cases, the policy goes beyond replicating source behavior, discovering manipulation strategies for the task that are better suited to the target embodiment.}
+    \label{fig:human_vs_policy}
+\vspace{-10pt}
+\end{figure}
+
+Notably, successful transfer often requires the policy to discover new manipulation strategies suited to the target morphology rather than simply replicate the source behavior. For example, the shorter static bimanual robot must use one arm to hold the bag open while the other performs insertion, whereas the taller UR5e arm can accomplish the same task with a single-arm pick-and-place (Fig.~\ref{fig:human_vs_policy} (a)). Despite this significant morphological gap, the model applies the appropriate strategy for each embodiment, demonstrating cross-embodiment transfer that goes beyond mimicking the original robot's motion. 
+
+
+
+
+
+\begin{figure*}[h]
+    \centering
+    \includegraphics[width=\textwidth]{compressed_images_final/airfryer_film_strip.pdf}
+    \caption{\textbf{Example of language coaching: } We can ``teach'' a new task to \MethodName{} by providing step-by-step verbal instructions. Because of its language following ability, \MethodName{} can perform new tasks successfully under user instruction, and these instructions can then by used to train a high-level policy that prompts \MethodName{} so that it can perform the task fully autonomously.}
+\label{fig:air_fryer_coaching}
+\vspace{-5pt}
+\end{figure*}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=\linewidth]{compressed_images_final/long_horizon_task_generalization.pdf}
+    \caption{\textbf{Coaching to perform new long-horizon tasks: }Because \MethodName{} can follow language instructions effectively, even for unfamiliar skills, it can be ``coached" to perform a number of unseen, longer horizon tasks both when conditioned on language and generated subgoal images (\MethodName{} (GC)). Prior models generally lack the language following ability needed to follow the coaching commands, and thus achieve very poor performance.}
+\label{fig:long_horizon_task_generalization}
+\vspace{-5pt}
+\end{figure}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=\linewidth]{compressed_images_final/coaching.pdf}
+    \caption{\textbf{Acquiring new autonomous capabilities with coaching: } We can use the coaching episodes collected for a number of different unseen tasks to train a high-level policy to automatically prompt \MethodName{} in accordance with the coaching episodes. This allows us to create fully autonomous policies for these tasks (\MethodName{} (autonomous)) that closely match the performance of the policy with live human coaching (\MethodName{} (coaching)) \emph{without collecting any additional data with teleoperation or any other kind of low-level actions}.}
+    \label{fig:coaching}
+\vspace{-5pt}
+\end{figure}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=\linewidth]{compressed_images_final/task_generalization.pdf}
+    \caption{\textbf{Performing new short-horizon tasks: }\MethodName{} can perform a number of new short-horizon tasks directly out of the box, including scooping rice into a rice cooker, spinning various objects such as a gear set and desk fan, and wiping down objects with a cloth, such as a ruler and headphones, despite no data being collected for any of these tasks. \MethodName{} shows roughly equally strong performance when conditioned directly on language instructions (\MethodName{}) or generated image goals (\MethodName{} (GC)).}
+    \label{fig:task_generalization}
+\vspace{-10pt}
+\end{figure}
+
+\noindent \textbf{Zero-shot cross-embodiment transfer for dexterous tasks. }
+Dexterous tasks, such as laundry folding, present a bigger challenge for cross-embodiment transfer. Such tasks require more precise manipulation skills than just grasping and repositioning objects. Successfully folding a t-shirt requires a sequence of precise grasps and placements, and the correct grasp angle might vary with the robot's reachable workspace and gripper orientation. Most of our folding data was collected with lightweight static bimanual robots (see Fig.~\ref{fig:robots}). We did not collect any laundry folding data with the bimanual UR5e system. The morphology of this system, its reachable workspace, and its dynamics (e.g., higher internal inertia) differ significantly from the robots with which we collected laundry folding data. We found the UR5e generally harder to teleoperate and less suitable for very precise grasps, suggesting that folding laundry with this robot requires a change in the manipulation strategy.
+
+
+\begin{figure*}[h]
+    \centering
+    \includegraphics[width=\textwidth]{compressed_images_final/generalization_and_conditioning_full.pdf}
+    \caption{\textbf{Scaling of generalization performance with diverse context and data: } Left: We find that \MethodName{} (with metadata) can continuously improve its performance when it is trained on larger datasets, even when the average quality of the data actually decreases. By contrast, without training on rich conditioning information, we find that \MethodName{} (without metadata) actually can degrade in performance as more lower quality data is introduced. Right: When \MethodName{} is trained without our robot data with the highest task diversity, its performance degrades substantially. This suggests that \MethodName{} is able to utilize the task diversity in our robot data to drive substantial improvements in compositional task generalization.}
+\label{fig:generalization_and_conditioning}
+\vspace{-8pt}
+\end{figure*}
+
+
+\MethodName{} was able to successfully fold both towels and shirts on the bimanual UR5e system (Fig.~\ref{fig:cross_embodiment}, right).
+On the source robot (the static bimanual robot in Fig.~\ref{fig:robots}), human operators often approach the cloth with a tilted end-effector to secure the fabric against the table before lifting. On the UR5e, \MethodName{} instead uses a vertical grasp that is better suited to the arm's kinematics --- a strategy that is different from the training data on the source robot but more suitable for the target embodiment (Fig.~\ref{fig:human_vs_policy} (b)). We also find that using subgoal image generation with our world model significantly improves performance (labeled \MethodName{} (GC) in the plots), as the world model can more effectively construct visual analogies between the source and target robots. The generated subgoals predict what kind of grasps and clothing configurations would be reasonable for the target robot, and the model incorporates this additional context as a hint for selecting better actions.
+
+
+To contextualize these results, we conducted a human subject study with 10 experienced teleoperators (mean 375 hours of teleoperation experience across all robots, all within the top 2\% by experience). Like the policy, these operators had extensive experience on the source embodiment, but had never attempted shirt folding on the UR5e bimanual system, making this a zero-shot cross-embodiment transfer setting for both humans and the policy. The human operators achieved 90.9\% task progress and an 80.6\% success rate, while \MethodName{} achieved 85.6\% task progress and an 80\% success rate, demonstrating performance comparable to these expert operators. The strong cross-embodiment transfer performance highlighted by this comparison is scientifically exciting, and it has a practical implication: dexterous skills may be transferred \textit{from} lightweight, low-cost platforms that are easy to teleoperate \textit{to} high-payload industrial arms, where collecting human demonstration data is substantially more expensive and difficult. More details on the human study setup and results are provided in Appendix~\ref{app:human_study}.
+

@@ -1,0 +1,961 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Motus: A Unified Latent Action World Model - 精读报告</title>
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']]
+      },
+      svg: { fontCache: 'global' }
+    };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --paper: #f6f7f3;
+      --paper-deep: #e8ede7;
+      --surface: #fffefb;
+      --surface-raised: rgba(255, 254, 251, 0.9);
+      --surface-2: #f0f4ee;
+      --ink: #20241f;
+      --ink-soft: #3a4038;
+      --muted: #697166;
+      --muted-2: #838a7f;
+      --line: rgba(32, 29, 25, 0.12);
+      --line-strong: rgba(32, 29, 25, 0.22);
+      --state: #2f766f;
+      --state-soft: #e6f0ed;
+      --action: #a45f38;
+      --action-soft: #f3e8dd;
+      --planning: #4f6542;
+      --planning-soft: #e7eddf;
+      --warn: #9a6a21;
+      --warn-soft: #f3ead8;
+      --font-body: "Sora", "PingFang SC", "Noto Sans SC", system-ui, sans-serif;
+      --font-mono: "Geist Mono", "SFMono-Regular", Menlo, monospace;
+      --sidebar-w: 188px;
+      --content-max: 1080px;
+      --desktop-gutter: 2.6rem;
+    }
+    *,
+    *::before,
+    *::after { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background:
+        linear-gradient(90deg, rgba(32, 29, 25, 0.035) 1px, transparent 1px),
+        linear-gradient(180deg, rgba(32, 29, 25, 0.03) 1px, transparent 1px),
+        var(--paper);
+      background-size: 32px 32px;
+      color: var(--ink);
+      font-family: var(--font-body);
+      font-size: 15px;
+      line-height: 1.75;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+    main {
+      width: min(100%, var(--content-max));
+      margin: 0 auto;
+      padding: 2.4rem 1.15rem 5.6rem;
+      min-height: 100vh;
+    }
+    h1 {
+      max-width: 900px;
+      margin: 0 0 1rem;
+      color: var(--ink);
+      font-size: clamp(1.75rem, 3.6vw, 3.7rem);
+      font-weight: 650;
+      line-height: 0.98;
+      letter-spacing: 0;
+    }
+    h2 {
+      margin: 0 0 1rem;
+      color: var(--ink);
+      font-size: clamp(1.55rem, 3vw, 2.7rem);
+      font-weight: 650;
+      line-height: 1.08;
+      letter-spacing: 0;
+    }
+    h3 {
+      margin: 1.8rem 0 0.55rem;
+      color: var(--ink);
+      font-size: 1.08rem;
+      font-weight: 650;
+      line-height: 1.35;
+    }
+    h4 {
+      margin: 1.35rem 0 0.45rem;
+      color: var(--ink-soft);
+      font-size: 0.95rem;
+      font-weight: 650;
+      line-height: 1.35;
+    }
+    p { margin: 0.65rem 0; }
+    a {
+      color: var(--state);
+      text-decoration: none;
+      text-underline-offset: 0.18em;
+    }
+    a:hover { text-decoration: underline; }
+    code {
+      padding: 0.12rem 0.32rem;
+      background: rgba(47, 118, 111, 0.08);
+      border: 1px solid rgba(47, 118, 111, 0.12);
+      border-radius: 4px;
+      color: var(--ink);
+      font-family: var(--font-mono);
+      font-size: 0.86em;
+    }
+    header {
+      padding: 1rem 0 2.5rem;
+      border-bottom: 1px solid var(--line);
+      margin-bottom: 1.2rem;
+    }
+    header::before {
+      display: inline-flex;
+      align-items: center;
+      min-height: 1.7rem;
+      margin-bottom: 1rem;
+      padding: 0.25rem 0.55rem;
+      border: 1px solid rgba(32, 29, 25, 0.13);
+      border-radius: 999px;
+      background: rgba(255, 254, 251, 0.68);
+      color: var(--state);
+      content: "paper report";
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    .meta {
+      display: grid;
+      gap: 0.35rem;
+      max-width: 900px;
+      background: linear-gradient(180deg, var(--surface-raised), rgba(255, 254, 251, 0.72));
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      box-shadow: 0 18px 55px rgba(55, 63, 48, 0.08);
+      padding: 1rem 1.05rem;
+      color: var(--muted);
+    }
+    .meta p {
+      margin: 0;
+      font-size: 0.86rem;
+      line-height: 1.62;
+    }
+    .meta strong {
+      color: var(--ink);
+      font-weight: 650;
+    }
+    .title-wrap {
+      display: grid;
+      gap: 0.75rem;
+      max-width: 900px;
+    }
+    .subtitle,
+    .lead {
+      max-width: 860px;
+      color: var(--muted);
+      font-size: 0.98rem;
+      line-height: 1.72;
+    }
+    .lead {
+      padding: 1rem 1.05rem;
+      background: linear-gradient(180deg, var(--state-soft), rgba(255, 254, 251, 0.74));
+      border: 1px solid rgba(47, 118, 111, 0.2);
+      border-radius: 8px;
+      color: var(--ink-soft);
+    }
+    .title-wrap .meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.45rem;
+      box-shadow: none;
+    }
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      min-height: 1.7rem;
+      padding: 0.2rem 0.55rem;
+      border: 1px solid rgba(32, 29, 25, 0.13);
+      border-radius: 999px;
+      background: rgba(255, 254, 251, 0.72);
+      color: var(--muted);
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      font-weight: 600;
+      line-height: 1.25;
+    }
+    .toc {
+      background: rgba(255, 254, 251, 0.84);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 0.95rem;
+      margin: 1.2rem 0 1.6rem;
+      backdrop-filter: blur(12px);
+    }
+    .toc strong {
+      display: block;
+      margin-bottom: 0.35rem;
+      color: var(--ink);
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    .toc ul,
+    ul.toc,
+    ol.toc {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0.12rem 0.35rem;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+    .toc li { min-width: 0; }
+    .toc a {
+      display: block;
+      padding: 0.42rem 0.52rem;
+      border-radius: 6px;
+      color: var(--muted);
+      font-size: 0.82rem;
+      line-height: 1.38;
+    }
+    .toc a:hover {
+      background: rgba(47, 118, 111, 0.08);
+      color: var(--ink);
+      text-decoration: none;
+    }
+    .tldr {
+      background: linear-gradient(180deg, var(--action-soft), rgba(255, 254, 251, 0.74));
+      border: 1px solid rgba(164, 95, 56, 0.22);
+      border-radius: 8px;
+      padding: 1rem 1.05rem;
+      margin: 1rem 0 1.1rem;
+      color: var(--ink-soft);
+      font-size: 0.98rem;
+      line-height: 1.72;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0.85rem;
+    }
+    .grid.three {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+    .note, .audit-card, .formula-block, .card, .danger {
+      background: var(--surface-raised);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      box-shadow: 0 14px 42px rgba(55, 63, 48, 0.055);
+      padding: 0.95rem 1rem;
+      margin: 0.85rem 0;
+    }
+    .card {
+      margin: 0;
+    }
+    .danger {
+      background: linear-gradient(180deg, var(--warn-soft), rgba(255, 254, 251, 0.78));
+      border-color: rgba(154, 106, 33, 0.22);
+    }
+    .kpi {
+      color: var(--ink);
+      font-family: var(--font-mono);
+      font-size: clamp(1.35rem, 2.8vw, 2.15rem);
+      font-weight: 700;
+      line-height: 1;
+    }
+    .kpi-label {
+      margin-top: 0.45rem;
+      color: var(--muted);
+      font-size: 0.82rem;
+      line-height: 1.5;
+    }
+    .note strong { color: var(--ink); }
+    .appendix-ref {
+      color: var(--planning);
+      background: var(--planning-soft);
+      border: 1px solid rgba(79, 101, 66, 0.18);
+      border-radius: 999px;
+      padding: 0.08rem 0.38rem;
+      font-family: var(--font-mono);
+      font-size: 0.74rem;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+    .formula-block .intuition {
+      font-weight: 650;
+      color: var(--state);
+      margin-bottom: 8px;
+    }
+    .symbol-table td:first-child {
+      width: 26%;
+      color: var(--state);
+      font-family: var(--font-mono);
+      font-weight: 600;
+    }
+    section {
+      padding: 3rem 0;
+      border-bottom: 1px solid var(--line);
+      scroll-margin-top: 1.4rem;
+    }
+    section:last-child { border-bottom: none; }
+    section > h2 {
+      max-width: 760px;
+      margin-right: auto;
+      margin-left: auto;
+      text-align: center;
+    }
+    section > h2::before {
+      display: block;
+      margin-bottom: 0.45rem;
+      color: var(--state);
+      content: "section";
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      line-height: 1.4;
+      text-transform: uppercase;
+    }
+    figure,
+    .figure {
+      margin: 1.35rem auto;
+      text-align: center;
+    }
+    figure img,
+    .figure img,
+    .pdf-frame {
+      display: block;
+      max-width: 100%;
+      max-height: min(72vh, 760px);
+      margin: 0 auto;
+      background: white;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      box-shadow: 0 18px 50px rgba(55, 63, 48, 0.08);
+    }
+    .pdf-frame {
+      width: auto;
+      height: auto;
+    }
+    figcaption,
+    .caption {
+      max-width: 920px;
+      margin: 0.65rem auto 0;
+      color: var(--muted);
+      font-size: 0.82rem;
+      line-height: 1.6;
+      text-align: center;
+    }
+    table {
+      width: 100%;
+      overflow: hidden;
+      border-collapse: separate;
+      border-spacing: 0;
+      margin: 1rem 0 1.25rem;
+      background: var(--surface-raised);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      box-shadow: 0 14px 42px rgba(55, 63, 48, 0.045);
+      font-size: 0.88rem;
+    }
+    th, td {
+      border-right: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+      padding: 0.62rem 0.68rem;
+      vertical-align: top;
+      text-align: left;
+    }
+    th:last-child,
+    td:last-child { border-right: none; }
+    tbody tr:last-child td { border-bottom: none; }
+    th {
+      background: var(--surface-2);
+      color: var(--ink);
+      font-family: var(--font-mono);
+      font-size: 0.76rem;
+      font-weight: 600;
+    }
+    tbody tr:nth-child(even) td { background: rgba(240, 244, 238, 0.45); }
+    ul, ol { padding-left: 1.25rem; }
+    li { margin: 0.35rem 0; }
+    .best { font-weight: 650; color: var(--state); }
+    .warn { color: var(--warn); font-weight: 650; }
+    .pseudocode {
+      background: #20241f;
+      color: #eef2e7;
+      border: 1px solid rgba(255, 254, 251, 0.12);
+      border-radius: 8px;
+      padding: 1rem 1.05rem;
+      overflow-x: auto;
+      font-family: var(--font-mono);
+      font-size: 0.82rem;
+      line-height: 1.58;
+      margin: 0.9rem 0;
+    }
+    pre {
+      max-width: 100%;
+      overflow-x: auto;
+      margin: 0.9rem 0;
+      padding: 1rem 1.05rem;
+      background: #20241f;
+      border: 1px solid rgba(255, 254, 251, 0.12);
+      border-radius: 8px;
+      color: #eef2e7;
+      font-family: var(--font-mono);
+      font-size: 0.82rem;
+      line-height: 1.58;
+    }
+    pre code {
+      padding: 0;
+      background: transparent;
+      border: 0;
+      color: inherit;
+      font: inherit;
+    }
+    article {
+      display: block;
+    }
+    .small {
+      color: var(--muted-2);
+      font-size: 0.78rem;
+      line-height: 1.55;
+    }
+    .checklist li { margin: 5px 0; }
+    @media (min-width: 980px) {
+      main {
+        width: min(100%, calc(var(--content-max) + var(--sidebar-w) + var(--desktop-gutter)));
+        margin: 0;
+        padding: 3.2rem var(--desktop-gutter) 6rem calc(var(--sidebar-w) + var(--desktop-gutter));
+      }
+      .toc {
+        position: fixed;
+        inset: 0 auto 0 0;
+        z-index: 50;
+        width: var(--sidebar-w);
+        min-height: 100vh;
+        margin: 0;
+        padding: 2.25rem 1.25rem;
+        border-width: 0 1px 0 0;
+        border-radius: 0;
+        background: rgba(246, 247, 243, 0.9);
+        box-shadow: none;
+      }
+      .toc strong::before {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 2rem;
+        height: 2rem;
+        margin-right: 0.55rem;
+        border-radius: 7px;
+        background: var(--ink);
+        color: var(--paper);
+        content: "R";
+        font-family: var(--font-body);
+        font-size: 0.75rem;
+        font-weight: 700;
+        letter-spacing: 0;
+      }
+      .toc ul,
+      ul.toc,
+      ol.toc {
+        grid-template-columns: 1fr;
+        margin-top: 1.35rem;
+      }
+      .toc a {
+        padding: 0.62rem 0.7rem;
+        font-size: 0.84rem;
+      }
+    }
+    @media (max-width: 760px) {
+      main { padding: 1.35rem 0.9rem 4rem; }
+      h1 { font-size: 1.85rem; }
+      section { padding: 2.2rem 0; }
+      .toc ul, ul.toc, ol.toc { grid-template-columns: 1fr; }
+      .grid { grid-template-columns: 1fr; }
+      .grid.three { grid-template-columns: 1fr; }
+      table {
+        display: block;
+        overflow-x: auto;
+        font-size: 0.82rem;
+      }
+      th, td { padding: 0.55rem; }
+    }
+
+    .language-switch {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.2rem;
+      width: fit-content;
+      margin: 0 0 1rem;
+      padding: 0.18rem;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(255, 254, 251, 0.74);
+      box-shadow: 0 10px 28px rgba(55, 63, 48, 0.08);
+    }
+    .language-switch a,
+    .language-switch span {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 1.55rem;
+      padding: 0.18rem 0.55rem;
+      border-radius: 999px;
+      color: var(--muted);
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      font-weight: 650;
+      line-height: 1;
+      text-transform: uppercase;
+    }
+    .language-switch a:hover {
+      background: var(--state-soft);
+      color: var(--state);
+      text-decoration: none;
+    }
+    .language-switch .active {
+      background: var(--ink);
+      color: var(--paper);
+    }
+</style>
+  <link rel="alternate" hreflang="zh-CN" href="./index.html">
+  <link rel="alternate" hreflang="en" href="./index.en.html">
+</head>
+<body>
+<main>
+<header>
+        <div class="language-switch" aria-label="语言切换">
+      <span class="active" aria-current="page">中文</span>
+      <a href="./index.en.html" lang="en">EN</a>
+    </div>
+<h1>Motus: A Unified Latent Action World Model</h1>
+    <div class="meta">
+      <p><strong>作者：</strong>Hongzhe Bi, Hengkai Tan, Shenghao Xie, Zeyuan Wang, Shuhe Huang, Haitian Liu, Ruowen Zhao, Yao Feng, Chendong Xiang, Yinze Rong, Hongyan Zhao, Hanyu Liu, Zhizhong Su, Lei Ma, Hang Su, Jun Zhu</p>
+      <p><strong>机构：</strong>Tsinghua University, Peking University, Horizon Robotics</p>
+      <p><strong>版本：</strong>arXiv:2512.13030；arXiv HTML 生成日期显示为 2025-12-25</p>
+      <p><strong>链接：</strong><a href="https://arxiv.org/abs/2512.13030">arXiv</a> | <a href="https://arxiv.org/pdf/2512.13030">PDF</a> | <a href="https://motus-robotics.github.io/motus">Project Page</a> | <a href="https://github.com/thu-ml/Motus">GitHub</a></p>
+    </div>
+  </header>
+
+  
+
+<nav class="toc">
+    <strong>目录</strong>
+    <ul>
+      <li><a href="#sec1">1. 论文速览</a></li>
+      <li><a href="#sec2">2. 动机</a></li>
+      <li><a href="#sec3">3. 相关工作梳理</a></li>
+      <li><a href="#sec4">4. 方法详解</a></li>
+      <li><a href="#sec5">5. 实验</a></li>
+      <li><a href="#sec6">6. 结果分析与讨论</a></li>
+      <li><a href="#sec7">7. 分析、局限与边界</a></li>
+      <li><a href="#sec8">8. 复现审计</a></li>
+    </ul>
+  </nav>
+<section id="sec1">
+    <h2>1. 论文速览</h2>
+    <div class="tldr"><strong>一句话总结：</strong>Motus 把 video generation model、vision-language understanding expert 和 action expert 接到一个 MoT 统一架构中，用 UniDiffuser-style scheduler 在同一模型里切换 VLA、world model、IDM、VGM 和 video-action joint prediction，并用 optical-flow latent action 让无动作标签视频也能参与动作专家预训练。</div>
+    <p><strong>难度评级：</strong>★★★★☆。阅读需要同时理解 VLA/action chunking、diffusion 或 rectified flow、video generation model、Mixture-of-Transformers、latent action 与机器人评测协议。</p>
+    <p><strong>关键词：</strong>Unified Embodied Foundation Model, Latent Action, World Model, MoT, Rectified Flow, Cross-Embodiment Pretraining。</p>
+
+    <table class="compact">
+      <tr><th>阅读定位</th><th>内容</th></tr>
+      <tr><td>论文要解决什么</td><td>现有 embodied models 把理解、未来预测、逆动力学、视频生成和动作输出拆成孤立模型；同时大规模视频、人类视角数据和跨机器人轨迹因为动作空间不一致而难以共同训练动作模块。</td></tr>
+      <tr><td>作者的方法抓手</td><td>用 MoT + Tri-model Joint Attention 连接 VGM、action expert、understanding expert；用不同模态 timesteps 的 UniDiffuser-style scheduler 切换五种建模模式；用 optical flow 训练 latent action，把像素运动压缩到接近控制维度的空间。</td></tr>
+      <tr><td>最重要的结果</td><td>RoboTwin 2.0 平均成功率达到 Clean 88.66%、Randomized 87.02%，相对 $\pi_{0.5}$ 绝对提升约 45 个点；真实 AC-One 平均 PSR 63.22%，Agilex-Aloha-2 平均 PSR 59.30%。</td></tr>
+      <tr><td>阅读时要注意的点</td><td>Motus 的“统一”不是把所有数据直接拼接进一个普通 Transformer，而是通过专家保留、joint attention 交互、模态噪声调度和 latent action 对齐共同实现；附录算法说明了五种模式如何由同一个 rectified-flow 模型切换。</td></tr>
+    </table>
+
+    <h3>核心贡献清单</h3>
+    <ul>
+      <li><strong>统一五种 embodied modeling paradigms。</strong>论文把 WM、IDM、VLA、VGM、Video-Action Joint Prediction 放入一个生成式模型框架中；这意味着同一模型既可以预测视频，也可以预测动作，或同时预测两者。</li>
+      <li><strong>MoT + Tri-model Joint Attention。</strong>VGM、action expert、understanding expert 各自保留 Transformer 模块，同时在 multi-head self-attention 层进行拼接式交互；这意味着模型可以利用预训练 VGM/VLM 的先验而不是从零训练统一 backbone。</li>
+      <li><strong>Optical-flow latent action。</strong>作者把 optical flow 当作像素级 delta action，经 DC-AE 和轻量 encoder 压缩为 14 维 latent action；这意味着没有真实动作标签的视频也能提供动作相关运动监督。</li>
+      <li><strong>三阶段训练与六层数据金字塔。</strong>Stage 1 适配 VGM，Stage 2 用 latent actions 统一训练，Stage 3 用目标机器人真动作 SFT；这意味着数据从 web/egocentric/synthetic/multi-robot/target-robot 分层进入训练流程。</li>
+      <li><strong>仿真和真机验证。</strong>论文在 RoboTwin 2.0、LIBERO-Long、VLABench 与两类真实双臂平台上报告结果；这意味着作者不仅验证 VLA policy，也展示了 VGM、WM、IDM 等模式的补充能力。</li>
+    </ul>
+  </section>
+
+  <section id="sec2">
+    <h2>2. 动机</h2>
+    <h3>2.1 要解决什么问题</h3>
+    <p>论文关注 language-conditioned robotic manipulation。给定当前视觉观测 $\mathbf{o}_t$、语言指令 $\ell$，以及可选的 proprioception $\mathbf{p}_t$，策略需要预测未来 $k$ 步 action chunk $\mathbf{a}_{t+1:t+k}$。传统目标写作：</p>
+    <div class="formula-block">
+      <p class="intuition">这个公式在说：用专家演示数据训练一个策略，让它在当前观测和指令下给出专家会做的未来动作块。</p>
+      $$\max_\theta\ \mathbb{E}_{(\mathbf{o}_t,\mathbf{p}_t,\mathbf{a}_{t+1:t+k},\ell)\sim D_{\text{expert}}}\log p_\theta(\mathbf{a}_{t+1:t+k}\mid \mathbf{o}_t,\mathbf{p}_t,\ell).$$
+      <table class="symbol-table">
+        <tr><td>$\mathbf{o}_t$</td><td>当前视觉观测，属于 observation space $\mathcal{O}$。</td></tr>
+        <tr><td>$\mathbf{p}_t$</td><td>机器人本体感知；论文脚注说明在 joint position control 中 proprioception 与 action 共享表示空间。</td></tr>
+        <tr><td>$\mathbf{a}_{t+1:t+k}$</td><td>未来动作块，action chunking 的长度为 $k$。</td></tr>
+        <tr><td>$\ell$</td><td>语言指令。</td></tr>
+      </table>
+    </div>
+    <p>论文认为一个通用 embodied agent 不只需要这一种 VLA 条件分布，还需要能理解场景、生成未来、根据动作预测后果、根据视频反推出动作，以及同时生成视频和动作。因此作者把问题写成五种分布的统一建模：</p>
+    <table class="compact">
+      <tr><th>模式</th><th>分布</th><th>作用</th></tr>
+      <tr><td>VLA</td><td>$p(\mathbf{a}_{t+1:t+k}\mid \mathbf{o}_t,\ell)$</td><td>从当前图像和指令直接出动作。</td></tr>
+      <tr><td>World Model</td><td>$p(\mathbf{o}_{t+1:t+k}\mid \mathbf{o}_t,\mathbf{a}_{t+1:t+k})$</td><td>给定动作，预测未来视觉后果。</td></tr>
+      <tr><td>IDM</td><td>$p(\mathbf{a}_{t+1:t+k}\mid \mathbf{o}_{t:t+k})$</td><td>给定当前和未来视频，反推出动作。</td></tr>
+      <tr><td>VGM</td><td>$p(\mathbf{o}_{t+1:t+k}\mid \mathbf{o}_t,\ell)$</td><td>给定初始图像和语言，想象任务未来视频。</td></tr>
+      <tr><td>Joint</td><td>$p(\mathbf{o}_{t+1:t+k},\mathbf{a}_{t+1:t+k}\mid \mathbf{o}_t,\ell)$</td><td>同时生成未来视频和动作。</td></tr>
+    </table>
+
+    <h3>2.2 已有方法的局限</h3>
+    <p>论文把已有方法的瓶颈分成两类。第一类是能力割裂：VLAs 通常从 vision-language 输入直接学 policy，video/world-model 系列强调未来预测，$\mathcal{F}_1$ 结合 VLA 和 IDM 但不覆盖 world model 或 VGM，UWM 覆盖五类模型但没有充分利用 internet-scale multimodal priors 与大规模机器人轨迹中的领域先验。第二类是数据异构：跨机器人 action space 在维度、范围和语义上都不同，互联网视频和 egocentric human videos 又没有 action labels，因此很难把这些数据直接用于 action expert pretraining。</p>
+    <p>作者在 Problem Formulation 中把这两点明确命名为两个挑战：Challenge 1 是如何在一个框架里统一多模态生成能力；Challenge 2 是如何利用 heterogeneous data，尤其是动作标签缺失但含有丰富运动信息的视频。</p>
+
+    <h3>2.3 本文的解决思路</h3>
+    <p>Motus 的高层思路是“保留专家能力，再让专家在统一生成式调度下交互”。VGM 提供物理和时序先验，VLM/understanding expert 提供视觉语言理解与空间定位先验，action expert 负责控制输出。Tri-model Joint Attention 让三类 token 交互；UniDiffuser-style scheduler 通过给 observation/action 设置不同噪声 timestep，让同一个模型在不同条件组合下执行 VLA、WM、IDM、VGM 或 Joint mode。对数据异构问题，论文不强行统一所有机器人的真实动作，而是从 optical flow 中学习 latent action，再通过少量动作标签和 task-agnostic data 把 latent action 拉近真实控制分布。</p>
+  </section>
+
+  <section id="sec3">
+    <h2>3. 相关工作梳理</h2>
+    <h3>3.1 论文自述的相关工作</h3>
+    <p><strong>Unified Multimodal Models。</strong>论文从 Emu3、Chameleon、Mmada、DualDiffusion、Show-o2、Janus 等统一多模态生成模型切入，强调 Bagel 通过 MoT 共享 understanding expert 和 generation expert 的 self-attention 层。Motus 借鉴的是这种“专家保留 + attention 交互”的结构，但应用对象从图文生成扩展到 video、action、language 的 embodied setting。</p>
+    <p><strong>Embodied foundation model paradigms。</strong>OpenVLA、$\pi_{0.5}$、GR00T-N1 等使用 VLM 的图文理解能力做 action prediction；UniPi、RoboDreamer、Vidar 等使用 VGM 或未来视频来支持 world modeling 或 policy；$\mathcal{F}_1$ 通过显式想象未来视觉状态再用 IDM 输出动作；UWM 在一个 diffusion backbone 中统一五种 robotic modeling forms。Motus 与 UWM 的核心区别是引入预训练 VLM/VGM 的通用先验，并加入大规模机器人轨迹和 latent action 预训练。</p>
+    <p><strong>Latent Action Models。</strong>论文指出早期 latent action 通常通过 IDM + FDM，从相邻帧重建 next frame 来学低维动作，但 RGB 重建容易带入光照、纹理等外观信息。后续方法通过低容量 autoencoder、$\beta$-VAE、DINOv2 features、object keypoints、language instructions 或少量 action labels 降低冗余。Motus 选择 optical flow 作为 motion-centric supervision，把动作理解为 pixel-level displacement。</p>
+
+    <h3>3.2 直接前作对比</h3>
+    <table class="compact">
+      <tr><th>维度</th><th>$\mathcal{F}_1$</th><th>UWM</th><th>Bagel/MoT 类统一模型</th><th><strong>Motus</strong></th></tr>
+      <tr><td>核心思路</td><td>VLA 显式想象未来视觉，再通过 IDM 输出动作。</td><td>在 diffusion backbone 中统一 WM、VLA、IDM、VGM、Joint。</td><td>用 MoT 让理解和生成专家共享注意力。</td><td>把 VGM、action expert、VLM-derived understanding expert 放入 MoT，并用 scheduler 切换五种 embodied modes。</td></tr>
+      <tr><td>关键假设</td><td>预测未来图像有助于动作推断。</td><td>五种分布可用单一扩散框架统一。</td><td>专家可以保留专长，同时通过 attention 融合。</td><td>预训练 VGM/VLM 先验可复用，动作可通过 optical-flow latent action 从无标签视频中预训练。</td></tr>
+      <tr><td>不足或边界</td><td>不覆盖 world model 或 VGM。</td><td>缺少充分的通用多模态先验和大规模机器人领域先验。</td><td>不是针对机器人动作/世界模型设计。</td><td>需要三阶段训练、光流预处理、VAE latent action 对齐和目标机器人 SFT。</td></tr>
+      <tr><td>论文报告性能</td><td>未作为本文主表 baseline。</td><td>未作为主表 baseline。</td><td>作为架构来源而非机器人 baseline。</td><td>RoboTwin 2.0 Clean 88.66、Randomized 87.02；真机平均 PSR 在两平台上分别 63.22、59.30。</td></tr>
+    </table>
+  </section>
+
+  <section id="sec4">
+    <h2>4. 方法详解</h2>
+    <h3>4.1 方法概览</h3>
+    <p>Motus 的整体数据流可以按训练和推理分开理解。训练时，模型输入当前观测、语言、带噪未来 observation/action chunk，以及 observation/action 各自的 timestep；模型输出两个 velocity fields，用 rectified-flow loss 同时监督未来视频和未来动作。推理时，通过设置不同模态的初始 timestep 为 clean 或 noise，同一个模型就能得到 VGM、WM、IDM、VLA 或 Joint mode。<span class="appendix-ref">附录 Training and Inference</span></p>
+
+    <div class="figure">
+      <img src="figures/x1.png" alt="Motus Architecture">
+      <div class="caption"><strong>Figure 1。</strong>Motus Architecture。左侧是 Video Generation Model，中间是 Action Expert，右侧是 Understanding Expert；三者通过 Tri-model Joint Attention 交换信息。$\tau_v$ 和 $\tau_a$ 分别控制视频和动作的 rectified-flow timestep。</div>
+    </div>
+
+    <h3>4.2 方法演变脉络</h3>
+    <table class="compact">
+      <tr><th>阶段</th><th>代表思路</th><th>本文继承或改变了什么</th></tr>
+      <tr><td>分离式 VLA / VGM / WM / IDM</td><td>每个能力独立训练，输入输出分布不同。</td><td>Motus 把五种分布写成同一个多模态生成模型的不同条件化形式。</td></tr>
+      <tr><td>UWM</td><td>把 observation tokens 和 action tokens 放进单一 diffusion backbone。</td><td>Motus 不从零训练单一 backbone，而是复用 Wan 2.2 5B、Qwen3-VL-2B 等预训练专家。</td></tr>
+      <tr><td>MoT 统一多模态模型</td><td>专家保留 FFN/blocks，通过共享 attention 融合。</td><td>Motus 将 MoT 改造为 Tri-model Joint Attention，面向 video/action/language 三类专家。</td></tr>
+      <tr><td>Latent Action</td><td>从视觉变化中提取低维动作。</td><td>Motus 用 optical flow 而不是 RGB next-frame reconstruction 作为更直接的运动监督，并用少量真实动作标签对齐分布。</td></tr>
+    </table>
+
+    <h3>4.3 核心设计与数学推导</h3>
+    <h4>4.3.1 Unified rectified-flow objective</h4>
+    <div class="formula-block">
+      <p class="intuition">这组三个公式在做一件事：分别让 action 分支和 observation 分支预测“从真实数据走向噪声”的速度场，然后把两个误差相加。</p>
+      $$
+      l_{\text{action}}^\theta =
+      \mathbb{E}_{\substack{(\mathbf{o}_{t:t+k}, \mathbf{a}_{t+1:t+k}, \ell)\sim\mathcal{D}\\
+      \tau_a\sim \mathcal{U}(0,T_\tau),\ \epsilon_a\sim\mathcal{N}(\mathbf{0},\mathbf{I})}}
+      \left\|v_a^\theta-(\epsilon_a-\mathbf{a}_{t+1:t+k})\right\|_2^2
+      $$
+      $$
+      l_{\text{obs}}^\theta =
+      \mathbb{E}_{\substack{(\mathbf{o}_{t:t+k}, \mathbf{a}_{t+1:t+k}, \ell)\sim\mathcal{D}\\
+      \tau_o\sim \mathcal{U}(0,T_\tau),\ \epsilon_o\sim\mathcal{N}(\mathbf{0},\mathbf{I})}}
+      \left\|v_o^\theta-(\epsilon_o-\mathbf{o}_{t+1:t+k})\right\|_2^2,\quad
+      l^\theta=l_{\text{action}}^\theta+l_{\text{obs}}^\theta.
+      $$
+      <table class="symbol-table">
+        <tr><td>$v_a^\theta, v_o^\theta$</td><td>模型预测的 action velocity field 与 observation velocity field。</td></tr>
+        <tr><td>$\epsilon_a,\epsilon_o$</td><td>分别采样自标准高斯的 action/video 噪声。</td></tr>
+        <tr><td>$\tau_a,\tau_o$</td><td>action 和 observation 的独立噪声时间步；它们允许模型在不同模态上设置不同条件强度。</td></tr>
+        <tr><td>$\epsilon - x^0$</td><td>rectified flow 线性路径 $x^\tau=(1-\tau)x^0+\tau\epsilon$ 的导数方向。</td></tr>
+      </table>
+      <details>
+        <summary>为什么目标速度是 $\epsilon-x^0$</summary>
+        <div>
+          <p>附录 Algorithm 1 显式写出 $o_{t+1:t+k}^{\tau_o}=(1-\tau_o)o^0_{t+1:t+k}+\tau_o\epsilon_o$ 和 $a_{t+1:t+k}^{\tau_a}=(1-\tau_a)a^0_{t+1:t+k}+\tau_a\epsilon_a$。对 $\tau$ 求导，得到 $\frac{d x^\tau}{d\tau}=\epsilon-x^0$。因此训练目标让模型在任意中间噪声点预测沿直线路径移动的速度。推理时从噪声沿反方向积分到 clean sample，附录算法用 $x^{\tau-1}=x^\tau+v\,d\tau$ 形式表示离散更新。</p>
+        </div>
+      </details>
+    </div>
+
+    <h4>4.3.2 UniDiffuser-style scheduler 如何切换五种模式</h4>
+    <p>Motus 不是训练五个单独模型，而是用 observation/action 的 noise level 表示“这个模态是条件还是要生成的变量”。如果某个模态要作为条件，它的 timestep 设为 0，即 clean；如果某个模态要生成，它从 $T_\tau$ 噪声开始迭代去噪。<span class="appendix-ref">附录 Algorithms 2-6</span></p>
+    <table class="compact">
+      <tr><th>模式</th><th>给模型的 clean 条件</th><th>保持 noisy 或需要去噪的变量</th><th>输出</th></tr>
+      <tr><td>VGM</td><td>$o_t^0,\ell$</td><td>$o_{t+1:t+k}^{T_\tau}$ 去噪；$a_{t+1:t+k}^{T_\tau}$ 维持噪声</td><td>未来视频 $o^0_{t+1:t+k}$</td></tr>
+      <tr><td>World Model</td><td>$o_t^0,a^0_{t+1:t+k},\ell$</td><td>$o_{t+1:t+k}^{T_\tau}$ 去噪</td><td>动作条件下的未来视频</td></tr>
+      <tr><td>IDM</td><td>$o^0_{t:t+k},\ell$</td><td>$a_{t+1:t+k}^{T_\tau}$ 去噪</td><td>解释视频变化的动作</td></tr>
+      <tr><td>VLA</td><td>$o_t^0,\ell$</td><td>$a_{t+1:t+k}^{T_\tau}$ 去噪；未来 observation 保持噪声</td><td>动作 chunk</td></tr>
+      <tr><td>Joint</td><td>$o_t^0,\ell$</td><td>observation 和 action 同时从噪声去噪</td><td>未来视频和动作</td></tr>
+    </table>
+
+    <h4>4.3.3 Tri-model Joint Attention</h4>
+    <p>Motus 包含三个专家：Wan 2.2 5B 作为 generative expert，Qwen3-VL-2B 作为 VLM 来源的 understanding expert，以及一个与 Wan 深度相同的 action expert。每个专家保留自己的 Transformer 模块和 FFN，但 self-attention 层的 QKV 被连接到同一个 Tri-model Joint Attention 中。这样做的目标是保留专家职能，同时允许 video tokens、action tokens 和 understanding tokens 跨专家交互。</p>
+    <p>与 UWM 直接串接 observation/action tokens 进入同一 backbone 不同，Motus 的 MoT 设计让预训练 VGM/VLM 权重更容易被利用。action expert 的 block 包含 AdaLN、FFN 和 Tri-model Joint Attention；understanding expert 使用 VLM 最后一层对应 tokens 作为输入，并由 LayerNorm、FFN、Tri-model Joint Attention 组成。</p>
+
+    <h4>4.3.4 Action-Dense Video-Sparse Prediction</h4>
+    <div class="figure">
+      <img src="figures/x2.png" alt="Action-Dense Video-Sparse Prediction">
+      <div class="caption"><strong>Figure 2。</strong>Action-Dense Video-Sparse Prediction。论文指出 action chunking 会带来动作帧密、视频帧冗余的问题，因此在训练和推理时下采样视频，使 video tokens 与 action tokens 更平衡。例如论文给出视频帧率可设为动作帧率的六分之一。</div>
+    </div>
+    <p>这个设计解决三件事：降低训练/推理开销；避免预测大量高度相似的未来帧；避免 Tri-model Joint Attention 中 video tokens 数量压倒 action tokens，导致模型过度关注视频预测而削弱动作预测。</p>
+
+    <h4>4.3.5 Optical-flow latent action</h4>
+    <div class="figure">
+      <img src="figures/x3.png" alt="Latent Action VAE">
+      <div class="caption"><strong>Figure 3。</strong>Latent Action VAE。相邻帧先经 DPFlow 得到 optical flow，再转成 RGB flow image；DC-AE 重建 flow，并编码为 4 个 512 维 token；轻量 encoder 将 $4\times512$ 特征投影到 14 维 latent action。</div>
+    </div>
+    <div class="formula-block">
+      <p class="intuition">这个公式在训练 latent action VAE：既要重建光流，又要让 latent action 对齐真实动作，还要用 KL 项约束 latent 空间。</p>
+      $$
+      \mathcal{L}=\mathcal{L}_{\text{recon}}+\lambda_a\|a_{\text{real}}-a_{\text{pred}}\|^2+\beta\mathcal{L}_{\text{KL}}.
+      $$
+      <table class="symbol-table">
+        <tr><td>$\mathcal{L}_{\text{recon}}$</td><td>flow reconstruction error，让 latent 保留像素运动信息。</td></tr>
+        <tr><td>$a_{\text{real}}$</td><td>带标签轨迹或 task-agnostic data 中的真实动作。</td></tr>
+        <tr><td>$a_{\text{pred}}$</td><td>从 latent action 解码或预测得到的动作。</td></tr>
+        <tr><td>$\lambda_a,\beta$</td><td>附录实现细节给出 $\lambda_a=1.0$，$\beta=10^{-6}$。</td></tr>
+      </table>
+    </div>
+    <p>训练时作者混合 90% unlabeled data 做 self-supervised reconstruction，与 10% labeled trajectories 做 weak action supervision；labeled 部分包括 task-agnostic data 和标准机器人演示。task-agnostic data 采用 AnyPos 思路，用 Curobo 随机采样目标机器人动作空间来收集 image-action pairs，使 latent space 被锚定到可执行控制分布。</p>
+
+    <h3>4.4 实现要点</h3>
+    <h4>模型规模与关键超参数</h4>
+    <table class="compact">
+      <tr><th>组件</th><th>配置</th><th>来源</th></tr>
+      <tr><td>Action Expert</td><td>Hidden size 1024；30 layers；24 heads；LayerNorm eps 1e-5；GELU</td><td><span class="appendix-ref">Implementation Details</span></td></tr>
+      <tr><td>Understanding Expert</td><td>Hidden size 512；30 layers；24 heads；LayerNorm eps 1e-5；GELU</td><td><span class="appendix-ref">Implementation Details</span></td></tr>
+      <tr><td>Latent Action VAE</td><td>$\lambda_a=1.0$；$\beta=1\times10^{-6}$</td><td><span class="appendix-ref">Implementation Details</span></td></tr>
+      <tr><td>Sampling Rate</td><td>Video frames: 8 @ 5Hz；Action chunk: 48 @ 30Hz</td><td><span class="appendix-ref">Implementation Details</span></td></tr>
+      <tr><td>Flow Matching</td><td>Inference steps 10；sampling strategy: Logit Normal</td><td><span class="appendix-ref">Implementation Details</span></td></tr>
+      <tr><td>Model Scale</td><td>VGM 5.00B；VLM 2.13B；Action Expert 641.5M；Understanding Expert 253.5M；Total 约 8B</td><td><span class="appendix-ref">Implementation Details</span></td></tr>
+    </table>
+    <h4>训练伪代码</h4>
+    <div class="pseudocode"><span class="k">Algorithm</span>: Motus training iteration
+<span class="c"># sample clean data and independent noise levels</span>
+sample o^0_{t:t+k}, a^0_{t+1:t+k}, language l from D_expert
+sample tau_o, tau_a from Uniform({1, ..., T_tau})
+sample eps_o, eps_a from Normal(0, I)
+
+<span class="c"># rectified-flow interpolation</span>
+o_tau = (1 - tau_o) * o^0_{t+1:t+k} + tau_o * eps_o
+a_tau = (1 - tau_a) * a^0_{t+1:t+k} + tau_a * eps_a
+
+<span class="c"># one unified model predicts two velocity fields</span>
+v_o, v_a = Model_theta(o^0_t, o_tau, a_tau, tau_o, tau_a, l)
+loss = ||v_a - (eps_a - a^0_{t+1:t+k})||^2
+     + ||v_o - (eps_o - o^0_{t+1:t+k})||^2
+update theta with AdamW</div>
+
+    <h4>三阶段训练和数据金字塔</h4>
+    <table class="compact">
+      <tr><th>阶段</th><th>数据</th><th>训练对象</th><th>作用</th></tr>
+      <tr><td>Off-the-shelf foundation models</td><td>Level 1: Web Data</td><td>VGM and VLM</td><td>提供通用视觉、语言和视频生成先验。</td></tr>
+      <tr><td>Stage 1: Video Generation</td><td>Level 2 egocentric human videos；Level 3 synthetic data；Level 5 multi-robot task trajectory data</td><td>Only VGM</td><td>让 VGM 适配机器人操作视频和未来任务执行视频。</td></tr>
+      <tr><td>Stage 2: Unified Training with Latent Actions</td><td>Level 2、3、4 task-agnostic data、5</td><td>Motus 三个 experts，使用 latent actions；VLM frozen</td><td>用 videos、language、latent actions 预训练 action expert 和跨模态交互。</td></tr>
+      <tr><td>Stage 3: SFT</td><td>Level 6 target-robot task trajectory data</td><td>Motus 三个 experts，使用真实 actions</td><td>适配目标机器人具体动力学和运动学。</td></tr>
+    </table>
+    <div class="figure">
+      <img src="figures/x4.png" alt="Embodied Data Pyramid">
+      <div class="caption"><strong>Figure 4。</strong>Embodied Data Pyramid。数据从 Level 1 web data 到 Level 6 target-robot trajectory data，数量递减、质量和策略相关性递增。论文说明 Level 3 和 Level 4 的顺序有时可能变化。</div>
+    </div>
+  </section>
+
+  <section id="sec5">
+    <h2>5. 实验</h2>
+    <h3>5.1 实验设置</h3>
+    <table class="compact">
+      <tr><th>项目</th><th>设置</th></tr>
+      <tr><td>仿真 benchmark</td><td>RoboTwin 2.0，50 个代表性 manipulation tasks；每个任务 clean scenes 50 demonstrations，randomized scenes 500 demonstrations，总计 2,500 clean + 25,000 randomized demonstrations。</td></tr>
+      <tr><td>仿真随机化</td><td>随机背景、杂乱桌面、桌高扰动、随机光照。</td></tr>
+      <tr><td>仿真训练/评测</td><td>所有模型从预训练 checkpoint 开始，在 RoboTwin 数据上 finetune 40k steps；每个任务 100 execution trials，以 success rate 评估。</td></tr>
+      <tr><td>真机平台</td><td>AC-One 与 Agilex-Aloha-2 两个双臂机器人平台。</td></tr>
+      <tr><td>真机任务</td><td>空间理解、柔性物体、精细流体控制、视觉理解、长程规划等任务；每个任务 100 trajectories 训练；每个平台多任务联合训练一个模型。</td></tr>
+      <tr><td>真机指标</td><td>Partial Success Rate，按子任务给分，完整成功得满分。</td></tr>
+      <tr><td>Baselines</td><td>$\pi_{0.5}$、X-VLA；消融包括 w/o Pretrain、Stage1-only/Stage1 Pretrain。</td></tr>
+    </table>
+
+    <h4>完整数据集信息</h4>
+    <table class="compact">
+      <tr><th>Dataset</th><th>Size</th><th>Embodiment</th><th>Data Level</th></tr>
+      <tr><td>Egodex</td><td>230,949</td><td>Human</td><td>Level 2: Egocentric Human Videos</td></tr>
+      <tr><td>Agibot</td><td>728,209</td><td>Genie-1 Robot</td><td>Level 5: Multi-Robot Task Trajectory Data</td></tr>
+      <tr><td>RDT</td><td>6,083</td><td>Aloha Robot</td><td>Level 5</td></tr>
+      <tr><td>RoboMind Franka</td><td>9,589</td><td>Franka Robot</td><td>Level 5</td></tr>
+      <tr><td>RoboMind Aloha</td><td>7,272</td><td>Aloha Robot</td><td>Level 5</td></tr>
+      <tr><td>RoboTwin</td><td>27,500</td><td>Aloha Robot</td><td>Level 3: Synthetic Data</td></tr>
+      <tr><td>Task-Agnostic Data</td><td>1,000</td><td>Aloha Robot</td><td>Level 4</td></tr>
+      <tr><td>In-house Data</td><td>2,000</td><td>Aloha Robot</td><td>Level 6: Target-Robot Task Trajectory Data</td></tr>
+    </table>
+
+    <h4>训练配置</h4>
+    <table class="compact">
+      <tr><th>配置</th><th>Stage 1</th><th>Stage 2</th><th>Stage 3</th></tr>
+      <tr><td>Batch Size</td><td>256</td><td>256</td><td>256</td></tr>
+      <tr><td>Learning Rate</td><td>$8\times10^{-5}$</td><td>$5\times10^{-5}$</td><td>$1\sim5\times10^{-5}$</td></tr>
+      <tr><td>Optimizer</td><td>AdamW</td><td>AdamW</td><td>AdamW</td></tr>
+      <tr><td>Weight Decay</td><td>0.01</td><td>0.01</td><td>0.01</td></tr>
+      <tr><td>GPU Hours</td><td>约 8000</td><td>约 10000</td><td>约 400</td></tr>
+    </table>
+
+    <h3>5.2 主要结果</h3>
+    <h4>RoboTwin 2.0 simulation</h4>
+    <table class="compact">
+      <tr><th>Model</th><th>Clean Avg. (%)</th><th>Randomized Avg. (%)</th><th>说明</th></tr>
+      <tr><td>GO-1 <span class="appendix-ref">附录 Table 14</span></td><td>37.80</td><td>36.24</td><td>仅在附录 full comparison 中出现。</td></tr>
+      <tr><td>$\pi_{0.5}$</td><td>42.98</td><td>43.84</td><td>主 baseline。</td></tr>
+      <tr><td>X-VLA</td><td>72.80</td><td>72.84</td><td>强 VLA baseline。</td></tr>
+      <tr><td>w/o Pretrain</td><td>77.56</td><td>77.00</td><td>无预训练消融；正文短表 Clean 写作 72.8，附录 full table 给出 77.56。</td></tr>
+      <tr><td>Stage1</td><td>82.26</td><td>81.86</td><td>只做 Stage 1 video pretraining。</td></tr>
+      <tr><td><strong>Motus</strong></td><td><strong>88.66</strong></td><td><strong>87.02</strong></td><td>Clean 和 Randomized 两列平均最高。</td></tr>
+    </table>
+    <p>作者在正文强调，相比 $\pi_{0.5}$，Motus 在 RoboTwin 2.0 randomized multi-task setting 上有超过 45 个百分点的绝对提升；相比 X-VLA，摘要和贡献段报告约 +15% 改善。附录 Table 14 给出 50 个任务的完整逐项结果，正文 Table 2 是截断展示。</p>
+
+    <h4>Real-world tasks</h4>
+    <div class="figure">
+      <img src="figures/x5.png" alt="Task definitions and visualizations">
+      <div class="caption"><strong>Figure 5。</strong>真实任务定义和可视化。论文用该图展示 AC-One 与 Agilex-Aloha-2 上的任务语言指令和子任务定义。</div>
+    </div>
+    <table class="compact">
+      <tr><th>Platform</th><th>$\pi_{0.5}$ Avg.</th><th>w/o Pretrain Avg.</th><th>Motus Avg.</th><th>关键现象</th></tr>
+      <tr><td>AC-One</td><td>14.79</td><td>25.86</td><td><strong>63.22</strong></td><td>Motus 在 9 个任务中的 8 个最高；Touch Keyboard 由 w/o Pretrain 最高。</td></tr>
+      <tr><td>Agilex-Aloha-2</td><td>48.60</td><td>26.60</td><td><strong>59.30</strong></td><td>Motus 平均最高；Put Bread into Oven 和 Touch Keyboard 不是最高。</td></tr>
+    </table>
+    <p>正文 Table 4 和 Table 5 用两个任务解释 Partial Success Rate 的计算：AC-One 的 Put Bread into Oven 按 Open Oven、Grab Bread、Put Bread、Close Oven、Spin Button 等子目标给分；Agilex-Aloha-2 的 Get Water from Water Dispenser 按 Grab cup、Fill cup、Complete Success 给分。附录 Table 15 和 Table 16 扩展到所有真机任务的子目标 breakdown。<span class="appendix-ref">附录 More Real-World Results</span></p>
+
+    <h3>5.3 消融实验</h3>
+    <div class="figure">
+      <img src="figures/x6.png" alt="Ablation in RoboTwin 2.0">
+      <div class="caption"><strong>Figure 6。</strong>RoboTwin 2.0 randomized 和 clean 的训练阶段消融。Randomized：w/o pretrain 77.00，Stage1 81.86，Stage2/Motus 87.02，提升 +10.02；Clean：w/o pretrain 77.56，Stage1 82.26，Stage2/Motus 88.66，提升 +11.10。</div>
+    </div>
+    <p>该消融验证三阶段训练中的预训练贡献：Stage 1 相比无预训练有提升，Stage 2 的 unified latent-action pretraining 进一步提高最终成功率。真实实验中 w/o Pretrain 也作为对照出现在 Table 3、15、16 中；AC-One 平均从 25.86 提升到 63.22，Agilex-Aloha-2 平均从 26.60 提升到 59.30。</p>
+
+    <h3>5.4 补充实验</h3>
+    <h4>五种模式的补充验证</h4>
+    <table class="compact">
+      <tr><th>模式</th><th>补充结果</th><th>结论范围</th></tr>
+      <tr><td>VGM</td><td>Agilex-Aloha-2 与 AC-One 可视化分别见 Figure 7 和 Figure 9。</td><td>展示语言和初始图像条件下的视频生成能力。</td></tr>
+      <tr><td>World Model</td><td>Agilex-Aloha-2: FID 9.4571, FVD 49.2848, SSIM 0.88618, LPIPS 0.05449, PSNR 26.1021；AC-One: FID 12.9609, FVD 73.1325, SSIM 0.84605, LPIPS 0.07280, PSNR 24.0379。</td><td>展示动作条件未来视频预测质量。</td></tr>
+      <tr><td>IDM</td><td>Action MSE: ResNet18+MLP 0.044，DINOv2+MLP 0.122，Motus 0.014。</td><td>Motus 的 IDM mode 在该测试上低于专门训练的 IDM baselines。</td></tr>
+      <tr><td>VLA</td><td>RoboTwin 2.0 randomized average success: Motus (VLA) 83.90，Motus (Joint) 87.02。</td><td>Joint mode 高于单独 VLA mode，但 VLA mode 仍具备竞争力。</td></tr>
+      <tr><td>Video-Action Joint</td><td>Figure 12 展示真机推理中同时生成视频和动作的可视化。</td><td>补充说明同一模型可同步预测未来视觉与动作。</td></tr>
+    </table>
+
+    <div class="grid2">
+      <div class="figure">
+        <img src="figures/x7.png" alt="VGM Agilex-Aloha-2">
+        <div class="caption"><strong>Figure 7。</strong>Motus VGM mode on Agilex-Aloha-2。</div>
+      </div>
+      <div class="figure">
+        <img src="figures/x9.png" alt="VGM AC-One">
+        <div class="caption"><strong>Figure 9。</strong>Motus VGM mode on AC-One。</div>
+      </div>
+    </div>
+    <div class="figure">
+      <img src="figures/x8.png" alt="Nine real-world task demos">
+      <div class="caption"><strong>Figure 8。</strong>两类机器人、九个真机任务的执行可视化，补充正文真实实验表。</div>
+    </div>
+    <div class="grid2">
+      <div class="figure">
+        <img src="figures/x10.png" alt="World model Agilex-Aloha-2">
+        <div class="caption"><strong>Figure 10。</strong>Agilex-Aloha-2 数据上的 World Model mode 可视化。</div>
+      </div>
+      <div class="figure">
+        <img src="figures/x11.png" alt="World model AC-One">
+        <div class="caption"><strong>Figure 11。</strong>AC-One 数据上的 World Model mode 可视化。</div>
+      </div>
+    </div>
+    <div class="figure">
+      <img src="figures/x12.png" alt="Video-action joint prediction">
+      <div class="caption"><strong>Figure 12。</strong>Video-Action Joint Prediction Model mode during real-world inference。</div>
+    </div>
+
+    <h4>其他 benchmark</h4>
+    <table class="compact">
+      <tr><th>Benchmark</th><th>设置</th><th>结果</th></tr>
+      <tr><td>LIBERO-Long</td><td>LIBERO-100 中 10 个长程语言条件操作任务。</td><td>Motus 97.6，等于 X-VLA 97.6；高于 $\pi_0$ 85.2、GR00T-N1 90.6、UniVLA 94.0、OpenVLA-OFT 94.5。</td></tr>
+      <tr><td>VLABench In Distribution</td><td>Add Condiment、Select Toy、Select Fruit 三个任务。</td><td>Motus 平均 0.48，高于 $\pi_{0.5}$ 平均 0.43。</td></tr>
+      <tr><td>VLABench Cross Category</td><td>同三任务，跨类别评估。</td><td>Motus 平均 0.25，高于 $\pi_{0.5}$ 平均 0.22。</td></tr>
+    </table>
+  </section>
+
+  <section id="sec6">
+    <h2>6. 结果分析与讨论</h2>
+    <h3>6.1 论文已给出的结果解释</h3>
+    <p>对 RoboTwin 2.0，作者解释为两部分设计共同作用：统一 MoT 模型整合 vision、language 和 action generation，回应 Challenge 1；latent actions 让模型利用 labeled 和 large-scale unlabeled data，提升跨 embodiment 泛化并捕获 motion priors，回应 Challenge 2。正文还强调该 benchmark 的随机背景、杂乱桌面、桌高扰动和光照扰动使其能检验 distribution shift 下的泛化。</p>
+    <p>对真机结果，作者强调两平台任务包含 spatial understanding、deformable objects manipulation、precision fluid control、visual understanding、long-horizon planning。因为任务可拆分且长程，论文使用 Partial Success Rate，而不是只看二值成功率，以反映模型是否完成关键子目标。</p>
+    <p>对五种模式的补充结果，作者分别用 VGM/WM 的可视化和生成质量指标、IDM 的 action MSE、VLA 与 Joint 的成功率对比，说明 Motus 不只是 policy，而是在同一模型中执行多种 embodied foundation model 功能。</p>
+
+    <h3>6.2 论文中的反常或边界结果</h3>
+    <p>真实任务表中并非每个单项都是 Motus 最高。AC-One 的 Touch Instructed Keyboard 中 w/o Pretrain 为 100，Motus 为 82.5；Agilex-Aloha-2 的 Put Bread into Oven 中 $\pi_{0.5}$ 为 36，Motus 为 34；Agilex-Aloha-2 的 Touch Keyboard 中 w/o Pretrain 为 85，Motus 为 80。论文没有对这些单项给出额外解释，因此报告只记录为表中现象，不扩展原因。</p>
+    <p>附录 VLA vs Joint 表显示 Motus (Joint) 87.02 高于 Motus (VLA) 83.90，这说明论文最终主结果使用 video-action joint prediction mode 更强；但作者仍把 VLA mode 作为同一模型可切换能力展示。</p>
+  </section>
+
+  <section id="sec7">
+    <h2>7. 分析、局限与边界</h2>
+    <h3>这篇论文最有价值的地方</h3>
+    <p>基于论文自身主张和实验，Motus 的核心价值在于把“统一模型”和“可利用异构数据”两个问题放在同一个技术闭环里处理。MoT 与 Tri-model Joint Attention 使 VGM/VLM 预训练先验能够进入机器人动作模型；UniDiffuser-style scheduler 把五种条件/联合分布统一为不同 timestep 设置；optical-flow latent action 让无动作标签视频可以通过 motion prior 参与 action expert 预训练。这三者共同支撑了仿真平均成功率、真机 PSR、IDM MSE 和 WM/VGM 可视化结果。</p>
+
+    <h3>结果为什么站得住</h3>
+    <p>论文的结果支撑来自多个互补层面：RoboTwin 2.0 使用 50 个任务、clean/randomized 两种场景、100 trials/task，并限制所有模型 40k finetuning steps；真机评测覆盖两个双臂平台和多种长程/精细任务，每任务 100 trajectories，多任务联合训练；附录给出了 full 50-task table、真机子目标 breakdown、LIBERO-Long、VLABench、WM 生成质量、IDM MSE、VLA vs Joint 对比和训练配置。因此，主结论不是只由单一 benchmark 或单一指标支撑。</p>
+
+    <h3>作者自述的局限性</h3>
+    <p>Conclusion and Limitations 标题下的正文没有列出具体失败案例或负面限制，而是总结 Motus 统一了 vision-language understanding、video generation、inverse dynamics、world modeling 和 video-action joint prediction，并说明未来将继续探索更先进的 unified model architectures、更 universal 的 motion priors，以及从 internet-scale general videos 中学习 latent actions。报告不把这些未来工作扩展为新的建议，只记录为作者明确写出的后续方向。</p>
+
+    <h3>适用边界</h3>
+    <ul>
+      <li><strong>依赖预训练专家。</strong>Motus 的架构建立在 Wan 2.2 5B 和 Qwen3-VL-2B 等专家之上，论文没有把从零训练作为主要路径。</li>
+      <li><strong>依赖 optical-flow preprocessing。</strong>Latent action 需要 DPFlow 计算相邻帧光流，再由 DC-AE 和轻量 encoder 压缩。</li>
+      <li><strong>目标机器人仍需 SFT。</strong>Stage 3 使用 Level 6 target-robot task trajectory data，把 latent action 或通用 motion prior 适配到具体 embodiment 的真实动作空间。</li>
+      <li><strong>真机数据规模仍是每任务 100 trajectories。</strong>这说明论文的真机结果是在该训练规模和两类双臂平台设置下得到的。</li>
+    </ul>
+  </section>
+
+  <section id="sec8">
+    <h2>8. 复现审计</h2>
+    <div class="audit-card">
+      <h4>代码与模型</h4>
+      <p><span class="warn">部分可查。</span>论文主文件给出 Project Page；检索到 GitHub 链接 <a href="https://github.com/thu-ml/Motus">https://github.com/thu-ml/Motus</a>。是否包含完整训练代码、权重和数据处理脚本，需要以仓库当前内容为准。</p>
+    </div>
+    <div class="audit-card">
+      <h4>数据</h4>
+      <p><span class="ok">论文列出数据来源与规模。</span>附录列出了 Egodex、Agibot、RDT、RoboMind、RoboTwin、Task-Agnostic Data 和 In-house Data 的规模、embodiment 与数据金字塔层级。但 In-house Data 的采集细节、过滤规则和原始发布状态会影响完全复现。</p>
+    </div>
+    <div class="audit-card">
+      <h4>训练配置</h4>
+      <p><span class="ok">关键训练超参给出。</span>Batch size、learning rate、optimizer、weight decay、GPU hours、模型规模、latent VAE 权重、采样率和 flow matching steps 均在附录中列出。</p>
+    </div>
+    <div class="audit-card">
+      <h4>主要复现步骤</h4>
+      <ol>
+        <li>准备 VGM 和 VLM 预训练专家：Wan 2.2 5B、Qwen3-VL-2B。</li>
+        <li>用 DPFlow 为视频数据生成 optical flow，并训练 latent action VAE：flow reconstruction + action alignment + KL。</li>
+        <li>Stage 1 只训练/适配 VGM，让其在机器人操作数据上生成未来任务视频。</li>
+        <li>Stage 2 训练三专家 Motus，VLM frozen，输入 videos、language 和 latent actions。</li>
+        <li>Stage 3 在目标机器人真实 action trajectories 上 SFT，替换 latent actions 为目标机器人动作。</li>
+        <li>评测时根据目标模式设置 observation/action timestep：clean 模态设为 0，需要生成的模态从 $T_\tau$ 噪声开始。</li>
+      </ol>
+    </div>
+    <div class="audit-card">
+      <h4>潜在复现障碍</h4>
+      <p><span class="warn">算力和数据是主要瓶颈。</span>附录训练配置显示 Stage 1 约 8000 GPU hours，Stage 2 约 10000 GPU hours；模型总规模约 8B。完整复现还需要获取大规模多源数据和 in-house target-robot trajectories，并复现真实机器人 PSR 评测协议。</p>
+    </div>
+  </section>
+</main>
+</body>
+</html>

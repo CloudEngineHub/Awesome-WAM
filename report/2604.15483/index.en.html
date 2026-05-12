@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>pi0. 7 - Reading Report</title>
+<script>window.MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']],displayMath:[['$$','$$'],['\\[','\\]']]},svg:{fontCache:'global'}};</script>
+<script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&amp;family=Geist+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<style>
+    :root {
+      --paper: #f6f7f3;
+      --paper-deep: #e8ede7;
+      --surface: #fffefb;
+      --surface-raised: rgba(255, 254, 251, 0.9);
+      --surface-2: #f0f4ee;
+      --ink: #20241f;
+      --ink-soft: #3a4038;
+      --muted: #697166;
+      --muted-2: #838a7f;
+      --line: rgba(32, 29, 25, 0.12);
+      --line-strong: rgba(32, 29, 25, 0.22);
+      --state: #2f766f;
+      --state-soft: #e6f0ed;
+      --action: #a45f38;
+      --action-soft: #f3e8dd;
+      --planning: #4f6542;
+      --planning-soft: #e7eddf;
+      --warn: #9a6a21;
+      --warn-soft: #f3ead8;
+      --font-body: "Sora", "PingFang SC", "Noto Sans SC", system-ui, sans-serif;
+      --font-mono: "Geist Mono", "SFMono-Regular", Menlo, monospace;
+      --sidebar-w: 188px;
+      --content-max: 1080px;
+      --desktop-gutter: 2.6rem;
+    }
+    *,
+    *::before,
+    *::after { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background:
+        linear-gradient(90deg, rgba(32, 29, 25, 0.035) 1px, transparent 1px),
+        linear-gradient(180deg, rgba(32, 29, 25, 0.03) 1px, transparent 1px),
+        var(--paper);
+      background-size: 32px 32px;
+      color: var(--ink);
+      font-family: var(--font-body);
+      font-size: 15px;
+      line-height: 1.75;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+    main {
+      width: min(100%, var(--content-max));
+      margin: 0 auto;
+      padding: 2.4rem 1.15rem 5.6rem;
+      min-height: 100vh;
+    }
+    h1 {
+      max-width: 900px;
+      margin: 0 0 1rem;
+      color: var(--ink);
+      font-size: clamp(1.75rem, 3.6vw, 3.7rem);
+      font-weight: 650;
+      line-height: 0.98;
+      letter-spacing: 0;
+    }
+    h2 {
+      margin: 0 0 1rem;
+      color: var(--ink);
+      font-size: clamp(1.55rem, 3vw, 2.7rem);
+      font-weight: 650;
+      line-height: 1.08;
+      letter-spacing: 0;
+    }
+    h3 {
+      margin: 1.8rem 0 0.55rem;
+      color: var(--ink);
+      font-size: 1.08rem;
+      font-weight: 650;
+      line-height: 1.35;
+    }
+    h4 {
+      margin: 1.35rem 0 0.45rem;
+      color: var(--ink-soft);
+      font-size: 0.95rem;
+      font-weight: 650;
+      line-height: 1.35;
+    }
+    p { margin: 0.65rem 0; }
+    a {
+      color: var(--state);
+      text-decoration: none;
+      text-underline-offset: 0.18em;
+    }
+    a:hover { text-decoration: underline; }
+    code {
+      padding: 0.12rem 0.32rem;
+      background: rgba(47, 118, 111, 0.08);
+      border: 1px solid rgba(47, 118, 111, 0.12);
+      border-radius: 4px;
+      color: var(--ink);
+      font-family: var(--font-mono);
+      font-size: 0.86em;
+    }
+    header {
+      padding: 1rem 0 2.5rem;
+      border-bottom: 1px solid var(--line);
+      margin-bottom: 1.2rem;
+    }
+    header::before {
+      display: inline-flex;
+      align-items: center;
+      min-height: 1.7rem;
+      margin-bottom: 1rem;
+      padding: 0.25rem 0.55rem;
+      border: 1px solid rgba(32, 29, 25, 0.13);
+      border-radius: 999px;
+      background: rgba(255, 254, 251, 0.68);
+      color: var(--state);
+      content: "paper report";
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    .meta {
+      display: grid;
+      gap: 0.35rem;
+      max-width: 900px;
+      background: linear-gradient(180deg, var(--surface-raised), rgba(255, 254, 251, 0.72));
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      box-shadow: 0 18px 55px rgba(55, 63, 48, 0.08);
+      padding: 1rem 1.05rem;
+      color: var(--muted);
+    }
+    .meta p {
+      margin: 0;
+      font-size: 0.86rem;
+      line-height: 1.62;
+    }
+    .meta strong {
+      color: var(--ink);
+      font-weight: 650;
+    }
+    .title-wrap {
+      display: grid;
+      gap: 0.75rem;
+      max-width: 900px;
+    }
+    .subtitle,
+    .lead {
+      max-width: 860px;
+      color: var(--muted);
+      font-size: 0.98rem;
+      line-height: 1.72;
+    }
+    .lead {
+      padding: 1rem 1.05rem;
+      background: linear-gradient(180deg, var(--state-soft), rgba(255, 254, 251, 0.74));
+      border: 1px solid rgba(47, 118, 111, 0.2);
+      border-radius: 8px;
+      color: var(--ink-soft);
+    }
+    .title-wrap .meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.45rem;
+      box-shadow: none;
+    }
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      min-height: 1.7rem;
+      padding: 0.2rem 0.55rem;
+      border: 1px solid rgba(32, 29, 25, 0.13);
+      border-radius: 999px;
+      background: rgba(255, 254, 251, 0.72);
+      color: var(--muted);
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      font-weight: 600;
+      line-height: 1.25;
+    }
+    .toc {
+      background: rgba(255, 254, 251, 0.84);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 0.95rem;
+      margin: 1.2rem 0 1.6rem;
+      backdrop-filter: blur(12px);
+    }
+    .toc strong {
+      display: block;
+      margin-bottom: 0.35rem;
+      color: var(--ink);
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    .toc ul,
+    ul.toc,
+    ol.toc {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0.12rem 0.35rem;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+    .toc li { min-width: 0; }
+    .toc a {
+      display: block;
+      padding: 0.42rem 0.52rem;
+      border-radius: 6px;
+      color: var(--muted);
+      font-size: 0.82rem;
+      line-height: 1.38;
+    }
+    .toc a:hover {
+      background: rgba(47, 118, 111, 0.08);
+      color: var(--ink);
+      text-decoration: none;
+    }
+    .tldr {
+      background: linear-gradient(180deg, var(--action-soft), rgba(255, 254, 251, 0.74));
+      border: 1px solid rgba(164, 95, 56, 0.22);
+      border-radius: 8px;
+      padding: 1rem 1.05rem;
+      margin: 1rem 0 1.1rem;
+      color: var(--ink-soft);
+      font-size: 0.98rem;
+      line-height: 1.72;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0.85rem;
+    }
+    .grid.three {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+    .note, .audit-card, .formula-block, .card, .danger {
+      background: var(--surface-raised);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      box-shadow: 0 14px 42px rgba(55, 63, 48, 0.055);
+      padding: 0.95rem 1rem;
+      margin: 0.85rem 0;
+    }
+    .card {
+      margin: 0;
+    }
+    .danger {
+      background: linear-gradient(180deg, var(--warn-soft), rgba(255, 254, 251, 0.78));
+      border-color: rgba(154, 106, 33, 0.22);
+    }
+    .kpi {
+      color: var(--ink);
+      font-family: var(--font-mono);
+      font-size: clamp(1.35rem, 2.8vw, 2.15rem);
+      font-weight: 700;
+      line-height: 1;
+    }
+    .kpi-label {
+      margin-top: 0.45rem;
+      color: var(--muted);
+      font-size: 0.82rem;
+      line-height: 1.5;
+    }
+    .note strong { color: var(--ink); }
+    .appendix-ref {
+      color: var(--planning);
+      background: var(--planning-soft);
+      border: 1px solid rgba(79, 101, 66, 0.18);
+      border-radius: 999px;
+      padding: 0.08rem 0.38rem;
+      font-family: var(--font-mono);
+      font-size: 0.74rem;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+    .formula-block .intuition {
+      font-weight: 650;
+      color: var(--state);
+      margin-bottom: 8px;
+    }
+    .symbol-table td:first-child {
+      width: 26%;
+      color: var(--state);
+      font-family: var(--font-mono);
+      font-weight: 600;
+    }
+    section {
+      padding: 3rem 0;
+      border-bottom: 1px solid var(--line);
+      scroll-margin-top: 1.4rem;
+    }
+    section:last-child { border-bottom: none; }
+    section > h2 {
+      max-width: 760px;
+      margin-right: auto;
+      margin-left: auto;
+      text-align: center;
+    }
+    section > h2::before {
+      display: block;
+      margin-bottom: 0.45rem;
+      color: var(--state);
+      content: "section";
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      line-height: 1.4;
+      text-transform: uppercase;
+    }
+    figure,
+    .figure {
+      margin: 1.35rem auto;
+      text-align: center;
+    }
+    figure img,
+    .figure img,
+    .pdf-frame {
+      display: block;
+      max-width: 100%;
+      max-height: min(72vh, 760px);
+      margin: 0 auto;
+      background: white;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      box-shadow: 0 18px 50px rgba(55, 63, 48, 0.08);
+    }
+    .pdf-frame {
+      width: auto;
+      height: auto;
+    }
+    figcaption,
+    .caption {
+      max-width: 920px;
+      margin: 0.65rem auto 0;
+      color: var(--muted);
+      font-size: 0.82rem;
+      line-height: 1.6;
+      text-align: center;
+    }
+    table {
+      width: 100%;
+      overflow: hidden;
+      border-collapse: separate;
+      border-spacing: 0;
+      margin: 1rem 0 1.25rem;
+      background: var(--surface-raised);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      box-shadow: 0 14px 42px rgba(55, 63, 48, 0.045);
+      font-size: 0.88rem;
+    }
+    th, td {
+      border-right: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+      padding: 0.62rem 0.68rem;
+      vertical-align: top;
+      text-align: left;
+    }
+    th:last-child,
+    td:last-child { border-right: none; }
+    tbody tr:last-child td { border-bottom: none; }
+    th {
+      background: var(--surface-2);
+      color: var(--ink);
+      font-family: var(--font-mono);
+      font-size: 0.76rem;
+      font-weight: 600;
+    }
+    tbody tr:nth-child(even) td { background: rgba(240, 244, 238, 0.45); }
+    ul, ol { padding-left: 1.25rem; }
+    li { margin: 0.35rem 0; }
+    .best { font-weight: 650; color: var(--state); }
+    .warn { color: var(--warn); font-weight: 650; }
+    .pseudocode {
+      background: #20241f;
+      color: #eef2e7;
+      border: 1px solid rgba(255, 254, 251, 0.12);
+      border-radius: 8px;
+      padding: 1rem 1.05rem;
+      overflow-x: auto;
+      font-family: var(--font-mono);
+      font-size: 0.82rem;
+      line-height: 1.58;
+      margin: 0.9rem 0;
+    }
+    pre {
+      max-width: 100%;
+      overflow-x: auto;
+      margin: 0.9rem 0;
+      padding: 1rem 1.05rem;
+      background: #20241f;
+      border: 1px solid rgba(255, 254, 251, 0.12);
+      border-radius: 8px;
+      color: #eef2e7;
+      font-family: var(--font-mono);
+      font-size: 0.82rem;
+      line-height: 1.58;
+    }
+    pre code {
+      padding: 0;
+      background: transparent;
+      border: 0;
+      color: inherit;
+      font: inherit;
+    }
+    article {
+      display: block;
+    }
+    .small {
+      color: var(--muted-2);
+      font-size: 0.78rem;
+      line-height: 1.55;
+    }
+    .checklist li { margin: 5px 0; }
+    @media (min-width: 980px) {
+      main {
+        width: min(100%, calc(var(--content-max) + var(--sidebar-w) + var(--desktop-gutter)));
+        margin: 0;
+        padding: 3.2rem var(--desktop-gutter) 6rem calc(var(--sidebar-w) + var(--desktop-gutter));
+      }
+      .toc {
+        position: fixed;
+        inset: 0 auto 0 0;
+        z-index: 50;
+        width: var(--sidebar-w);
+        min-height: 100vh;
+        margin: 0;
+        padding: 2.25rem 1.25rem;
+        border-width: 0 1px 0 0;
+        border-radius: 0;
+        background: rgba(246, 247, 243, 0.9);
+        box-shadow: none;
+      }
+      .toc strong::before {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 2rem;
+        height: 2rem;
+        margin-right: 0.55rem;
+        border-radius: 7px;
+        background: var(--ink);
+        color: var(--paper);
+        content: "R";
+        font-family: var(--font-body);
+        font-size: 0.75rem;
+        font-weight: 700;
+        letter-spacing: 0;
+      }
+      .toc ul,
+      ul.toc,
+      ol.toc {
+        grid-template-columns: 1fr;
+        margin-top: 1.35rem;
+      }
+      .toc a {
+        padding: 0.62rem 0.7rem;
+        font-size: 0.84rem;
+      }
+    }
+    @media (max-width: 760px) {
+      main { padding: 1.35rem 0.9rem 4rem; }
+      h1 { font-size: 1.85rem; }
+      section { padding: 2.2rem 0; }
+      .toc ul, ul.toc, ol.toc { grid-template-columns: 1fr; }
+      .grid { grid-template-columns: 1fr; }
+      .grid.three { grid-template-columns: 1fr; }
+      table {
+        display: block;
+        overflow-x: auto;
+        font-size: 0.82rem;
+      }
+      th, td { padding: 0.55rem; }
+    }
+
+    .language-switch {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.2rem;
+      width: fit-content;
+      margin: 0 0 1rem;
+      padding: 0.18rem;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(255, 254, 251, 0.74);
+      box-shadow: 0 10px 28px rgba(55, 63, 48, 0.08);
+    }
+    .language-switch a,
+    .language-switch span {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 1.55rem;
+      padding: 0.18rem 0.55rem;
+      border-radius: 999px;
+      color: var(--muted);
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      font-weight: 650;
+      line-height: 1;
+      text-transform: uppercase;
+    }
+    .language-switch a:hover {
+      background: var(--state-soft);
+      color: var(--state);
+      text-decoration: none;
+    }
+    .language-switch .active {
+      background: var(--ink);
+      color: var(--paper);
+    }
+</style>
+<link href="./index.en.html" hreflang="en" rel="alternate"/>
+<link href="./index.html" hreflang="zh-CN" rel="alternate"/>
+</head>
+<body>
+<main>
+<header>
+<div aria-label="Language switch" class="language-switch">
+<span aria-current="page" class="active">EN</span>
+<a href="./index.html" lang="zh-CN">中文</a>
+</div>
+<h1>$\pi_{0.7}$: a Steerable Generalist Robotic Foundation Model with Emergent Capabilities</h1><div class="meta">
+<p><b>Authors:</b>Physical Intelligence Team: Bo Ai, Ali Amin, Raichelle Aniceto, Ashwin Balakrishna, Kevin Black, . . . Ury Zhilinsky, etc.</p>
+<p><b>Affiliations:</b>Physical Intelligence</p>
+<p><b>Publication:</b>arXiv preprint, 2026</p>
+<p><b>arXiv：</b><a href="https://arxiv.org/abs/2604.15483">2604.15483</a> | <b>PDF：</b><a href="https://arxiv.org/pdf/2604.15483">download</a> | <b>Project：</b><a href="https://pi.website/pi07">pi.website/pi07</a></p>
+</div></header>
+<nav class="toc"><b>Contents</b><ul><li><a href="#overview">1. Quick overview of the paper</a></li><li><a href="#motivation">2. Motivation</a></li><li><a href="#related">3. Summary of related work</a></li><li><a href="#method">4. Detailed explanation of method</a></li><li><a href="#exp">5. Experiment</a></li><li><a href="#discussion">6. Analysis and Discussion</a></li></ul></nav>
+<section id="overview"><h2>1. Quick overview of the paper</h2><div class="tldr"><b>One-sentence summary:</b>$\pi_{0.7}$ is a 5B parameter steerable generalist robotic foundation model. The core is not just to expand VLA, but to enable the same model to absorb multi-quality and multi-source data through multi-modal context conditioning (language, subtask, episode metadata, subgoal images, history), and demonstrate out-of-the-box capabilities in unseen instructions, cross-embodiment, and compositional tasks.</div>
+<p><b>Difficulty rating:</b>★★★★☆. Need to be familiar with VLA, flow matching action expert, VLM backbone, robot history encoder, world model/subgoal generation, cross-embodiment evaluation and robot experiment evaluation.</p>
+<p><b>Keywords:</b>Robotic Foundation Model, VLA, Context Conditioning, Subgoal Images, Episode Metadata, Cross-Embodiment Transfer。</p>
+<table><tr><th>Reading positioning issues</th><th>Answer</th></tr><tr><td>What should the paper solve?</td><td>The combinatorial generalization ability of the robot foundation model is still weak: the model often requires task-specific fine-tuning, and it is difficult to reuse existing skills in new tasks, new robots, and new environments just by relying on prompts.</td></tr><tr><td>The author's approach</td><td>Expand prompt/context from single language instructions to multi-modal context: subtask instructions, subgoal images, episode metadata, video history, and combined training with dropout.</td></tr><tr><td>most important results</td><td>Seen dexterous tasks often exceed 90% success rate; zero-shot/unseen or unseen robot-task combinations are mostly 60-80%; UR5e shirt folding human experts 90. 9% progress/80. 6% success, $\pi_{0.7}$ is 85. 6% progress/80% success.</td></tr><tr><td>Things to note when reading</td><td>A large number of conclusions in this article come from real robot evaluation diagrams and supplementary explanations, not a single benchmark table; the focus is on how "steerability + diverse context" allows the model to exploit failures, suboptimal data, non-robot data, and specialist rollouts.</td></tr></table>
+<h3>Core contribution list</h3><ul><li><b>Proposed $\pi_{0.7}$.</b>5B parameter VLA, including 4B Gemma3 VLM backbone, MEM-style video history encoder and 860M flow matching action expert.</li><li><b>Propose a multimodal context conditioning recipe.</b>Context not only includes task description, but also includes next semantic subtask, subgoal images, episode metadata, control mode, etc.</li><li><b>Leveraging heterogeneous data.</b>Distinguish demonstrations, failures, suboptimal autonomous rollouts, specialist rollouts and non-robot data through metadata, so that multi-quality data can be used uniformly.</li><li><b>Display emergent capabilities.</b>Includes complex instruction following, cross-embodiment shirt folding, new appliance coaching, combinatorial generalization, and memory tasks.</li></ul></section>
+<section id="motivation"><h2>2. Motivation</h2><h3>2. 1 What problem should be solved?</h3><p>The paper starts from the general principle of the foundation model: capabilities come from large-scale and diverse data training. Language models can combine knowledge, follow user formats, and perform reasoning, but physical intelligence in robots is still difficult to achieve similar compositional generalization. Already VLA, while getting larger, often still relies on task-specific data or fine-tuning.</p><div class="figure"><img alt="teaser" src="figures/fig1.png"/><div class="caption">Teaser: $\pi_{0.7}$ uses richer prompts to describe what and how, including language, subgoal images, and episode metadata, thereby leveraging wider data and combining skills to solve new tasks.</div></div><h3>2. 2 Limitations of existing methods</h3><ul><li><b>VLA using only language commands:</b>context Insufficient information to express strategy, data quality, desired behavioral styles, or intermediate goals.</li><li><b>Only train high-quality demonstrations:</b>Data size is limited, and failures, suboptimal autonomous rollouts, or specialist policy rollouts cannot be exploited.</li><li><b>task-specific specialists：</b>Can be strong on a single task, but each new task requires additional data or fine-tuning.</li><li><b>The world model generates targets separately:</b>If it cannot be combined with the VLA prompt system, the generated subgoal cannot be stably converted into a control strategy.</li></ul><h3>2. 3 The solution ideas of this article</h3><p>The core insight is: if the context is rich enough, the model can distinguish "what task this trajectory is, what strategy is used, success or failure, whether it should be imitated or avoided", thereby turning heterogeneous data into a trainable resource. $\pi_{0.7}$ uses component dropout to allow the model to see different context combinations during training, and can flexibly use language, subgoal image or metadata to steer behavior during inference.</p></section>
+<section id="related"><h2>3. Summary of related work</h2><table><tr><th>Technical line</th><th>Paper positioning</th><th>Relationship with $\pi_{0.7}$</th></tr><tr><td>VLA / robotic foundation models</td><td>RT-2, OpenVLA, $\pi_0$ series, etc. adapt VLM backbone to robot control.</td><td>$\pi_{0.7}$ continues the $\pi_0$ series architecture, but the focus shifts to richer context and steerability.</td></tr><tr><td>Memory / history encoders</td><td>Robotic tasks require remembering previous observations, which have been processed by methods such as MEM.</td><td>$\pi_{0.7}$ uses MEM-style video history encoder to support compressing any historical frame to a fixed number of tokens.</td></tr><tr><td>World models / subgoal generation</td><td>Generating future target images can guide strategy, but generation is slow and needs to be combined with control.</td><td>$\pi_{0.7}$ uses BAGEL-based lightweight world model to generate subgoal images and passes them to VLA asynchronously.</td></tr><tr><td>Cross-embodiment transfer</td><td>The shapes, joints, and end effectors of different robots vary greatly, making skill transfer difficult.</td><td>The paper demonstrates zero-shot target embodiment migration, especially UR5e shirt folding, that is close to that of human experts.</td></tr></table></section>
+<section id="method"><h2>4. Detailed explanation of method</h2><h3>4. 1 Method overview</h3><p>$\pi_{0.7}$ is the 5B parameter VLA. The input includes observation history $\mathbf{o}_{t-T:t}$ and context $\mathcal{C}_t$. observation includes multi-camera image $\mathbf{I}_t^i$ and joint status $\mathbf{q}_t$; context can include language command, next semantic subtask, subgoal image, episode metadata, control mode, etc. The output is action chunk $\mathbf{a}_{t:t+H}$. Usually only shorter sub-segments are executed and then re-planned.</p><div class="figure"><img alt="architecture" src="figures/model_architecture.png"/><div class="caption">Architecture overview: 4B VLM backbone, MEM-style history encoder, 860M action expert; high-level semantic policy in runtime generates language commands, and BAGEL-based world model generates subgoal images.</div></div><div class="pseudocode">Training sample: (observation history o_{t-T:t}, action chunk a_{t:t+H}, context C_t)
+C_t may include:
+  language command ell_t
+  next semantic subtask rawtext_t
+  subgoal image generated by world model
+  episode metadata: quality / strategy / success / source
+  control mode and other fields
+Train VLA by imitation / flow-matching action expert.
+At inference:
+  update history tokens with MEM encoder
+  optionally generate semantic subtask and subgoal image
+  build prompt/context C_t
+  action expert predicts action chunk
+  execute short horizon, repeat</div>
+<h3>4. 2 Method evolution</h3><table><tr><th>stage</th><th>form</th><th>Improvement motivation</th></tr><tr><td>$\pi_0$ / prior VLA</td><td>Short text task instructions + observation history → action chunk.</td><td>It can control multitasking, but context cannot describe strategy and data quality.</td></tr><tr><td>MEM-style VLA</td><td>Add video history encoder to handle long-term observations.</td><td>Supports tasks that require memory.</td></tr><tr><td><b>$\pi_{0.7}$</b></td><td>Multimodal context: subtask, metadata, subgoal images, history, control mode.</td><td>Allow models to be steered, utilize heterogeneous data, and combine existing skills to solve new tasks.</td></tr></table>
+<h3>4. 3 Core design and mathematical derivation</h3><div class="formula-block"><div class="intuition">VLA Training goal: Given historical observations and rich context, maximize the conditional likelihood of future action chunks.</div>$$\max_{\theta}\;\mathbb{E}_{\mathcal{D}}\left[\log \pi_{\theta}(\mathbf{a}_{t:t+H}\mid \mathbf{o}_{t-T:t},\mathcal{C}_t)\right].$$<p class="small">$\mathcal{D}$ is the training data set; $\mathbf{o}_{t-T:t}$ is historical observation; $\mathcal{C}_t$ is context; $\mathbf{a}_{t:t+H}$ is future action chunk. The paper explains that flow matching action expert actually optimizes the approximate lower bound instead of the closed log-likelihood.</p></div>
+<h4>4.3.1 Subtask instructions</h4><p>In addition to the overall task description $\ell_t$, the model also receives higher-level text $\hat{\ell}_t$ representing the next semantic subtask. For example, instead of just saying "clean the kitchen", you can also tell the model "now pick up the plate and put it in the sink". This allows step-by-step verbal coaching of the model with human or high-level semantic policy during inference.</p>
+<h4>4.3.2 Subgoal images</h4><p>Subgoal image tells the model the goal state in a visual form. The paper uses a lightweight world model based on the BAGEL image generation model to generate subgoal images. The supplementary material explains that the world model uses 7B LLM backbone and 7B generation backbone; ViT input is resized to 448x336, and VAE input is resized to 512x384; subgoal is generated every $\Delta=4$ seconds during inference.</p>
+<div class="figure"><img alt="prompt" src="figures/prompts_v4.png"/><div class="caption">Prompt overview: context consists of subtask instructions, subgoal images, episode metadata, etc. ; each component is dropout during training, and can be flexibly combined during inference.</div></div>
+<h4>4.3.3 Episode metadata</h4><p>The role of episode metadata is to let the model know the source, quality, strategy or success of this trajectory. In this way, the model can take advantage of lower-quality demonstrations, failures, autonomous data from prior models, and RL/SFT specialist rollouts, instead of relying only on high-quality human demonstrations. Without metadata, it is difficult for the model to distinguish between "high-quality behavior that should be imitated" and "failure/suboptimal behavior that should be avoided. "</p>
+<h4>4.3.4 Architecture and knowledge insulation</h4><p>The model backbone is initialized from Gemma3 4B VLM, where the vision encoder is about 400M. Actions are generated by 860M flow matching action expert. The paper follows the knowledge insulation recipe: the VLM backbone is trained with discrete cross-entropy of FAST tokens; the action expert attends to the backbone activation, but the gradient of the action expert is not transmitted back to the VLM backbone, thus stabilizing the training.</p>
+<h3>4. 4 Implementation points</h3><div class="impl-note"><b>Parameter scale:</b>Total about 5B; 4B VLM backbone + 400M vision encoder + 860M action expert.</div><div class="impl-note"><b>Prompt dropout：</b>Randomly drop each context component during training, so that the model can accept any subset during inference and does not rely heavily on all prompt items.</div><div class="impl-note"><b>Reasoning speed:</b>The minimum variant is 38ms under 3 camera inputs, 5 denoising steps, training-time RTC; the worst is 127ms after turning on MEM encoder and subgoal images <span class="appendix-ref">[Supplementary Inference speed]</span>。</div><div class="impl-note"><b>Subgoal world model：</b>14B image generation model, nearly 10, 000 tokens, 4xH100 tensor parallelism, 8-bit large matmul, SageAttention; 25 denoising steps about 1. 25 seconds, using an asynchronous strategy to allow the robot to generate the next subgoal while continuing to execute <span class="appendix-ref">[Supplementary Training of world model]</span>。</div><div class="impl-note"><b>Control space:</b>The supplementary experiment compares joint-space and end-effector control. EE control has no obvious advantage in cross-embodiment tasks, so the main experiment uses joint-space control. <span class="appendix-ref">[Additional action spaces]</span>。</div></section>
+<section id="exp"><h2>5. Experiment</h2><h3>5. 1 Experimental setup</h3><table><tr><th>category</th><th>set up</th></tr><tr><td>Robot platform</td><td>A variety of robots, including mobile/static/single-arm/bimanual systems. The figure shows the experimental robot collection.</td></tr><tr><td>Task type</td><td>espresso, box building, laundry folding, peanut butter sandwich, turn shirt inside-out, drive through door, zucchini slicing, peeling fruits/vegetables, take out trash, mug swapping, find object, etc.</td></tr><tr><td>Review topic</td><td>out-of-the-box dexterity、instruction following、cross-embodiment transfer、compositional task generalization。</td></tr><tr><td>Baselines</td><td>prior $\pi_0$ models、task-specific RL/SFT specialists、human teleoperators、ablations without eval data/metadata。</td></tr><tr><td>Supplementary Rating</td><td>The supplementary materials provide a scoring rubric for each task. For example, espresso needs to complete grinding/powdering/portafilter/extraction/moving cups, and take out trash can score up to 12 points.</td></tr></table><div class="figure"><img alt="robots" src="figures/pi07robots_v5.png"/><div class="caption">Schematic diagram of the experimental robot platform.</div></div>
+<h3>5. 2 Main results</h3><h4>Out-of-the-box dexterity</h4><p>Thesis report $\pi_{0.7}$ achieves performance close to that of task-specific RL/SFT specialists on tasks such as espresso, box building, laundry, etc. directly out of the box, and exceeds specialists on the throughput of laundry and box building. The authors also report that both "no eval data" and "no metadata" ablations are significantly weaker than the full model on the task, indicating that eval rollouts and metadata are critical to utilizing mixed-quality data.</p><div class="figure"><img alt="distillation results" src="figures/distillation_results.png"/><div class="caption">Out-of-the-box dexterity: Complete $\pi_{0.7}$ compared to RL/SFT specialists.</div></div><div class="figure"><img alt="ablations" src="figures/distillation_ablations.png"/><div class="caption">The ablation of prompt composition and evaluation data: no eval data / no metadata are weaker than the complete model.</div></div>
+<h4>Instruction following</h4><p>The paper tests open-ended instruction, referral instruction, reverse tasks and tasks that require memory. Reverse Bussing requires placing trash/dishes in a position opposite to the offset of the data set; Reverse Fridge to Microwave requires placing food from the microwave back to the fridge. The results show that $\pi_{0.7}$ is significantly better at overcoming dataset bias than prior models; for Reverse Fridge to Microwave, using the GC version of generated subgoal images is critical to success.</p><div class="figure"><img alt="instruction following" src="figures/instruction_following.png"/><div class="caption">Broad instruction following in novel environments。</div></div><div class="figure"><img alt="compositional" src="figures/compositional_generalization.png"/><div class="caption">Breaking dataset biases by following instructions。</div></div>
+<h4>Cross-embodiment transfer</h4><p>When the target robot does not have training data for the task, $\pi_{0.7}$ displays zero-shot transfer. In the supplementary human control experiment, 10 top experienced operators (average experience of all robot platforms are about 375 hours) performed a total of 30 trials on UR5e shirt folding. Human achieved 90. 9% task progress and 80. 6% success; $\pi_{0.7}$ (GC) achieved 85. 6% progress and 80% success.</p><div class="figure"><img alt="cross embodiment" src="figures/cross_embodiment.png"/><div class="caption">Cross-embodiment transfer: Transfer skills between different robots.</div></div><div class="figure"><img alt="human vs pi07" src="figures/human_vs_pi07.png"/><div class="caption">Comparison of $\pi_{0.7}$ (GC) and expert human teleoperators in UR5e shirt folding.</div></div>
+<h4>Compositional task generalization and coaching</h4><p>The paper shows that users can guide the model to complete new long-horizon tasks through verbal coaching, such as putting sweet potatoes into an air fryer. The author takes this as an example of portfolio generalization: instead of collecting action data separately for each new task, existing skill sets are called upon through prompts, subgoals, and step-by-step coaching.</p><div class="figure"><img alt="air fryer" src="figures/airfryer_film_strip.png"/><div class="caption">Language coaching Example: air fryer long-horizon task.</div></div>
+<h3>5. 3 Ablation experiment</h3><table><tr><th>ablate</th><th>Verification purpose</th><th>Paper conclusion</th></tr><tr><td>No eval data</td><td>By removing autonomous evaluation episodes, strong RL/specialist policy rollouts cannot be distilled.</td><td>Weaker than the full model on $\pi_*^{0.6}$ release tasks.</td></tr><tr><td>No metadata</td><td>The context does not contain episode metadata and the model cannot differentiate between data quality/policy.</td><td>Weaker than the full model on all relevant tasks, indicating that metadata is critical for mixed-quality data.</td></tr><tr><td>Joint vs EE control</td><td>Compare action space in cross-embodiment.</td><td>EE control has no obvious advantages, and the main experiment uses joint-space control.</td></tr><tr><td>GC vs non-GC</td><td>Check generated subgoal image conditioning.</td><td>The GC is a critical component in tasks such as Reverse Fridge to Microwave and cross-embodiment shirt folding.</td></tr></table>
+<h3>5. 4 Supplementary experiment and scoring details</h3><p>The supplementary materials give detailed task scoring rubrics, covering laundry, espresso, box building, peanut butter sandwich, inside-out shirt, drive through door, cut zucchini, peel fruits/vegetables, take out trash, swap mugs, find object, etc. Instead of binary successes, many tasks are scored by subgoals, such as taking out trash for up to 12 points, and peanut butter sandwich for up to 9 points.</p><div class="figure"><img alt="operator stats" src="figures/operator_experience_hours.png"/><div class="caption">Operator experience statistics in the Human subject study; the selected candidates belong to the top 2% of the operator team's experience.</div></div></section>
+<section id="discussion"><h2>6. Analysis and Discussion</h2><h3>6. 1 Analysis and explanation of the results given in the paper</h3><ul><li>The author believes that the complete model is stronger than no metadata/no eval data because metadata allows the model to distinguish imitable and non-imitable behaviors from mixed-quality data.</li><li>The improvement in Instruction following is interpreted as the model placing more emphasis on instructions and therefore overcoming the common directional bias in the data set.</li><li>The success of Cross-embodiment comes from the model's ability to change strategies based on prompt/context, rather than just reproducing the source robot's movement trajectory.</li><li>The function of Subgoal images is to convert web/non-robot/image-generation knowledge into VLA usable visual targets.</li></ul><h3>6. 2 Limitations of the author's statement</h3><p>Discussion clearly states that zero-shot generalization has a lower success rate than in-distribution tasks. Seen tasks tend to exceed 90%, while unseen tasks or unseen task-robot combinations tend to be around 60-80%. The authors also point out that in such a large and diverse data set, it is difficult to rigorously determine which tasks are truly unseen, because the relevant skills may exist in the form of different labels or other task sub-behaviors.</p><h3>6. 3 Applicable boundaries and future work</h3><ul><li><b>Applicable boundaries:</b>The ability of $\pi_{0.7}$ relies on the coverage of combinable skills in the training data and whether prompt/context can accurately specify the strategy.</li><li><b>Inference boundaries:</b>Subgoal image generation is still slow, and the paper uses asynchronous generation to alleviate it, rather than completely real-time synchronous generation.</li><li><b>Future work:</b>The author proposes that model steerability can be used to learn more efficiently on test tasks, such as through more detailed language coaching or autonomous reinforcement learning.</li></ul><h3>6. 4 Reproducibility audit</h3><table><tr><th>project</th><th>state</th><th>illustrate</th></tr><tr><td>Source code and PDF</td><td class="audit-pass">Obtained</td><td>arXiv e-print, abs, and PDF are all downloaded successfully.</td></tr><tr><td>chart</td><td class="audit-pass">Extracted</td><td>22 PDF figures have been converted to PNG and the report selects key figures for embedding.</td></tr><tr><td>Model structure</td><td class="audit-pass">clearer</td><td>5B, 4B VLM, 860M action expert, MEM encoder, BAGEL world model and other information are clear.</td></tr><tr><td>Training hyperparameters</td><td class="audit-warn">incomplete</td><td>The paper provides training recipes and inference optimization, but does not provide complete batch size, learning rate and other recurrence experiment tables.</td></tr><tr><td>Dataset</td><td class="audit-warn">Well described but not directly reproducible</td><td>The tasks and scoring details are rich, but the training data size, complete data list and downloadable data are not fully given in the source code.</td></tr><tr><td>code repository</td><td class="audit-warn">No explicit GitHub found</td><td>The paper provides a project page, but the official GitHub repository is not specified in the source code/abs.</td></tr></table></section>
+</main>
+</body></html>

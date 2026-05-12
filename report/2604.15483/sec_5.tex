@@ -1,0 +1,33 @@
+
+
+While subtask instructions are effective at conveying the high-level intent of the task, they may lack details that matter for execution --- e.g., ``open the fridge door'' does not specify how the robot arm should grasp the handle. Subgoal images address this by depicting the desired near-future state of the scene in images, providing a richer specification of \emph{what the world should look like} after successful progress of the task.
+
+We consider \textbf{multi-view subgoals} $\bg_t = [G_t^1,\ldots,G_t^n]$, where $G_t^i$ is the desired near-future image for camera $i$. Multi-view subgoals simultaneously specify environment- and object-centric outcomes (often easiest in the base view) and arm/gripper outcomes (often easiest in wrist views), improving spatial grounding for control.
+
+At runtime, the subgoal images are produced by a \textbf{lightweight world model}, which takes in the same subtask instruction $\rawtext_t$ as the main model, but benefits from web-scale pre-training on videos and image editing tasks and is thus capable of generalizing to diverse tasks and scenarios. Generated subgoal images that are grounded in the robot's current observation can often more clearly disambiguate the objective for the policy than a language instruction, resulting in improvements in language following and generalization.
+We denote this model as $g_\psi$ and it is trained with the objective
+\begin{equation*}
+\max_{\psi}\;
+\E_{\data_g} %
+\left[
+\mathcal{L}_\text{CFM}
+\left(
+\bg_t^{\star},\; g_\psi(\bo_t,\rawtext_t,m)
+\right)
+\right],
+\end{equation*}
+where $\mathcal{L}_\text{CFM}$ is the standard flow matching loss~\citep{lipman2022flow}, $\bg^{\star}_t$ is the future subgoal image, $m$ is the episode metadata from Sec.~\ref{subsec:metadata}, and the dataset $\mathcal{D}_g$ is a subset of segments from Sec.~\ref{subsec:hl} that are annotated with especially high-quality subtask labels $\rawtext_t$.
+The image frames at the end of the segments serve as the ground-truth subgoal, i.e., $\bg_t^{\star} = \bo_{t_{\mathrm{end}}}$. 
+
+Following SuSIE~\citep{black2023zero}, our world model is initialized using an off-the-shelf image generation and editing model with web-scale pre-training. We initialize from BAGEL~\cite{deng2025emerging}, a 14B mixture-of-transformers model capable of image understanding, editing, and generation.
+By augmenting our world model training with web data, non-robot data sources such as egocentric human videos, and other video data, we can acquire semantic and physical concepts from these other data sources and then transfer them into \MethodName{} via subgoal images. Implementation details are in Appendix~\ref{app:gg_impl}.
+
+
+\begin{figure*}[t]
+    \centering
+    \includegraphics[width=0.75\linewidth]{compressed_images_final/prompts_v4.pdf}
+    \caption{\textbf{Prompt overview.} \MethodName{} uses diverse modalities of context in the prompt, including: subtask instructions, subgoal images, and episode metadata. We train the model with dropout for each component, and then prompt the model flexibly combining modalities. For example, when using the UR5e bimanual manipulator to fold a shirt, we use subgoal image and metadata prompting.}
+    \label{fig:prompt}
+\vspace{-8pt}
+\end{figure*}
+

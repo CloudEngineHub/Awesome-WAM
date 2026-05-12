@@ -1,0 +1,10 @@
+
+\begin{figure}
+    \centering
+    \includegraphics[width=\linewidth]{compressed_images_final/attention_masks.pdf}
+    \caption{The \MethodName{} model and its world model (for generating subgoal images) use several different nontrivial attention patterns during training and inference. From top left: in absence of image goals we use the same attention patterns as in $\pi_{0.5}$, with global bidirectional attention between embeddings for all memory-aware image views. Note that the FAST tokens (only available at training time) and the flow actions do not attend to each other. When image goals are present, we include them as an additional block-causal bidirectional block, after the text prompt. When we do classifier-free guidance (at inference time), we pack both the positive and negative example into the same sequence for efficient inference by constructing an ``attention tree'' with two branches (positive and negative), which do not attend to one another. Following BAGEL, at training time the world model receives three copies of the image, each of which is block-bidirectional within the multiview group: current observation, encoded with ViT; current observation encoded with VAE; noisy image goal encoded with VAE. The world model uses a similar inference-time CFG trick, albeit with a more complex mask because it has three CFG groups rather than two.}
+    \label{app:attention_masks}
+\end{figure}
+
+We describe the attention pattern used in training \MethodName{} and the lightweight world model (for subgoal image generation), as well as running inference with them, in Fig.~\ref{app:attention_masks}.
+

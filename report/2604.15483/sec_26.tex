@@ -1,0 +1,11 @@
+  \label{app:human_study}
+
+The human subject study serves two purposes. First, it provides the strongest possible baseline for evaluating \MethodName{} by measuring how well expert operators can teleoperate the UR5e bimanual robot to perform the same task. Second, the result potentially motivates for cross-embodiment transfer: UR5e, an industrial manipulator with high joint inertia, is difficult to teleoperate precisely for dexterous tasks like shirt folding, making demonstration collection on this platform difficult. A model that transfers to new embodiment opens up opportunities to collect autonomous data without human teleoperation.
+
+\textbf{Participant selection.} We recruited ten operators with the top 2 percentile of experience from the entire group of operators. They all have extensive prior experience teleoperating the source static bimanual robot, with an average experience of $\sim$375 hours across all robot platforms (Fig.~\ref{fig:operator_stats}). Crucially, none had prior experience performing the shirt folding task on the UR5e, mirroring the ``zero-shot'' setting of our learned policy.
+
+\textbf{Protocol.} Each operator performed three trials, yielding 30 total trials. To match the zero-shot transfer setting of \MethodName{}, operators received no practice or warm-up period before their first attempt. The initial shirt configuration (flattened on the table), the time limit, and the evaluation criteria were all identical to those used in the \MethodName{} policy evaluation. Operators were instructed to maximize task success to align with the evaluation metric. We report task progress and success rate using the same metrics as in our robot experiments, ensuring a direct and fair comparison.
+
+\textbf{Results.}
+Fig.~\ref{fig:human_vs_policy_quantitative} compares \MethodName{} (GC) with human teleoperators under the same zero-shot setting. Human operators achieve an average task progress of 90.9\% and a success rate of 80.6\%. \MethodName{} achieves 85.6\% task progress and an 80\% success rate, demonstrating performance comparable to these expert operators despite not trained with any folding data from the UR5e platforms. These results provide strong evidence of zero-shot cross-embodiment transfer in \MethodName{}.
+
