@@ -1,7 +1,0 @@
-
-\label{subsec:hl}
-Following \Pizf\ \cite{black2025pi05}, we include intermediate, higher-level text that captures the \textbf{next semantic subtask} as part of the prompt in addition to the overall textual task description $\ell_t$ (e.g., ``clean the kitchen''). We denote this intermediate text by $\rawtext_t$ (e.g., ``open the fridge door''). During inference, $\rawtext_t$ may be produced by a learned high-level policy or a human (or be omitted) and may change over time.
-We collect data from a diverse set of tasks and scenarios, and then annotate the segments with detailed textual descriptions.
-
-Conditioning the model on the semantic subtask also enables us to \textbf{verbally coach} the model step-by-step. Since the model is trained to follow diverse language instructions, it can follow the live instructions from the human in a new task, e.g., loading a sweet potato into an air fryer (Fig.~\ref{fig:air_fryer_coaching}). After coaching we can take the verbal coaching data to finetune \MethodName{} as a high-level policy that maps the robot observations, task specification, and history of past subtask instructions to the new subtask instruction (Fig.~\ref{fig:arch} bottom left). This high-level policy then guides the robot to perform the task fully autonomously.
-
