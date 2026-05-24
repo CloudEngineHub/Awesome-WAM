@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="WAM Survey leaderboard for Vision-Language-Action model performance across robot simulation benchmarks."
+    />
+    <meta name="theme-color" content="#f6f7f3" />
+    <title>WAM Survey | VLA Leaderboard</title>
+    <link rel="stylesheet" href="./leaderboard.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="icon" href="../favicon.ico?v=20260513b" type="image/x-icon" />
+  </head>
+  <body>
+    <header class="leaderboard-hero">
+      <nav class="topbar" aria-label="Leaderboard navigation">
+        <a class="brand" href="../">WAM Survey</a>
+        <div class="topbar-actions">
+          <a class="btn btn-outline" href="../">Survey</a>
+          <a class="btn btn-dark" href="https://allenai.github.io/vla-evaluation-harness/leaderboard/" target="_blank" rel="noopener">Data Source</a>
+        </div>
+      </nav>
+
+      <div class="hero-copy">
+        <p class="eyebrow">benchmark tracker</p>
+        <h1>Leaderboard</h1>
+        <p class="hero-note">
+          Data sourced from AllenAI VLA Evaluation Harness.
+        </p>
+      </div>
+
+      <div class="stat-grid" id="summaryStats" aria-live="polite">
+        <article><span>Models</span><strong>--</strong></article>
+        <article><span>Benchmarks</span><strong>--</strong></article>
+        <article><span>Results</span><strong>--</strong></article>
+        <article><span>Updated</span><strong>--</strong></article>
+      </div>
+
+      <div class="notice">
+        Evaluation protocols are not fully standardized across all benchmarks. Scores may not always
+        be directly comparable; check benchmark notes and source-table metadata before drawing conclusions.
+      </div>
+    </header>
+
+    <main class="leaderboard-main">
+      <section class="panel controls-panel" aria-label="Leaderboard controls">
+        <label>
+          <span>Benchmark</span>
+          <select id="benchmarkSelect"></select>
+        </label>
+        <label>
+          <span>Metric</span>
+          <select id="metricSelect"></select>
+        </label>
+        <label>
+          <span>Search</span>
+          <input id="modelSearch" type="search" placeholder="OpenVLA, pi0, CALVIN..." autocomplete="off" />
+        </label>
+        <label>
+          <span>From</span>
+          <input id="dateFrom" type="month" lang="en" />
+        </label>
+        <label>
+          <span>To</span>
+          <input id="dateTo" type="month" lang="en" />
+        </label>
+        <label>
+          <span>Sort</span>
+          <select id="sortSelect">
+            <option value="score-desc">Score high to low</option>
+            <option value="score-asc">Score low to high</option>
+            <option value="date-desc">Newest paper first</option>
+            <option value="date-asc">Oldest paper first</option>
+            <option value="model-asc">Model A-Z</option>
+          </select>
+        </label>
+        <label class="toggle">
+          <input id="firstPartyOnly" type="checkbox" />
+          <span title="Only show results reported by the paper that introduced the model.">First-party only</span>
+        </label>
+      </section>
+
+      <section class="panel chart-panel">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">trend</p>
+            <h2 id="chartTitle">Benchmark Trend</h2>
+          </div>
+          <p id="chartMeta" class="section-note">Loading benchmark data...</p>
+        </div>
+        <div class="chart-shell">
+          <svg id="trendChart" role="img" aria-labelledby="chartTitle chartMeta"></svg>
+        </div>
+        <div class="legend" aria-label="Trend chart legend">
+          <span><i class="dot-muted"></i>Comparable scored models</span>
+          <span><i class="dot-frontier"></i>State-of-the-art frontier</span>
+        </div>
+      </section>
+
+      <section class="panel table-panel">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">scores</p>
+            <h2 id="tableTitle">Leaderboard Table</h2>
+          </div>
+          <p id="tableMeta" class="section-note">Loading results...</p>
+        </div>
+        <div id="benchmarkNotes" class="benchmark-notes" hidden></div>
+        <div class="table-wrap">
+          <table id="leaderboardTable">
+            <thead></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <p>World Action Models: The Next Frontier in Embodied AI</p>
+      <p>OpenMOSS</p>
+    </footer>
+
+    <script type="module" src="./leaderboard.js"></script>
+  </body>
+</html>

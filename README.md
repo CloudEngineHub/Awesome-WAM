@@ -2,7 +2,7 @@
 
 # World Action Models: The Next Frontier in Embodied AI
 
-[![arXiv](https://img.shields.io/badge/arXiv-2605.12090-b31b1b.svg)](https://arxiv.org/abs/2605.12090) [![Hugging Face](https://img.shields.io/badge/🤗%20Hugging%20Face-Paper-FFD21E)](https://huggingface.co/papers/2605.12090) [![ProjectPage](https://img.shields.io/badge/Website-Link-blue)](https://openmoss.github.io/Awesome-WAM/)
+[![arXiv](https://img.shields.io/badge/arXiv-2605.12090-b31b1b.svg)](https://arxiv.org/abs/2605.12090) [![Hugging Face](https://img.shields.io/badge/🤗%20Hugging%20Face-Paper-FFD21E)](https://huggingface.co/papers/2605.12090) [![Project Page](https://img.shields.io/badge/Project%20Page-Link-blue)](https://openmoss.github.io/Awesome-WAM/) [![Leaderboard](https://img.shields.io/badge/Leaderboard-Benchmarks-2f766f)](https://openmoss.github.io/Awesome-WAM/leaderboard/)
 
 <p align="center">
   <a href="https://sinwang20.github.io/">Siyin Wang</a></strong><sup>1,2,*,‡</sup>,  
@@ -11,7 +11,7 @@
   <a href="https://github.com/OpenMOSS/Awesome-WAM">Xinzhe He</a></strong><sup>1,*</sup>,  
   <a href="https://github.com/OpenMOSS/Awesome-WAM">Feihong Liu</a></strong><sup>1,*</sup>,<br>
   <a href="https://github.com/OpenMOSS/Awesome-WAM">Chenchen Yang</a><sup>1,2</sup>, 
-  <a href="https://github.com/OpenMOSS/Awesome-WAM">Yikang Zhou</a><sup>2</sup>, 
+  <a href="https://kevinconqueror.github.io/">Yikang Zhou</a><sup>2</sup>, 
   <a href="https://github.com/OpenMOSS/Awesome-WAM">Zhaoye Fei</a><sup>1</sup>, 
   <a href="https://scholar.google.com/citations?user=IlNreT4AAAAJ&hl=zh-TW">Jingjing Gong</a><sup>2</sup>, 
   <a href="https://jinlanfu.github.io/">Jinlan Fu</a><sup>1</sup><br>,
@@ -49,12 +49,15 @@ This repository accompanies our survey on **World Action Models (WAMs)** — the
 
 ## 🔔 News
 
+- **[2026-05-25]**  Added the benchmark leaderboard page and benchmark-level performance trend visualization.
+
 - **[2026-05-21]**  Updated the link to the paper-reading skill.
 
 - **[2026-05-13]**  Initial release of the survey paper and repository.
 
 ## Contents
 
+- [Leaderboard](https://openmoss.github.io/Awesome-WAM/leaderboard/)
 - [Tag Legend](#tag-legend)
 - [World Action Model](#world-action-model)
   - [Cascaded World-Action-Model](#cascaded-world-action-model)
@@ -628,6 +631,11 @@ This repository accompanies our survey on **World Action Models (WAMs)** — the
 | **RoboChallenge** - *RoboChallenge: Large-Scale Real-Robot Evaluation of Embodied Policies* | 2025-10 | [📄 Paper](https://arxiv.org/pdf/2510.17950) · [🌍&nbsp;Web](https://robochallenge.ai/)· [💻&nbsp;Code](https://github.com/RoboChallenge) |
 | **ManipArena** - *ManipArena: Comprehensive Real-World Evaluation of Reasoning-Oriented Generalist Robot Manipulation* | 2026-03 | [📄 Paper](https://arxiv.org/pdf/2603.28545) · [🌍&nbsp;Web](https://maniparena.x2robot.com/) · [💻&nbsp;Code](https://github.com/maniparena/maniparena-repo) |
 
+
+
+## 🙏 Acknowledgements
+
+We thank the [AllenAI VLA Evaluation Harness](https://allenai.github.io/vla-evaluation-harness/leaderboard/) team for curating and maintaining the VLA leaderboard data that supports our leaderboard. 
 
 
 ## 👋 Citation
