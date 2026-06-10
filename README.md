@@ -94,6 +94,8 @@ This repository accompanies our survey on **World Action Models (WAMs)** — the
     - ![](https://img.shields.io/badge/Hidden--State-fb7185) Hidden-State Coupling
     - ![](https://img.shields.io/badge/Shared--Rep-db2777) Shared Representation
 
+- **AHA-WAM**: "AHA-WAM:Asynchronous Horizon-Adaptive World-Action Modeling with Observation-Guided Context Routing", arXiv 2026. ![](https://img.shields.io/badge/Needs--Taxonomy--Review-64748b)
+  [[📄 Paper](https://arxiv.org/pdf/2606.09811)]
 
 ## World Action Model
 ### Cascaded World-Action-Model
