@@ -94,6 +94,8 @@ This repository accompanies our survey on **World Action Models (WAMs)** — the
     - ![](https://img.shields.io/badge/Hidden--State-fb7185) Hidden-State Coupling
     - ![](https://img.shields.io/badge/Shared--Rep-db2777) Shared Representation
 
+- **VoLo**: "VoLo: A Physical Orchestrator for Open-Vocabulary Long-Horizon Manipulation", arXiv 2026. ![](https://img.shields.io/badge/Needs--Taxonomy--Review-64748b)
+  [[📄 Paper](https://arxiv.org/pdf/2606.07723)]
 
 ## World Action Model
 ### Cascaded World-Action-Model
