@@ -300,11 +300,8 @@ This repository accompanies our survey on **World Action Models (WAMs)** — the
 - **PhysGen**: "Learning Physics from Pretrained Video Models: A Multimodal Continuous and Sequential World Interaction Models for Robotic Manipulation", arXiv 2026. ![](https://img.shields.io/badge/Multi--Dit-9f1239) ![](https://img.shields.io/badge/Shared--Rep-db2777)
   [[📄 Paper](https://arxiv.org/pdf/2603.00110)] [[🌟 Blog](https://openmoss.github.io/Awesome-WAM/report/2603.00110/index.html)]
 
-
-
-
-
-
+- **Making Foresight Actionable**: "Making Foresight Actionable: Repurposing Representation Alignment in World Action Models", arXiv 2026. ![](https://img.shields.io/badge/Multi--Dit-9f1239) ![](https://img.shields.io/badge/Hidden--State-fb7185)
+  [[📄 Paper](https://arxiv.org/pdf/2606.12217)]
 
 ## World Model for VLA
 
