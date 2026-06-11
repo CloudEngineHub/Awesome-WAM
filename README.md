@@ -94,8 +94,6 @@ This repository accompanies our survey on **World Action Models (WAMs)** — the
     - ![](https://img.shields.io/badge/Hidden--State-fb7185) Hidden-State Coupling
     - ![](https://img.shields.io/badge/Shared--Rep-db2777) Shared Representation
 
-- **SIMPLE**: "SIMPLE: Simulation-Based Policy Learning and Evaluation for Humanoid Loco-manipulation", arXiv 2026. ![](https://img.shields.io/badge/Needs--Taxonomy--Review-64748b)
-  [[📄 Paper](https://arxiv.org/pdf/2606.08278)]
 
 ## World Action Model
 ### Cascaded World-Action-Model
@@ -194,11 +192,6 @@ This repository accompanies our survey on **World Action Models (WAMs)** — the
 - **MWM**: "Mask World Model: Predicting What Matters for Robust Robot Policy Learning", arXiv 2026. ![](https://img.shields.io/badge/Implicit-ea580c)
   [[📄 Paper](https://arxiv.org/pdf/2604.19683)] [[💻 Code](https://github.com/LYFCLOUDFAN/mask-world-model)] [[🌟 Blog](https://openmoss.github.io/Awesome-WAM/report/2604.19683/index.html)]
 
-
-
-
-
-
 ### Joint World-Action-Model
 ### Autoregressive Generation
 
@@ -249,6 +242,9 @@ This repository accompanies our survey on **World Action Models (WAMs)** — the
 
 - **X-WAM**: "Unified 4D World Action Modeling from Video Priors with Asynchronous Denoising", arXiv 2026. ![](https://img.shields.io/badge/Unified--DiT-be123c) ![](https://img.shields.io/badge/Explicit-f43f5e)
   [[📄 Paper](https://arxiv.org/pdf/2604.26694)] [[🌍 Webpage](https://sharinka0715.github.io/X-WAM/)] [[💻 Code](https://github.com/sharinka0715/X-WAM)] [[🌟 Blog](https://openmoss.github.io/Awesome-WAM/report/2604.26694/index.html)]
+
+- [NEW] **HiMem-WAM**: "HiMem-WAM: Hierarchical Memory-Gated World Action Models for Robotic Manipulation", arXiv 2026. ![](https://img.shields.io/badge/Unified--DiT-be123c) ![](https://img.shields.io/badge/Explicit-f43f5e)
+  [[📄 Paper](https://arxiv.org/pdf/2606.10363)]
 
 - **FLARE**: "FLARE: Robot Learning with Implicit World Modeling", CoRL 2025. ![](https://img.shields.io/badge/Unified--DiT-be123c) ![](https://img.shields.io/badge/Implicit-fda4af)
   [[📄 Paper](https://arxiv.org/pdf/2505.15659)] [[🌍 Webpage](https://research.nvidia.com/labs/gear/flare/)] [[🌟 Blog](https://openmoss.github.io/Awesome-WAM/report/2505.15659/index.html)]
@@ -602,6 +598,9 @@ This repository accompanies our survey on **World Action Models (WAMs)** — the
 | **HumanoidGen** - *HumanoidGen: Data Generation for Bimanual Dexterous Manipulation via LLM Reasoning* | 2025-07 | [📄 Paper](https://arxiv.org/pdf/2507.00833) · [🌍&nbsp;Web](https://openhumanoidgen.github.io/) · [💻&nbsp;Code](https://github.com/carlosferrazza/humanoid-bench) |
 
 ---
+
+- **SIMPLE**: "SIMPLE: Simulation-Based Policy Learning and Evaluation for Humanoid Loco-manipulation", arXiv 2026.
+  [[📄 Paper](https://arxiv.org/pdf/2606.08278)]
 
 #### 🤖 Action Policy — Mobile Manipulation
 
