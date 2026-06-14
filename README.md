@@ -267,6 +267,9 @@ This repository accompanies our survey on **World Action Models (WAMs)** — the
 - **LingBot-VA**: "Causal World Modeling for Robot Control", arXiv 2026. ![](https://img.shields.io/badge/Multi--Dit-9f1239) ![](https://img.shields.io/badge/Cross--Attention-f97316)
   [[📄 Paper](https://arxiv.org/pdf/2601.21998)] [[💻 Code](https://github.com/robbyant/lingbot-va)] [[🌟 Blog](https://openmoss.github.io/Awesome-WAM/report/2601.21998/index.html)]
 
+- [NEW] **Flash-WAM**: "Flash-WAM: Modality-Aware Distillation for World Action Models", arXiv 2026. ![](https://img.shields.io/badge/Multi--Dit-9f1239) ![](https://img.shields.io/badge/Cross--Attention-f97316)
+  [[📄 Paper](https://arxiv.org/pdf/2606.05254)] [[🌍 Webpage](https://flashwam.github.io)]
+
 - **LDA-1B**: "LDA-1B: Scaling Latent Dynamics Action Model via Universal Embodied Data Ingestion", arXiv 2026. ![](https://img.shields.io/badge/Multi--Dit-9f1239) ![](https://img.shields.io/badge/Cross--Attention-f97316)
   [[📄 Paper](https://arxiv.org/pdf/2602.12215)] [[🌍 Webpage](https://pku-epic.github.io/LDA/)] [[💻 Code](https://github.com/jiangranlv/LDA-1B)] [[🌟 Blog](https://openmoss.github.io/Awesome-WAM/report/2602.12215/index.html)]
 
