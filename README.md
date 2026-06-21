@@ -194,6 +194,8 @@ This repository accompanies our survey on **World Action Models (WAMs)** — the
 
 - **FAWAM**: "FAWAM: Force-Aware World Action Models for Closed-Loop Contact-Rich Manipulation", arXiv 2026. ![](https://img.shields.io/badge/Implicit-ea580c)
   [[📄 Paper](https://arxiv.org/pdf/2606.08555)]
+- **World Pilot**: "World Pilot: Steering Vision-Language-Action Models with World-Action Priors", arXiv 2026. ![](https://img.shields.io/badge/Implicit-ea580c)
+  [[📄 Paper](https://arxiv.org/pdf/2606.12403)]
 
 ### Joint World-Action-Model
 ### Autoregressive Generation
@@ -270,6 +272,9 @@ This repository accompanies our survey on **World Action Models (WAMs)** — the
 - **LingBot-VA**: "Causal World Modeling for Robot Control", arXiv 2026. ![](https://img.shields.io/badge/Multi--Dit-9f1239) ![](https://img.shields.io/badge/Cross--Attention-f97316)
   [[📄 Paper](https://arxiv.org/pdf/2601.21998)] [[💻 Code](https://github.com/robbyant/lingbot-va)] [[🌟 Blog](https://openmoss.github.io/Awesome-WAM/report/2601.21998/index.html)]
 
+- [NEW] **Flash-WAM**: "Flash-WAM: Modality-Aware Distillation for World Action Models", arXiv 2026. ![](https://img.shields.io/badge/Multi--Dit-9f1239) ![](https://img.shields.io/badge/Cross--Attention-f97316)
+  [[📄 Paper](https://arxiv.org/pdf/2606.05254)] [[🌍 Webpage](https://flashwam.github.io)]
+
 - **LDA-1B**: "LDA-1B: Scaling Latent Dynamics Action Model via Universal Embodied Data Ingestion", arXiv 2026. ![](https://img.shields.io/badge/Multi--Dit-9f1239) ![](https://img.shields.io/badge/Cross--Attention-f97316)
   [[📄 Paper](https://arxiv.org/pdf/2602.12215)] [[🌍 Webpage](https://pku-epic.github.io/LDA/)] [[💻 Code](https://github.com/jiangranlv/LDA-1B)] [[🌟 Blog](https://openmoss.github.io/Awesome-WAM/report/2602.12215/index.html)]
 
@@ -303,11 +308,11 @@ This repository accompanies our survey on **World Action Models (WAMs)** — the
 - **PhysGen**: "Learning Physics from Pretrained Video Models: A Multimodal Continuous and Sequential World Interaction Models for Robotic Manipulation", arXiv 2026. ![](https://img.shields.io/badge/Multi--Dit-9f1239) ![](https://img.shields.io/badge/Shared--Rep-db2777)
   [[📄 Paper](https://arxiv.org/pdf/2603.00110)] [[🌟 Blog](https://openmoss.github.io/Awesome-WAM/report/2603.00110/index.html)]
 
-
-
-
-
-
+- **Efficient-WAM**: "Efficient-WAM: A 1B-Parameter World-Action Model with Low-Cost Future Imagination", arXiv 2026. ![](https://img.shields.io/badge/Multi--Dit-9f1239) ![](https://img.shields.io/badge/Hidden--State-fb7185)
+  [[📄 Paper](https://arxiv.org/pdf/2606.10040)]
+  
+- **Making Foresight Actionable**: "Making Foresight Actionable: Repurposing Representation Alignment in World Action Models", arXiv 2026. ![](https://img.shields.io/badge/Multi--Dit-9f1239) ![](https://img.shields.io/badge/Hidden--State-fb7185)
+  [[📄 Paper](https://arxiv.org/pdf/2606.12217)]
 
 ## World Model for VLA
 
