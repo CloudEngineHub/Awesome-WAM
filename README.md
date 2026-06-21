@@ -192,6 +192,8 @@ This repository accompanies our survey on **World Action Models (WAMs)** — the
 - **MWM**: "Mask World Model: Predicting What Matters for Robust Robot Policy Learning", arXiv 2026. ![](https://img.shields.io/badge/Implicit-ea580c)
   [[📄 Paper](https://arxiv.org/pdf/2604.19683)] [[💻 Code](https://github.com/LYFCLOUDFAN/mask-world-model)] [[🌟 Blog](https://openmoss.github.io/Awesome-WAM/report/2604.19683/index.html)]
 
+- **FAWAM**: "FAWAM: Force-Aware World Action Models for Closed-Loop Contact-Rich Manipulation", arXiv 2026. ![](https://img.shields.io/badge/Implicit-ea580c)
+  [[📄 Paper](https://arxiv.org/pdf/2606.08555)]
 - **World Pilot**: "World Pilot: Steering Vision-Language-Action Models with World-Action Priors", arXiv 2026. ![](https://img.shields.io/badge/Implicit-ea580c)
   [[📄 Paper](https://arxiv.org/pdf/2606.12403)]
 
