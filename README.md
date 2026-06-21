@@ -309,6 +309,8 @@ This repository accompanies our survey on **World Action Models (WAMs)** — the
 - **PhysGen**: "Learning Physics from Pretrained Video Models: A Multimodal Continuous and Sequential World Interaction Models for Robotic Manipulation", arXiv 2026. ![](https://img.shields.io/badge/Multi--Dit-9f1239) ![](https://img.shields.io/badge/Shared--Rep-db2777)
   [[📄 Paper](https://arxiv.org/pdf/2603.00110)] [[🌟 Blog](https://openmoss.github.io/Awesome-WAM/report/2603.00110/index.html)]
 
+- **AHA-WAM**: "AHA-WAM:Asynchronous Horizon-Adaptive World-Action Modeling with Observation-Guided Context Routing", arXiv 2026. ![](https://img.shields.io/badge/Multi--Dit-9f1239) ![](https://img.shields.io/badge/Cross--Attention-f97316)
+  [[📄 Paper](https://arxiv.org/pdf/2606.09811)]
 - **Dream-Tac**: "Dream-Tac: A Unified Tactile World Action Model for Contact-Rich Robot Manipulation", arXiv 2026. ![](https://img.shields.io/badge/Unified--DiT-be123c) ![](https://img.shields.io/badge/Explicit-f43f5e)
   [[📄 Paper](https://arxiv.org/pdf/2606.08737)]
   
