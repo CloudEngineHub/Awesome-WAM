@@ -326,6 +326,9 @@ This repository accompanies our survey on **World Action Models (WAMs)** — the
 - **Making Foresight Actionable**: "Making Foresight Actionable: Repurposing Representation Alignment in World Action Models", arXiv 2026. ![](https://img.shields.io/badge/Multi--Dit-9f1239) ![](https://img.shields.io/badge/Hidden--State-fb7185)
   [[📄 Paper](https://arxiv.org/pdf/2606.12217)]
 
+- **MV-WAM**: "MV-WAM: Manifold-Aware World Action Model with Value Augmentation", arXiv 2026. ![](https://img.shields.io/badge/Multi--Dit-9f1239) ![](https://img.shields.io/badge/Cross--Attention-f97316)
+  [[📄 Paper](https://arxiv.org/pdf/2606.21088)]
+
 ## World Model for VLA
 
 ### World Model for Imitation Learning
