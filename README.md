@@ -2,7 +2,7 @@
 
 # World Action Models: The Next Frontier in Embodied AI
 
-[![arXiv](https://img.shields.io/badge/arXiv-2605.12090-b31b1b.svg)](https://arxiv.org/abs/2605.12090) [![Hugging Face](https://img.shields.io/badge/🤗%20Hugging%20Face-Paper-FFD21E)](https://huggingface.co/papers/2605.12090) [![Project Page](https://img.shields.io/badge/Project%20Page-Link-blue)](https://openmoss.github.io/Awesome-WAM/) [![Leaderboard](https://img.shields.io/badge/Leaderboard-Benchmarks-2f766f)](https://openmoss.github.io/Awesome-WAM/leaderboard/)
+[![arXiv](https://img.shields.io/badge/arXiv-2605.12090-b31b1b.svg)](https://arxiv.org/abs/2605.12090) [![Hugging Face](https://img.shields.io/badge/🤗%20Hugging%20Face-Paper-FFD21E)](https://huggingface.co/papers/2605.12090) [![Project Page](https://img.shields.io/badge/Project%20Page-Link-blue)](https://openmoss.github.io/Awesome-WAM/) [![Leaderboard](https://img.shields.io/badge/Leaderboard-Benchmarks-2f766f)](https://openmoss.github.io/Awesome-WAM/leaderboard/) [![Feishu/Lark](https://img.shields.io/badge/Feishu&Lark-QR%20Code-FF007F)](https://applink.feishu.cn/client/chat/chatter/add_by_link?link_token=6d8ucf9a-002a-491c-bf89-0d47020baabf)
 
 <p align="center">
   <a href="https://sinwang20.github.io/">Siyin Wang</a></strong><sup>1,2,*,‡</sup>,  
@@ -46,14 +46,23 @@ This repository accompanies our survey on **World Action Models (WAMs)** — the
   <img src="figs/roadmap.svg" alt="Temporal evolution and taxonomy of representative works on World Action Models (WAMs). " width="100%">
 </p>
 
+---
+**Welcome to join our Feishu discussion group for in-depth academic exchange on World-Action Models, robot learning, and embodied intelligence. Our bot will also periodically share the latest WAM-related papers and updates, helping everyone stay informed about recent progress and discuss new ideas together.**
+
+<img src="figs/feishu_QR.png" alt="Feishu/Lark QR Code" width="300">
+
+---
 
 ## 🔔 News
+
+- **[2026-06-24]**  Added the community discussion group QR code, and everyone is welcome to join and exchange ideas. (Check [Feishu/Lark](https://applink.feishu.cn/client/chat/chatter/add_by_link?link_token=6d8ucf9a-002a-491c-bf89-0d47020baabf))
 
 - **[2026-05-25]**  Added the benchmark leaderboard page and benchmark-level performance trend visualization.
 
 - **[2026-05-21]**  Updated the link to the paper-reading skill.
 
 - **[2026-05-13]**  Initial release of the survey paper and repository.
+
 
 ## Contents
 
