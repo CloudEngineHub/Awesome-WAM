@@ -55,7 +55,7 @@ This repository accompanies our survey on **World Action Models (WAMs)** — the
 
 ## 🔔 News
 
-- **[2026-06-24]**  Added the community discussion group QR code, and everyone is welcome to join and exchange ideas. (Check [Feishu/Lark](https://applink.feishu.cn/client/chat/chatter/add_by_link?link_token=6d8ucf9a-002a-491c-bf89-0d47020baabf))
+- **[2026-06-24]**  Added the community discussion group QR code, and everyone is welcome to join and exchange ideas. (Use the QR code above or check [Feishu/Lark](https://applink.feishu.cn/client/chat/chatter/add_by_link?link_token=6d8ucf9a-002a-491c-bf89-0d47020baabf))
 
 - **[2026-05-25]**  Added the benchmark leaderboard page and benchmark-level performance trend visualization.
 
