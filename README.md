@@ -55,6 +55,8 @@ This repository accompanies our survey on **World Action Models (WAMs)** — the
 
 ## 🔔 News
 
+- **[2026-07-01]**  We are excited to share that the repository has surpassed 1,000 stars. Thank you all for your support!
+
 - **[2026-06-24]**  Added the community discussion group QR code, and everyone is welcome to join and exchange ideas. (Use the QR code above or check [Feishu/Lark](https://applink.feishu.cn/client/chat/chatter/add_by_link?link_token=6d8ucf9a-002a-491c-bf89-0d47020baabf))
 
 - **[2026-05-25]**  Added the benchmark leaderboard page and benchmark-level performance trend visualization.
@@ -665,6 +667,9 @@ This repository accompanies our survey on **World Action Models (WAMs)** — the
 | **ManipArena** - *ManipArena: Comprehensive Real-World Evaluation of Reasoning-Oriented Generalist Robot Manipulation* | 2026-03 | [📄 Paper](https://arxiv.org/pdf/2603.28545) · [🌍&nbsp;Web](https://maniparena.x2robot.com/) · [💻&nbsp;Code](https://github.com/maniparena/maniparena-repo) |
 
 
+## 🌟 Star History
+
+[![Star History Chart](https://api.star-history.com/svg?repos=OpenMOSS/Awesome-WAM&type=Date)](https://www.star-history.com/#OpenMOSS/Awesome-WAM&Date)
 
 ## 🙏 Acknowledgements
 
