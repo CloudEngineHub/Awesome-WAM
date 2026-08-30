@@ -671,9 +671,9 @@ This repository accompanies our survey on **World Action Models (WAMs)** — the
 
 <a href="https://www.star-history.com/?repos=OpenMOSS%2FAwesome-WAM&type=date&legend=top-left">
  <picture>
-   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/chart?repos=OpenMOSS/Awesome-WAM&type=date&theme=dark&legend=top-left&sealed_token=nVxGO_A1JFX00kZS0GQZ6inq-usNfyoDt6lWAQq4q3zpVCaQcc72V_cgQi2rnuiP3LduCAw02dtMw9YagBNDvUBrGwhVnEVwqLKdXiHykPa4AUCj7OxJzrtR1v03Xv9BmRiHI80G9bGhTJwKaJU5Isr_EqJa2RSp09Ho97AovQpQgm6EORtigY8V6tky" />
-   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/chart?repos=OpenMOSS/Awesome-WAM&type=date&legend=top-left&sealed_token=nVxGO_A1JFX00kZS0GQZ6inq-usNfyoDt6lWAQq4q3zpVCaQcc72V_cgQi2rnuiP3LduCAw02dtMw9YagBNDvUBrGwhVnEVwqLKdXiHykPa4AUCj7OxJzrtR1v03Xv9BmRiHI80G9bGhTJwKaJU5Isr_EqJa2RSp09Ho97AovQpQgm6EORtigY8V6tky" />
-   <img alt="Star History Chart" src="https://api.star-history.com/chart?repos=OpenMOSS/Awesome-WAM&type=date&legend=top-left&sealed_token=nVxGO_A1JFX00kZS0GQZ6inq-usNfyoDt6lWAQq4q3zpVCaQcc72V_cgQi2rnuiP3LduCAw02dtMw9YagBNDvUBrGwhVnEVwqLKdXiHykPa4AUCj7OxJzrtR1v03Xv9BmRiHI80G9bGhTJwKaJU5Isr_EqJa2RSp09Ho97AovQpQgm6EORtigY8V6tky" />
+   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/chart?repos=OpenMOSS/Awesome-WAM&type=date&theme=dark&legend=top-left&sealed_token=wEESwU6zYISJdd814h4rwVsU4pDYg5VyONSnqdH5chGSpujk2wwR60x6iviN7Zb89L9MiNTaHvpc2nFf2Uez97PT0aIIM8JNh0LXkh94giFnYtUFWWzHX-9VWZQyU5jHJL-Pk0g8ckyAH6LuUitQE0VGHbqkyScYc6l9p4JBdKXs1E62j1o370TeaPPt" />
+   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/chart?repos=OpenMOSS/Awesome-WAM&type=date&legend=top-left&sealed_token=wEESwU6zYISJdd814h4rwVsU4pDYg5VyONSnqdH5chGSpujk2wwR60x6iviN7Zb89L9MiNTaHvpc2nFf2Uez97PT0aIIM8JNh0LXkh94giFnYtUFWWzHX-9VWZQyU5jHJL-Pk0g8ckyAH6LuUitQE0VGHbqkyScYc6l9p4JBdKXs1E62j1o370TeaPPt" />
+   <img alt="Star History Chart" src="https://api.star-history.com/chart?repos=OpenMOSS/Awesome-WAM&type=date&legend=top-left&sealed_token=wEESwU6zYISJdd814h4rwVsU4pDYg5VyONSnqdH5chGSpujk2wwR60x6iviN7Zb89L9MiNTaHvpc2nFf2Uez97PT0aIIM8JNh0LXkh94giFnYtUFWWzHX-9VWZQyU5jHJL-Pk0g8ckyAH6LuUitQE0VGHbqkyScYc6l9p4JBdKXs1E62j1o370TeaPPt" />
  </picture>
 </a>
 
